@@ -561,50 +561,66 @@ input[type=color]{width:34px;height:28px;border:1px solid var(--border);border-r
   <div id="tb-persp"></div>
   <div class="tb-spacer"></div>
   <div class="tb-actions">
+    <!-- Angre / Gjenta -->
     <button class="tb-btn" onclick="undo()" id="undo-btn" title="Angre (Ctrl+Z)" style="opacity:.5" disabled>
       <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 6a4 4 0 1 1 1 2.8"/><path d="M2 3v3h3"/></svg>
-      Angre
     </button>
     <button class="tb-btn" onclick="redo()" id="redo-btn" title="Gjenta (Ctrl+Shift+Z)" style="opacity:.5" disabled>
       <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M10 6a4 4 0 1 0-1 2.8"/><path d="M10 3v3H7"/></svg>
-      Gjenta
     </button>
     <div style="width:1px;height:22px;background:rgba(255,255,255,.15)"></div>
+    <!-- Fil-meny: all import/eksport samlet -->
+    <div style="position:relative">
+      <button class="tb-btn" onclick="toggleTbMenu('tb-fil-menu')" title="Import og eksport">
+        <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 2h5l3 3v5H2z"/><path d="M7 2v3h3"/></svg>
+        Fil ▾
+      </button>
+      <div class="img-export-menu" id="tb-fil-menu" style="display:none;min-width:180px">
+        <div style="padding:4px 10px 2px;font-size:10px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--text3)">Importer</div>
+        <div class="col-menu-item" onclick="importJSON();toggleTbMenu('tb-fil-menu')">
+          <svg width="11" height="11" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" style="flex-shrink:0"><path d="M6 1v7M3 5l3 3 3-3M1 10h10"/></svg>
+          JSON (full backup)
+        </div>
+        <div class="col-menu-item" onclick="importCSV();toggleTbMenu('tb-fil-menu')">
+          <svg width="11" height="11" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" style="flex-shrink:0"><path d="M6 1v7M3 5l3 3 3-3M1 10h10"/></svg>
+          CSV til kategori
+        </div>
+        <div style="height:1px;background:var(--border);margin:4px 0"></div>
+        <div style="padding:4px 10px 2px;font-size:10px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--text3)">Eksporter</div>
+        <div class="col-menu-item" onclick="exportJSON();toggleTbMenu('tb-fil-menu')">
+          <svg width="11" height="11" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" style="flex-shrink:0"><path d="M6 8V1M3 4l3-3 3 3M1 10h10"/></svg>
+          JSON (backup)
+        </div>
+        <div class="col-menu-item" onclick="exportGraphSVG();toggleTbMenu('tb-fil-menu')">
+          <svg width="11" height="11" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" style="flex-shrink:0"><rect x="1" y="2" width="10" height="8" rx="1"/><circle cx="4" cy="5" r="1"/><path d="M1 9l3-3 2 2 2-2 3 3"/></svg>
+          Kart som SVG
+        </div>
+        <div class="col-menu-item" onclick="exportGraphPNG();toggleTbMenu('tb-fil-menu')">
+          <svg width="11" height="11" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" style="flex-shrink:0"><rect x="1" y="2" width="10" height="8" rx="1"/><circle cx="4" cy="5" r="1"/><path d="M1 9l3-3 2 2 2-2 3 3"/></svg>
+          Kart som PNG
+        </div>
+        <div class="col-menu-item" onclick="exportReport();toggleTbMenu('tb-fil-menu')">
+          <svg width="11" height="11" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" style="flex-shrink:0"><path d="M2 2h5l3 3v5H2zM4 6h4M4 8h3"/></svg>
+          HTML-rapport
+        </div>
+      </div>
+    </div>
+    <div style="width:1px;height:22px;background:rgba(255,255,255,.15)"></div>
+    <!-- Innstillinger -->
     <button class="tb-btn" onclick="openAdminModal()" title="Innstillinger">
       <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="6" cy="6" r="2"/><path d="M6 1v1M6 10v1M1 6h1M10 6h1M2.6 2.6l.7.7M8.7 8.7l.7.7M2.6 9.4l.7-.7M8.7 3.3l.7-.7"/></svg>
       Innstillinger
     </button>
-    <div style="width:1px;height:22px;background:rgba(255,255,255,.15)"></div>
-    <button class="tb-btn" onclick="importJSON()" title="Importer JSON">
-      <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M6 1v7M3 5l3 3 3-3M1 10h10"/></svg>
-      Import JSON
-    </button>
-    <button class="tb-btn" onclick="importCSV()" title="Importer CSV">
-      <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M6 1v7M3 5l3 3 3-3M1 10h10"/></svg>
-      Import CSV
-    </button>
-    <button class="tb-btn" onclick="exportJSON()" title="Eksporter tidsstemplet JSON">
-      <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M6 8V1M3 4l3-3 3 3M1 10h10"/></svg>
-      Export JSON
-    </button>
-    <div style="position:relative">
-      <button class="tb-btn" onclick="toggleImgExportMenu()" title="Eksporter graf som bilde">
-        <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="1" y="2" width="10" height="8" rx="1"/><circle cx="4" cy="5" r="1"/><path d="M1 9l3-3 2 2 2-2 3 3"/></svg>
-        Bilde ▾
-      </button>
-      <div class="img-export-menu" id="img-export-menu" style="display:none">
-        <div class="col-menu-item" onclick="exportGraphSVG();document.getElementById('img-export-menu').style.display='none'">Eksporter SVG</div>
-        <div class="col-menu-item" onclick="exportGraphPNG();document.getElementById('img-export-menu').style.display='none'">Eksporter PNG</div>
-      </div>
-    </div>
-    <a href="hjelp.html" target="_blank" class="tb-btn" title="Åpne hjelpeside" style="text-decoration:none">
+    <!-- Hjelp -->
+    <a href="hjelp.html" target="_blank" class="tb-btn" title="Hjelp" style="text-decoration:none">
       <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="6" cy="6" r="5"/><path d="M6 8v-1c0-1 2-1.5 2-3a2 2 0 1 0-4 0"/><circle cx="6" cy="9.5" r=".5" fill="currentColor" stroke="none"/></svg>
       Hjelp
     </a>
     <div style="width:1px;height:22px;background:rgba(255,255,255,.15)"></div>
+    <!-- Primær handling -->
     <button class="tb-btn tb-btn-primary" onclick="openCatModal(null)">
       <svg width="11" height="11" viewBox="0 0 11 11" fill="none" stroke="currentColor" stroke-width="2"><line x1="5.5" y1="1" x2="5.5" y2="10"/><line x1="1" y1="5.5" x2="10" y2="5.5"/></svg>
-      Kategori
+      + Kategori
     </button>
   </div>
 </div>
@@ -903,6 +919,13 @@ function _syncUndoBtns(){
 function toggleImgExportMenu(){
   const m=document.getElementById('img-export-menu');
   if(m)m.style.display=m.style.display==='none'?'block':'none';
+}
+function toggleTbMenu(id){
+  const m=document.getElementById(id);
+  if(!m)return;
+  const isOpen=m.style.display!=='none';
+  document.querySelectorAll('.img-export-menu').forEach(el=>el.style.display='none');
+  if(!isOpen)m.style.display='block';
 }
 let _csvParsed=null;
 
@@ -2844,9 +2867,8 @@ document.addEventListener('click',e=>{
     document.querySelectorAll('.col-menu,.export-menu').forEach(m=>m.style.display='none');
     document.querySelectorAll('.popover').forEach(m=>m.remove());
   }
-  if(!e.target.closest('.img-export-menu')&&!e.target.closest('[onclick*="toggleImgExportMenu"]')){
-    const m=document.getElementById('img-export-menu');
-    if(m)m.style.display='none';
+  if(!e.target.closest('.img-export-menu')&&!e.target.closest('[onclick*="toggleImgExportMenu"]')&&!e.target.closest('[onclick*="toggleTbMenu"]')){
+    document.querySelectorAll('.img-export-menu').forEach(m=>m.style.display='none');
   }
 });
 
@@ -3599,6 +3621,162 @@ function exportCatCSV(catId) {
   a.download=(cat.name||'kategori').replace(/\s+/g,'-')+'-'+new Date().toISOString().slice(0,10)+'.csv';
   a.click();toast('Eksportert CSV ✓');
 }
+
+// ════════════════════════════════════════════════════════
+//  HTML RAPPORT EKSPORT
+// ════════════════════════════════════════════════════════
+
+function exportReport() {
+  const catFilter = getActiveCatFilter();
+  const activeV = S.activeView ? S.views.find(v=>v.id===S.activeView) : null;
+  const allCats = getCatsSorted().filter(c => !catFilter || catFilter.includes(c.id));
+  const title = S.settings?.title || 'Virksomhetskartlegger';
+  const perspName = activeV ? activeV.name : 'Alle objekter';
+  const dateStr = new Date().toLocaleDateString('no-NO',{year:'numeric',month:'long',day:'numeric'});
+  const etypes = getEdgeTypes();
+
+  const totalNodes = allCats.reduce((s,c)=>s+getCatNodes(c.id).length,0);
+  const totalEdges = S.edges.length;
+
+  // ── Per-category sections ──
+  const catSections = allCats.map(cat => {
+    const params = getCatParams(cat.id);
+    const nodes = getCatNodes(cat.id);
+    if (!nodes.length) return '';
+
+    const thead = `<tr>
+      <th style="text-align:left;padding:9px 14px;background:#f5f6f8;border-bottom:2px solid ${cat.color};font-size:12px;font-weight:700;color:#444;min-width:160px">Navn</th>
+      ${params.map(p=>`<th style="text-align:left;padding:9px 14px;background:#f5f6f8;border-bottom:2px solid ${cat.color};font-size:12px;font-weight:700;color:#444">${resc(p.name)}${p.unit?` <span style="font-weight:400;color:#999">(${resc(p.unit)})</span>`:''}</th>`).join('')}
+      <th style="text-align:left;padding:9px 14px;background:#f5f6f8;border-bottom:2px solid ${cat.color};font-size:12px;font-weight:700;color:#444">Koblinger</th>
+    </tr>`;
+
+    const tbody = nodes.map((n,ri) => {
+      const bg = ri%2===0 ? '#fff' : '#fafafa';
+      // Conditional formatting
+      const cs = getCondStyle(n, cat.id);
+      const rowBg = cs.rowBg || bg;
+      const rowColor = cs.textColor ? `color:${cs.textColor}` : '';
+      const rowBold = cs.bold ? 'font-weight:600' : '';
+
+      const edges = getNodeEdges(n.id);
+      const connHTML = edges.length ? edges.map(e=>{
+        const oid = e.src===n.id ? e.tgt : e.src;
+        const on = getNode(oid); if(!on) return '';
+        const oc = getCat(on.catId);
+        const et = etypes.find(t=>t.v===e.type)||etypes[0];
+        const dir = e.src===n.id ? '→' : '←';
+        return `<span style="display:inline-block;margin:1px 3px 1px 0;padding:1px 7px;border-radius:12px;font-size:10px;background:${et.color}18;color:${et.color};border:1px solid ${et.color}40">${dir} ${resc(on.title)}</span>`;
+      }).filter(Boolean).join('') : '<span style="color:#bbb;font-size:12px">—</span>';
+
+      const cells = params.map(p => {
+        const val = computeVal(n, p, params);
+        let display = '—';
+        if (val !== null && val !== undefined && val !== '') {
+          if (p.type==='status') {
+            const sc={red:'#e74c3c',yellow:'#f39c12',green:'#27ae60'};
+            const sl={red:'Rød',yellow:'Gul',green:'Grønn'};
+            display=`<span style="display:inline-flex;align-items:center;gap:4px"><span style="width:8px;height:8px;border-radius:50%;background:${sc[val]||'#ccc'}"></span>${sl[val]||val}</span>`;
+          } else if (p.type==='boolean') {
+            display = val==='ja' ? '<span style="color:#27ae60;font-weight:600">Ja</span>' : '<span style="color:#999">Nei</span>';
+          } else if (p.type==='date') {
+            const d=new Date(val); display=isNaN(d)?resc(String(val)):d.toLocaleDateString('no-NO');
+          } else if (Array.isArray(val)) {
+            display = val.map(v=>`<span style="display:inline-block;padding:1px 6px;border-radius:10px;background:#eee;font-size:11px;margin:1px">${resc(v)}</span>`).join('');
+          } else {
+            display = resc(String(val));
+          }
+        }
+        return `<td style="padding:8px 14px;border-bottom:1px solid #eee;font-size:13px;vertical-align:top">${display}</td>`;
+      }).join('');
+
+      return `<tr style="background:${rowBg};${rowColor};${rowBold}">
+        <td style="padding:8px 14px;border-bottom:1px solid #eee;font-size:13px;font-weight:600;vertical-align:top">${resc(n.title)}</td>
+        ${cells}
+        <td style="padding:8px 14px;border-bottom:1px solid #eee;font-size:13px;vertical-align:top">${connHTML}</td>
+      </tr>`;
+    }).join('');
+
+    return `<section style="margin-bottom:40px;break-inside:avoid">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px">
+        <div style="width:14px;height:14px;border-radius:3px;background:${cat.color};flex-shrink:0"></div>
+        <h2 style="font-size:17px;font-weight:700;color:#1a1a2e;margin:0">${resc(cat.name)}</h2>
+        <span style="font-size:12px;color:#999;margin-left:4px">${nodes.length} objekt${nodes.length!==1?'er':''}</span>
+      </div>
+      <div style="overflow-x:auto;border-radius:8px;border:1px solid #e5e7eb;box-shadow:0 1px 4px rgba(0,0,0,.05)">
+        <table style="width:100%;border-collapse:collapse;font-family:system-ui,sans-serif">
+          <thead>${thead}</thead>
+          <tbody>${tbody}</tbody>
+        </table>
+      </div>
+    </section>`;
+  }).join('');
+
+  // ── Perspective description ──
+  const perspDesc = activeV?.description ? `<p style="color:#555;font-size:14px;margin-top:4px">${resc(activeV.description)}</p>` : '';
+
+  // ── Full HTML ──
+  const html = `<!DOCTYPE html>
+<html lang="no">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>${resc(title)} – ${resc(perspName)}</title>
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:system-ui,-apple-system,sans-serif;background:#f4f5f7;color:#1a1a2e;padding:0}
+  @media print{
+    body{background:#fff}
+    .no-print{display:none}
+    section{break-inside:avoid;page-break-inside:avoid}
+  }
+</style>
+</head>
+<body>
+  <!-- TOPBAR -->
+  <div style="background:#002169;color:#fff;padding:18px 40px;display:flex;align-items:center;justify-content:space-between;gap:16px" class="no-print">
+    <div>
+      <div style="font-size:11px;opacity:.6;letter-spacing:.08em;text-transform:uppercase;margin-bottom:2px">Rapport</div>
+      <div style="font-size:20px;font-weight:700">${resc(title)}</div>
+    </div>
+    <button onclick="window.print()" style="background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.3);color:#fff;padding:8px 18px;border-radius:6px;cursor:pointer;font-size:13px;font-family:inherit">Skriv ut / Lagre PDF</button>
+  </div>
+
+  <!-- HEADER -->
+  <div style="background:#002169;color:#fff;padding:28px 40px 32px">
+    <div style="font-size:13px;opacity:.65;margin-bottom:6px">Perspektiv</div>
+    <div style="font-size:26px;font-weight:700;margin-bottom:4px">${resc(perspName)}</div>
+    ${perspDesc}
+    <div style="margin-top:20px;display:flex;gap:28px;flex-wrap:wrap">
+      <div><div style="font-size:11px;opacity:.6;text-transform:uppercase;letter-spacing:.07em">Kategorier</div><div style="font-size:24px;font-weight:700">${allCats.length}</div></div>
+      <div><div style="font-size:11px;opacity:.6;text-transform:uppercase;letter-spacing:.07em">Objekter</div><div style="font-size:24px;font-weight:700">${totalNodes}</div></div>
+      <div><div style="font-size:11px;opacity:.6;text-transform:uppercase;letter-spacing:.07em">Koblinger</div><div style="font-size:24px;font-weight:700">${totalEdges}</div></div>
+      <div><div style="font-size:11px;opacity:.6;text-transform:uppercase;letter-spacing:.07em">Generert</div><div style="font-size:14px;font-weight:600;margin-top:4px">${dateStr}</div></div>
+    </div>
+  </div>
+
+  <!-- CONTENT -->
+  <div style="max-width:1200px;margin:0 auto;padding:36px 40px">
+    ${catSections || '<p style="color:#999;text-align:center;padding:40px">Ingen objekter å vise</p>'}
+  </div>
+
+  <!-- FOOTER -->
+  <div style="border-top:1px solid #e5e7eb;padding:16px 40px;font-size:11px;color:#aaa;text-align:center;background:#fff">
+    Generert fra Virksomhetskartlegger · ${dateStr}
+  </div>
+</body>
+</html>`;
+
+  const blob = new Blob([html], {type:'text/html;charset=utf-8'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  const safeName = (perspName).replace(/[^a-zA-Z0-9æøåÆØÅ\-_ ]/g,'').replace(/\s+/g,'-').toLowerCase();
+  a.download = `rapport-${safeName}-${new Date().toISOString().slice(0,10)}.html`;
+  a.click();
+  toast('HTML-rapport eksportert ✓');
+}
+
+// HTML-safe escape for report (avoids double-escaping)
+function resc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
 
 // ════════════════════════════════════════════════════════
 //  ADMIN / SETTINGS MODAL
