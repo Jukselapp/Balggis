@@ -1,0 +1,1704 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hjelp – Virksomhetskartlegger</title>
+<style>
+  :root {
+    --primary: #002169;
+    --primary-light: #1a3a8f;
+    --accent: #2563eb;
+    --bg: #f1f1f1;
+    --card: #ffffff;
+    --border: #dde1ea;
+    --text: #1a1a2e;
+    --text-muted: #5a6478;
+    --code-bg: #eef0f5;
+    --tip-bg: #eff6ff;
+    --tip-border: #2563eb;
+    --warn-bg: #fff7ed;
+    --warn-border: #f97316;
+    --success-bg: #f0fdf4;
+    --success-border: #22c55e;
+    --radius: 10px;
+    --shadow: 0 2px 12px rgba(0,33,105,0.08);
+    --shadow-lg: 0 8px 32px rgba(0,33,105,0.13);
+    --nav-h: 56px;
+    --font: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: var(--font);
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.65;
+    font-size: 16px;
+  }
+
+  /* ── NAV ── */
+  nav {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: var(--primary);
+    height: var(--nav-h);
+    display: flex;
+    align-items: center;
+    gap: 0;
+    box-shadow: 0 2px 16px rgba(0,0,0,0.18);
+  }
+
+  .nav-brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 0 24px;
+    color: #fff;
+    font-weight: 700;
+    font-size: 1rem;
+    white-space: nowrap;
+    border-right: 1px solid rgba(255,255,255,0.15);
+    height: 100%;
+    text-decoration: none;
+  }
+
+  .nav-brand svg { flex-shrink: 0; }
+
+  .nav-links {
+    display: flex;
+    align-items: center;
+    gap: 2px;
+    padding: 0 12px;
+    overflow-x: auto;
+    flex: 1;
+    height: 100%;
+    scrollbar-width: none;
+  }
+  .nav-links::-webkit-scrollbar { display: none; }
+
+  .nav-links a {
+    color: rgba(255,255,255,0.75);
+    text-decoration: none;
+    font-size: 0.85rem;
+    font-weight: 500;
+    padding: 6px 12px;
+    border-radius: 6px;
+    white-space: nowrap;
+    transition: background 0.15s, color 0.15s;
+  }
+  .nav-links a:hover { background: rgba(255,255,255,0.12); color: #fff; }
+
+  .nav-open {
+    margin-left: auto;
+    margin-right: 16px;
+    flex-shrink: 0;
+    background: rgba(255,255,255,0.15);
+    color: #fff;
+    border: 1px solid rgba(255,255,255,0.25);
+    border-radius: 8px;
+    padding: 7px 16px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    cursor: pointer;
+    text-decoration: none;
+    white-space: nowrap;
+    transition: background 0.15s;
+    font-family: var(--font);
+  }
+  .nav-open:hover { background: rgba(255,255,255,0.25); }
+
+  /* ── HERO ── */
+  .hero {
+    background: linear-gradient(135deg, var(--primary) 0%, #1a3a8f 60%, #2563eb 100%);
+    color: #fff;
+    padding: 72px 24px 80px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.04'%3E%3Ccircle cx='30' cy='30' r='2'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+    pointer-events: none;
+  }
+
+  .hero-badge {
+    display: inline-block;
+    background: rgba(255,255,255,0.15);
+    border: 1px solid rgba(255,255,255,0.25);
+    border-radius: 20px;
+    padding: 4px 14px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    margin-bottom: 20px;
+  }
+
+  .hero h1 {
+    font-size: clamp(2rem, 5vw, 3rem);
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    margin-bottom: 16px;
+    text-shadow: 0 2px 12px rgba(0,0,0,0.2);
+  }
+
+  .hero p {
+    font-size: 1.1rem;
+    max-width: 560px;
+    margin: 0 auto 32px;
+    opacity: 0.88;
+    line-height: 1.7;
+  }
+
+  .hero-actions {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  .btn-primary {
+    background: #fff;
+    color: var(--primary);
+    border: none;
+    border-radius: 8px;
+    padding: 12px 28px;
+    font-size: 0.95rem;
+    font-weight: 700;
+    cursor: pointer;
+    text-decoration: none;
+    font-family: var(--font);
+    transition: transform 0.12s, box-shadow 0.12s;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+  }
+  .btn-primary:hover { transform: translateY(-1px); box-shadow: 0 6px 24px rgba(0,0,0,0.2); }
+
+  .btn-secondary {
+    background: rgba(255,255,255,0.1);
+    color: #fff;
+    border: 1px solid rgba(255,255,255,0.3);
+    border-radius: 8px;
+    padding: 12px 28px;
+    font-size: 0.95rem;
+    font-weight: 600;
+    cursor: pointer;
+    text-decoration: none;
+    font-family: var(--font);
+    transition: background 0.12s;
+  }
+  .btn-secondary:hover { background: rgba(255,255,255,0.2); }
+
+  /* ── QUICK CARDS ── */
+  .quick-strip {
+    background: var(--card);
+    border-bottom: 1px solid var(--border);
+    padding: 32px 24px;
+  }
+
+  .quick-grid {
+    max-width: 960px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 16px;
+  }
+
+  .quick-card {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 16px;
+    border-radius: var(--radius);
+    background: var(--bg);
+    border: 1px solid var(--border);
+    text-decoration: none;
+    color: var(--text);
+    transition: box-shadow 0.15s, border-color 0.15s;
+  }
+  .quick-card:hover { box-shadow: var(--shadow); border-color: var(--accent); }
+
+  .quick-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 8px;
+    background: var(--primary);
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+    flex-shrink: 0;
+  }
+
+  .quick-card strong { display: block; font-size: 0.9rem; font-weight: 700; }
+  .quick-card span { font-size: 0.78rem; color: var(--text-muted); }
+
+  /* ── MAIN LAYOUT ── */
+  .page-wrap {
+    max-width: 880px;
+    margin: 0 auto;
+    padding: 48px 24px 80px;
+  }
+
+  /* ── SECTIONS ── */
+  .section {
+    margin-bottom: 64px;
+    scroll-margin-top: calc(var(--nav-h) + 24px);
+  }
+
+  .section-header {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 24px;
+    padding-bottom: 16px;
+    border-bottom: 2px solid var(--border);
+  }
+
+  .section-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 12px;
+    background: var(--primary);
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.4rem;
+    flex-shrink: 0;
+  }
+
+  .section-header h2 {
+    font-size: 1.5rem;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    color: var(--primary);
+  }
+
+  .section-header .section-sub {
+    font-size: 0.88rem;
+    color: var(--text-muted);
+    margin-top: 2px;
+  }
+
+  /* ── CARDS ── */
+  .card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 24px;
+    margin-bottom: 16px;
+    box-shadow: var(--shadow);
+  }
+
+  .card h3 {
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: var(--primary);
+    margin-bottom: 10px;
+  }
+
+  .card p { color: var(--text); margin-bottom: 10px; }
+  .card p:last-child { margin-bottom: 0; }
+
+  /* ── PARAM TYPES TABLE ── */
+  .param-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+
+  .param-row {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    align-items: center;
+    gap: 14px;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 14px 18px;
+    box-shadow: 0 1px 4px rgba(0,33,105,0.05);
+  }
+
+  .param-badge {
+    background: var(--primary);
+    color: #fff;
+    font-size: 0.72rem;
+    font-weight: 700;
+    padding: 3px 10px;
+    border-radius: 20px;
+    white-space: nowrap;
+    letter-spacing: 0.02em;
+  }
+
+  .param-row strong {
+    font-size: 0.92rem;
+    font-weight: 700;
+    display: block;
+    color: var(--text);
+  }
+
+  .param-row span {
+    font-size: 0.82rem;
+    color: var(--text-muted);
+    display: block;
+    margin-top: 2px;
+  }
+
+  /* ── EDGE TYPES ── */
+  .edge-list { display: flex; flex-direction: column; gap: 10px; }
+
+  .edge-row {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 14px 18px;
+    box-shadow: 0 1px 4px rgba(0,33,105,0.05);
+  }
+
+  .edge-line {
+    width: 48px;
+    height: 3px;
+    border-radius: 2px;
+    flex-shrink: 0;
+  }
+
+  .edge-row div strong { font-size: 0.92rem; display: block; }
+  .edge-row div span { font-size: 0.82rem; color: var(--text-muted); }
+
+  /* ── STEPS ── */
+  .steps { display: flex; flex-direction: column; gap: 0; }
+
+  .step {
+    display: flex;
+    gap: 16px;
+    padding-bottom: 24px;
+    position: relative;
+  }
+
+  .step:not(:last-child)::after {
+    content: '';
+    position: absolute;
+    left: 19px;
+    top: 40px;
+    bottom: 0;
+    width: 2px;
+    background: var(--border);
+  }
+
+  .step-num {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: var(--primary);
+    color: #fff;
+    font-weight: 800;
+    font-size: 0.9rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    position: relative;
+    z-index: 1;
+  }
+
+  .step-body { padding-top: 8px; }
+  .step-body strong { display: block; font-size: 0.95rem; font-weight: 700; margin-bottom: 4px; }
+  .step-body p { font-size: 0.88rem; color: var(--text-muted); }
+
+  /* ── CODE ── */
+  code {
+    background: var(--code-bg);
+    color: #1a1a2e;
+    font-family: 'SF Mono', 'Fira Code', 'Cascadia Code', Consolas, monospace;
+    font-size: 0.87em;
+    padding: 2px 7px;
+    border-radius: 4px;
+    border: 1px solid var(--border);
+  }
+
+  pre {
+    background: #1e2235;
+    color: #e2e8f0;
+    border-radius: 8px;
+    padding: 18px 20px;
+    font-family: 'SF Mono', 'Fira Code', 'Cascadia Code', Consolas, monospace;
+    font-size: 0.87rem;
+    line-height: 1.7;
+    overflow-x: auto;
+    margin: 12px 0;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.12);
+  }
+
+  pre .kw { color: #7dd3fc; }
+  pre .str { color: #86efac; }
+  pre .cm { color: #94a3b8; font-style: italic; }
+  pre .fn { color: #fbbf24; }
+
+  /* ── CALLOUTS ── */
+  .tip, .warn, .note {
+    border-radius: 8px;
+    padding: 14px 18px;
+    margin: 14px 0;
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+    font-size: 0.9rem;
+    line-height: 1.6;
+  }
+
+  .tip { background: var(--tip-bg); border-left: 4px solid var(--tip-border); }
+  .warn { background: var(--warn-bg); border-left: 4px solid var(--warn-border); }
+  .note { background: var(--success-bg); border-left: 4px solid var(--success-border); }
+
+  .tip-icon { font-size: 1.1rem; flex-shrink: 0; margin-top: 1px; }
+
+  .tip strong, .warn strong, .note strong { display: block; margin-bottom: 2px; }
+
+  /* ── KEYBOARD SHORTCUTS ── */
+  .shortcut-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 10px;
+  }
+
+  .shortcut-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 12px 16px;
+    box-shadow: 0 1px 4px rgba(0,33,105,0.04);
+  }
+
+  .shortcut-row span { font-size: 0.88rem; color: var(--text); }
+
+  .kbd-group { display: flex; gap: 4px; align-items: center; flex-shrink: 0; }
+
+  kbd {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: #f8f9fb;
+    border: 1px solid #c5cad6;
+    border-bottom-width: 3px;
+    border-radius: 5px;
+    padding: 3px 8px;
+    font-family: var(--font);
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: var(--text);
+    white-space: nowrap;
+    box-shadow: inset 0 -1px 0 #c5cad6;
+  }
+
+  .kbd-sep { font-size: 0.75rem; color: var(--text-muted); }
+
+  /* ── MATRIX DEMO ── */
+  .matrix-demo {
+    border-radius: 8px;
+    overflow: hidden;
+    border: 1px solid var(--border);
+    font-size: 0.82rem;
+  }
+
+  .matrix-demo table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+
+  .matrix-demo th {
+    background: var(--primary);
+    color: #fff;
+    padding: 9px 12px;
+    text-align: left;
+    font-weight: 600;
+    font-size: 0.8rem;
+  }
+
+  .matrix-demo td {
+    padding: 9px 12px;
+    border-bottom: 1px solid var(--border);
+    background: var(--card);
+  }
+
+  .matrix-demo tr:last-child td { border-bottom: none; }
+
+  .matrix-demo .cell-dot {
+    display: inline-block;
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    margin: 0 2px;
+  }
+
+  /* ── TWO COLUMNS ── */
+  .two-col {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+
+  @media (max-width: 600px) {
+    .two-col { grid-template-columns: 1fr; }
+    .param-row { grid-template-columns: 1fr; }
+    .shortcut-grid { grid-template-columns: 1fr; }
+  }
+
+  /* ── INLINED PILL ── */
+  .pill {
+    display: inline-block;
+    background: var(--primary);
+    color: #fff;
+    font-size: 0.75rem;
+    font-weight: 700;
+    padding: 2px 9px;
+    border-radius: 12px;
+    vertical-align: middle;
+    white-space: nowrap;
+  }
+
+  .pill.green { background: #16a34a; }
+  .pill.orange { background: #ea580c; }
+  .pill.gray { background: #64748b; }
+
+  /* ── FOOTER ── */
+  footer {
+    background: var(--primary);
+    color: rgba(255,255,255,0.7);
+    text-align: center;
+    padding: 32px 24px;
+    font-size: 0.85rem;
+  }
+
+  footer a {
+    color: rgba(255,255,255,0.9);
+    text-decoration: none;
+    font-weight: 600;
+  }
+
+  footer a:hover { text-decoration: underline; }
+
+  /* ── MISC ── */
+  ul, ol {
+    padding-left: 20px;
+    margin: 8px 0;
+  }
+
+  li { margin-bottom: 4px; font-size: 0.92rem; }
+
+  .text-muted { color: var(--text-muted); font-size: 0.88rem; }
+
+  hr { border: none; border-top: 1px solid var(--border); margin: 24px 0; }
+
+  .tag {
+    display: inline-block;
+    background: var(--code-bg);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 2px 9px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--primary);
+    margin: 2px;
+  }
+</style>
+</head>
+<body>
+
+<!-- ── NAVIGATION ── -->
+<nav>
+  <a class="nav-brand" href="#">
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+      <rect x="2" y="3" width="7" height="7" rx="1.5"/>
+      <rect x="15" y="3" width="7" height="7" rx="1.5"/>
+      <rect x="8.5" y="14" width="7" height="7" rx="1.5"/>
+      <line x1="5.5" y1="10" x2="12" y2="14"/>
+      <line x1="18.5" y1="10" x2="12" y2="14"/>
+    </svg>
+    Hjelp
+  </a>
+  <div class="nav-links">
+    <a href="#kom-i-gang">Kom i gang</a>
+    <a href="#kategorier">Kategorier</a>
+    <a href="#parametere">Parametere</a>
+    <a href="#relasjoner">Relasjoner</a>
+    <a href="#grafisk">Grafisk visning</a>
+    <a href="#tabell">Tabellvisning</a>
+    <a href="#matrise">Matrisevisning</a>
+    <a href="#perspektiver">Perspektiver</a>
+    <a href="#tidslinje">Tidslinje</a>
+    <a href="#grupperingsbokser">Grupperingsbokser</a>
+    <a href="#betinget-formatering">Betinget formatering</a>
+    <a href="#import-eksport">Import/Eksport</a>
+    <a href="#innstillinger">Innstillinger</a>
+    <a href="#snarveier">Snarveier</a>
+  </div>
+  <a href="mapper_edit.html" class="nav-open">Åpne appen →</a>
+</nav>
+
+<!-- ── HERO ── -->
+<div class="hero">
+  <div class="hero-badge">Brukerveiledning</div>
+  <h1>Virksomhetskartlegger</h1>
+  <p>Et strategisk kartleggingsverktøy for å visualisere og analysere virksomhetens strukturer, koblinger og mål – rett i nettleseren, uten installasjon.</p>
+  <div class="hero-actions">
+    <a href="mapper_edit.html" class="btn-primary">Åpne appen</a>
+    <a href="#kom-i-gang" class="btn-secondary">Les veiledningen</a>
+  </div>
+</div>
+
+<!-- ── QUICK ACCESS ── -->
+<div class="quick-strip">
+  <div class="quick-grid">
+    <a class="quick-card" href="#kategorier">
+      <div class="quick-icon">📂</div>
+      <div><strong>Kategorier</strong><span>Grupper og typer</span></div>
+    </a>
+    <a class="quick-card" href="#grafisk">
+      <div class="quick-icon">🗺️</div>
+      <div><strong>Grafisk visning</strong><span>Drag, zoom, koblinger</span></div>
+    </a>
+    <a class="quick-card" href="#tabell">
+      <div class="quick-icon">📋</div>
+      <div><strong>Tabellvisning</strong><span>Rader, kolonner, filter</span></div>
+    </a>
+    <a class="quick-card" href="#matrise">
+      <div class="quick-icon">⬛</div>
+      <div><strong>Matrisevisning</strong><span>Koblingsmatrise</span></div>
+    </a>
+    <a class="quick-card" href="#perspektiver">
+      <div class="quick-icon">👁️</div>
+      <div><strong>Perspektiver</strong><span>Filtrer for målgruppe</span></div>
+    </a>
+    <a class="quick-card" href="#snarveier">
+      <div class="quick-icon">⌨️</div>
+      <div><strong>Snarveier</strong><span>Tastaturkommandoer</span></div>
+    </a>
+  </div>
+</div>
+
+<!-- ── MAIN CONTENT ── -->
+<div class="page-wrap">
+
+  <!-- ── KOM I GANG ── -->
+  <section class="section" id="kom-i-gang">
+    <div class="section-header">
+      <div class="section-icon">🚀</div>
+      <div>
+        <h2>Kom i gang</h2>
+        <div class="section-sub">Grunnleggende om appen og datamodellen</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>Hva er Virksomhetskartlegger?</h3>
+      <p>Virksomhetskartlegger er et strategisk kartleggingsverktøy som lar deg bygge opp og visualisere virksomhetens strukturer – fra strategiske mål til IT-systemer og alt imellom. Du kan tegne koblinger mellom objekter, definere egenskaper, filtrere for ulike målgrupper og eksportere til bilder eller regneark.</p>
+      <p>Appen kjører direkte i nettleseren. Data lagres i nettleserens lokale lagring (localStorage) – ingen innlogging, ingen server, ingen installasjon.</p>
+    </div>
+
+    <div class="two-col">
+      <div class="card">
+        <h3>Tre visningsmoduser</h3>
+        <ul>
+          <li><strong>Grafisk</strong> – interaktivt kart med noder og koblinger</li>
+          <li><strong>Tabell</strong> – strukturert tabellvisning med inline-redigering</li>
+          <li><strong>Matrise</strong> – koblingsmatrise mellom to kategorier</li>
+        </ul>
+        <p style="margin-top:10px;">Bytt mellom visningene via knappene øverst i verktøylinjen.</p>
+      </div>
+      <div class="card">
+        <h3>Dataene dine er trygge</h3>
+        <ul>
+          <li>Ingenting sendes til en server</li>
+          <li>Alt lagres automatisk lokalt</li>
+          <li>Eksporter full backup som JSON-fil</li>
+          <li>Importer JSON for å gjenopprette</li>
+        </ul>
+        <div class="warn" style="margin-top:12px;">
+          <span class="tip-icon">⚠️</span>
+          <div>Sletting av nettleserdata vil slette kartet. Ta jevnlig backup via <strong>Eksporter JSON</strong>.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>Datamodellen – tre lag</h3>
+      <div class="steps">
+        <div class="step">
+          <div class="step-num">1</div>
+          <div class="step-body">
+            <strong>Kategorier</strong>
+            <p>Definerer en type objekt (f.eks. "KPI", "IT-system"). Hver kategori har en farge og et sett med parametere.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">2</div>
+          <div class="step-body">
+            <strong>Noder / Objekter</strong>
+            <p>Konkrete instanser av en kategori (f.eks. "Kundetilfredshet" som KPI). Noder har verdier for alle kategoriens parametere.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">3</div>
+          <div class="step-body">
+            <strong>Relasjoner / Koblinger</strong>
+            <p>Koblinger mellom noder med en bestemt type (hierarkisk, måler, støtter, leverer til).</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="tip">
+      <span class="tip-icon">💡</span>
+      <div><strong>Demodata</strong> – Appen starter med et ferdig strategisk kart første gang du åpner den. Utforsk gjerne dette før du begynner å bygge ditt eget.</div>
+    </div>
+  </section>
+
+  <!-- ── KATEGORIER ── -->
+  <section class="section" id="kategorier">
+    <div class="section-header">
+      <div class="section-icon">📂</div>
+      <div>
+        <h2>Kategorier</h2>
+        <div class="section-sub">Definer objekttyper i virksomheten din</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>Hva er en kategori?</h3>
+      <p>En kategori er en type objekt du vil kartlegge – for eksempel <em>Strategisk mål</em>, <em>KPI</em>, <em>Kapabilitet</em>, <em>Initiativ</em> eller <em>IT-system</em>. Alle objekter (noder) av samme type tilhører samme kategori og deler de samme parameterne (kolonnene).</p>
+      <p>Kategorier vises i venstre sideliste i grafisk visning, og som blokker i tabellvisning.</p>
+    </div>
+
+    <div class="two-col">
+      <div class="card">
+        <h3>Opprett ny kategori</h3>
+        <div class="steps">
+          <div class="step">
+            <div class="step-num">1</div>
+            <div class="step-body"><strong>Klikk "+ Kategori"</strong><p>I venstre sideliste i grafisk visning.</p></div>
+          </div>
+          <div class="step">
+            <div class="step-num">2</div>
+            <div class="step-body"><strong>Gi den et navn og velg farge</strong><p>Fargen brukes i grafen og tabellen for å skille kategorier visuelt.</p></div>
+          </div>
+          <div class="step">
+            <div class="step-num">3</div>
+            <div class="step-body"><strong>Legg til parametere</strong><p>Klikk "Rediger" på kategorien for å legge til egendefinerte felt.</p></div>
+          </div>
+        </div>
+      </div>
+      <div class="card">
+        <h3>Rediger kategori</h3>
+        <p>Klikk <strong>"Rediger"</strong> på en kategori for å:</p>
+        <ul>
+          <li>Endre navn og farge</li>
+          <li>Legge til, redigere eller slette parametere</li>
+          <li>Endre rekkefølge på parametere</li>
+          <li>Se og administrere nodene i kategorien</li>
+        </ul>
+        <div class="tip" style="margin-top:12px;">
+          <span class="tip-icon">💡</span>
+          <div>Parametere kan legges til og endres når som helst – eksisterende noder beholder sine verdier.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── PARAMETERE ── -->
+  <section class="section" id="parametere">
+    <div class="section-header">
+      <div class="section-icon">🔧</div>
+      <div>
+        <h2>Parametere</h2>
+        <div class="section-sub">Definer hvilke felter hvert objekt har</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <p>Parametere er feltene (kolonnene) til en kategori. Hvert objekt i kategorien får verdier for alle parameterne. Parametere har ulike typer som bestemmer hvordan verdien lagres og vises.</p>
+    </div>
+
+    <div class="param-grid">
+
+      <div class="param-row">
+        <span class="param-badge">Tekst</span>
+        <div>
+          <strong>Fritekst</strong>
+          <span>Fri tekst – beskrivelser, notater, kommentarer.</span>
+        </div>
+        <span class="tag">T</span>
+      </div>
+
+      <div class="param-row">
+        <span class="param-badge">Tall</span>
+        <div>
+          <strong>Numerisk verdi</strong>
+          <span>Tall med valgfri enhet (f.eks. "kr", "%" eller "dager"). Kan brukes i beregninger.</span>
+        </div>
+        <span class="tag">123</span>
+      </div>
+
+      <div class="param-row">
+        <span class="param-badge">Status</span>
+        <div>
+          <strong>Trafikklys</strong>
+          <span>Rød / Gul / Grønn. Kan aggregeres oppover fra tilknyttede noder (dårligste vinner).</span>
+        </div>
+        <span class="tag">🔴</span>
+      </div>
+
+      <div class="param-row">
+        <span class="param-badge">Ja / Nei</span>
+        <div>
+          <strong>Boolsk avkrysning</strong>
+          <span>Enkelt ja/nei-felt med avkrysningsboks.</span>
+        </div>
+        <span class="tag">☑</span>
+      </div>
+
+      <div class="param-row">
+        <span class="param-badge">Dato</span>
+        <div>
+          <strong>Datofelt</strong>
+          <span>Dato-velger. Egnet for frister, oppstartsdatoer, milepæler.</span>
+        </div>
+        <span class="tag">📅</span>
+      </div>
+
+      <div class="param-row">
+        <span class="param-badge">Valgliste</span>
+        <div>
+          <strong>Enkeltvalg-nedtrekksliste</strong>
+          <span>Definer alternativer kommaseparert (f.eks. <code>Lav,Medium,Høy</code>). Brukeren velger ett alternativ.</span>
+        </div>
+        <span class="tag">▼</span>
+      </div>
+
+      <div class="param-row">
+        <span class="param-badge">Flervalg</span>
+        <div>
+          <strong>Flervalg-avkrysning</strong>
+          <span>Definer alternativer kommaseparert. Brukeren kan krysse av ett eller flere.</span>
+        </div>
+        <span class="tag">☑☑</span>
+      </div>
+
+      <div class="param-row">
+        <span class="param-badge">Flerverdi</span>
+        <div>
+          <strong>Fritekst-tagg-felt</strong>
+          <span>Flere fritekstverdier som "tags". Egnet for stikkord, ansvarlige, teknologier.</span>
+        </div>
+        <span class="tag">#</span>
+      </div>
+
+      <div class="param-row">
+        <span class="param-badge">Beregnet</span>
+        <div>
+          <strong>Formel basert på andre parametere</strong>
+          <span>Beregner verdi automatisk fra andre tall-parametere i samme kategori.</span>
+        </div>
+        <span class="tag">ƒ</span>
+      </div>
+
+    </div>
+
+    <div class="card" style="margin-top:20px;">
+      <h3>Beregnede parametere – formelsyntaks</h3>
+      <p>Bruk <code>{ParamNavn}</code> for å referere til andre tall-parametere i samme kategori. Matematiske standardfunksjoner støttes:</p>
+
+      <pre><span class="cm">// Enkel aritmetikk</span>
+{Inntekt} - {Kostnad}
+
+<span class="cm">// Prosentberegning med avrunding</span>
+<span class="fn">round</span>({Faktisk} / {Mål} * 100)
+
+<span class="cm">// Mer komplekse uttrykk</span>
+<span class="fn">round</span>(({Inntekt} - {Kostnad}) / {Inntekt} * 100)</pre>
+
+      <p>Støttede funksjoner:</p>
+      <div>
+        <span class="tag">round</span>
+        <span class="tag">floor</span>
+        <span class="tag">ceil</span>
+        <span class="tag">min</span>
+        <span class="tag">max</span>
+        <span class="tag">abs</span>
+        <span class="tag">sqrt</span>
+        <span class="tag">pow</span>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>Statusaggregering</h3>
+      <p>For parametere av typen <strong>Status (trafikklys)</strong> kan du aktivere aggregering: <em>"Aggreger status fra tilknyttede noder"</em>. Da beregnes statusen automatisk som den dårligste statusen fra alle noder som peker inn mot denne noden.</p>
+      <div class="tip">
+        <span class="tip-icon">💡</span>
+        <div>Eksempel: En KPI med aggregert status vil vise rød hvis <em>ett av</em> de underliggende initiativene har rød status.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── RELASJONER ── -->
+  <section class="section" id="relasjoner">
+    <div class="section-header">
+      <div class="section-icon">🔗</div>
+      <div>
+        <h2>Relasjoner / Koblinger</h2>
+        <div class="section-sub">Definer sammenhenger mellom objekter</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <p>Relasjoner (kanter) binder noder sammen og gir kartet mening. Det finnes fire relasjonstyper som kan tilpasses i Innstillinger.</p>
+    </div>
+
+    <div class="edge-list">
+      <div class="edge-row">
+        <div class="edge-line" style="background:#1e3a8a;"></div>
+        <div>
+          <strong>Hierarkisk</strong>
+          <span>Mørkeblå, solid linje. Brukes til overordnet/underordnet-forhold, f.eks. mål → kapabilitet.</span>
+        </div>
+      </div>
+      <div class="edge-row">
+        <div class="edge-line" style="background:#16a34a; border-top: 3px dashed #16a34a; height:0;"></div>
+        <div>
+          <strong>Måler</strong>
+          <span>Grønn, stiplet linje. En KPI måler et strategisk mål.</span>
+        </div>
+      </div>
+      <div class="edge-row">
+        <div class="edge-line" style="background:#2563eb; border-top: 3px dashed #2563eb; height:0;"></div>
+        <div>
+          <strong>Støtter</strong>
+          <span>Blå, stiplet linje. Et initiativ støtter eller bidrar til en kapabilitet.</span>
+        </div>
+      </div>
+      <div class="edge-row">
+        <div class="edge-line" style="background:#ea580c;"></div>
+        <div>
+          <strong>Leverer til</strong>
+          <span>Oransje, solid linje. Et IT-system leverer til eller muliggjør en kapabilitet.</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="card" style="margin-top:16px;">
+      <h3>Opprette en kobling i grafisk visning</h3>
+      <div class="steps">
+        <div class="step">
+          <div class="step-num">1</div>
+          <div class="step-body"><strong>Hold musepekeren over en node</strong><p>En grønn prikk vises på høyre side av noden.</p></div>
+        </div>
+        <div class="step">
+          <div class="step-num">2</div>
+          <div class="step-body"><strong>Dra fra den grønne prikken</strong><p>Hold venstre museknapp nede og dra mot mål-noden.</p></div>
+        </div>
+        <div class="step">
+          <div class="step-num">3</div>
+          <div class="step-body"><strong>Slipp over mål-noden</strong><p>En popup lar deg velge relasjonstype. Klikk på ønsket type.</p></div>
+        </div>
+      </div>
+      <div class="tip">
+        <span class="tip-icon">💡</span>
+        <div>Du kan endre relasjonstypen etterpå ved å velge kanten og bruke sidepanelet til høyre.</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>Slette en kobling</h3>
+      <p>Klikk på koblingslinjen i grafisk visning for å markere den, deretter trykk <kbd>Del</kbd> eller bruk slett-knappen i sidepanelet.</p>
+    </div>
+  </section>
+
+  <!-- ── GRAFISK VISNING ── -->
+  <section class="section" id="grafisk">
+    <div class="section-header">
+      <div class="section-icon">🗺️</div>
+      <div>
+        <h2>Grafisk visning</h2>
+        <div class="section-sub">Interaktivt kart med noder og koblinger</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>Navigasjon på lerretet</h3>
+      <div class="shortcut-grid">
+        <div class="shortcut-row"><span>Panorere (flytte kartet)</span><div class="kbd-group">Drag på tomt område</div></div>
+        <div class="shortcut-row"><span>Zoom inn/ut</span><div class="kbd-group">Scrollhjul</div></div>
+        <div class="shortcut-row"><span>Flytte en node</span><div class="kbd-group">Drag noden</div></div>
+        <div class="shortcut-row"><span>Endre størrelse på node</span><div class="kbd-group">Drag i hjørne/kant</div></div>
+        <div class="shortcut-row"><span>Velge en node</span><div class="kbd-group">Klikk</div></div>
+        <div class="shortcut-row"><span>Opprette ny node</span><div class="kbd-group">Dobbelt-klikk på canvas</div></div>
+      </div>
+    </div>
+
+    <div class="two-col">
+      <div class="card">
+        <h3>Redigere en node</h3>
+        <p>Klikk en node for å åpne den i <strong>sidepanelet</strong> til høyre. Her kan du:</p>
+        <ul>
+          <li>Redigere tittel og alle parameterverdier</li>
+          <li>Se og administrere koblinger</li>
+          <li>Endre relasjonens type</li>
+          <li>Slette noden</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>Verktøylinjefunksjoner</h3>
+        <ul>
+          <li><strong>Auto-layout</strong> – Arrangerer noder automatisk (Sugiyama-algoritmen)</li>
+          <li><strong>Snap til rutenett</strong> – Låser noder til et rutenett ved moving</li>
+          <li><strong>Relasjonforklaring</strong> – Toggle legend for relasjonstyper</li>
+          <li><strong>Søk</strong> – Finn noder etter navn eller verdier</li>
+          <li><strong>Eksporter</strong> – SVG eller PNG av kartet</li>
+          <li><strong>Angre/Gjør om</strong> – Ctrl+Z / Ctrl+Shift+Z</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>Slette noder og koblinger</h3>
+      <p>Velg et element (node eller kobling) ved å klikke, deretter:</p>
+      <ul>
+        <li>Trykk <kbd>Del</kbd> på tastaturet, eller</li>
+        <li>Bruk slett-knappen i sidepanelet til høyre</li>
+      </ul>
+    </div>
+
+    <div class="tip">
+      <span class="tip-icon">💡</span>
+      <div><strong>Auto-layout</strong> er spesielt nyttig når du har mange noder som overlapper hverandre. Algoritmen prøver å minimere kryssende koblinger og plassere noder i logiske lag.</div>
+    </div>
+  </section>
+
+  <!-- ── TABELLVISNING ── -->
+  <section class="section" id="tabell">
+    <div class="section-header">
+      <div class="section-icon">📋</div>
+      <div>
+        <h2>Tabellvisning</h2>
+        <div class="section-sub">Strukturert redigering av objekter og parametere</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <p>Tabellvisningen viser alle noder i en kategori som rader, med parameterne som kolonner. Egnet for å legge inn og redigere data raskt uten å navigere i grafen.</p>
+    </div>
+
+    <div class="two-col">
+      <div class="card">
+        <h3>Redigere i tabellen</h3>
+        <ul>
+          <li>Klikk en celle for å redigere verdien inline</li>
+          <li>Trykk <kbd>Tab</kbd> for å gå til neste celle</li>
+          <li>Trykk <kbd>Enter</kbd> for å bekrefte og gå til raden under</li>
+          <li>Klikk <strong>⋯</strong>-knappen på en rad for å åpne noden i sidepanelet</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>Kolonnestyring</h3>
+        <p>Klikk <strong>"Kolonner"</strong>-knappen per kategoriblokk for å:</p>
+        <ul>
+          <li>Skjule eller vise enkeltkolonner</li>
+          <li>Endre rekkefølge med ↑↓-pilene</li>
+          <li>Aktivere avhengighetskolonner (viser koblinger)</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>Avhengighetskolonner</h3>
+      <p>For hver relasjonstype kan du aktivere en egen kolonne som viser hvilke noder denne noden er koblet til. Egnet for å se f.eks. "hvilke IT-systemer støtter kapabilitet X?" direkte i tabellen.</p>
+    </div>
+
+    <div class="card">
+      <h3>Eksport og import via CSV</h3>
+      <div class="two-col">
+        <div>
+          <strong>Eksport</strong>
+          <p style="margin-top:6px;">Klikk <strong>CSV</strong>-knappen per kategori. Filen eksporteres med UTF-8 BOM slik at den åpnes korrekt i Excel. Du kan også eksportere som JSON.</p>
+        </div>
+        <div>
+          <strong>Import</strong>
+          <p style="margin-top:6px;">Klikk <strong>Importer CSV</strong> i verktøylinjen. En dialog lar deg mappe CSV-kolonner til parametere, og du kan velge å legge til i eksisterende kategori eller opprette ny.</p>
+        </div>
+      </div>
+      <div class="tip" style="margin-top:12px;">
+        <span class="tip-icon">💡</span>
+        <div>CSV-import er fleksibel: kolonnenavn i filen trenger ikke å matche eksakt – du mapper dem manuelt i importdialogen.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── MATRISEVISNING ── -->
+  <section class="section" id="matrise">
+    <div class="section-header">
+      <div class="section-icon">⬛</div>
+      <div>
+        <h2>Matrisevisning</h2>
+        <div class="section-sub">Visualiser koblinger mellom to kategorier som et rutenett</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <p>Matrisevisningen viser relasjoner mellom noder i <strong>to ulike kategorier</strong> som et interaktivt rutenett – én kategori som rader, én som kolonner. Fargede prikker i cellene viser hvilken type kobling som finnes.</p>
+    </div>
+
+    <div class="card">
+      <h3>Eksempel: Kapabiliteter × IT-systemer</h3>
+      <div class="matrix-demo">
+        <table>
+          <thead>
+            <tr>
+              <th>Kapabilitet \ IT-system</th>
+              <th>CRM-system</th>
+              <th>ERP-plattform</th>
+              <th>Datalageret</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Kundehåndtering</strong></td>
+              <td><span class="cell-dot" style="background:#ea580c;" title="Leverer til"></span> <span class="cell-dot" style="background:#2563eb;" title="Støtter"></span></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td><strong>Rapportering</strong></td>
+              <td></td>
+              <td><span class="cell-dot" style="background:#2563eb;" title="Støtter"></span></td>
+              <td><span class="cell-dot" style="background:#ea580c;" title="Leverer til"></span></td>
+            </tr>
+            <tr>
+              <td><strong>Ordrebehandling</strong></td>
+              <td></td>
+              <td><span class="cell-dot" style="background:#ea580c;" title="Leverer til"></span> <span class="cell-dot" style="background:#1e3a8a;" title="Hierarkisk"></span></td>
+              <td></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <p style="margin-top:10px;font-size:0.85rem;color:var(--text-muted);">Fargede prikker tilsvarer relasjonstypene. Mørkeblå = Hierarkisk, Grønn = Måler, Blå = Støtter, Oransje = Leverer til.</p>
+    </div>
+
+    <div class="two-col">
+      <div class="card">
+        <h3>Klikke i matrisen</h3>
+        <ul>
+          <li>Klikk en <strong>tom celle</strong> for å legge til en kobling mellom de to nodene</li>
+          <li>Klikk en <strong>prikk</strong> i en celle for å fjerne akkurat den koblingen</li>
+          <li>Velg relasjonstype i popup som vises</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>Typiske brukstilfeller</h3>
+        <ul>
+          <li>Hvilke IT-systemer støtter hvilke kapabiliteter?</li>
+          <li>Hvilke initiativer bidrar til hvilke mål?</li>
+          <li>Hvilke KPI-er måler hvilke strategiske mål?</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── PERSPEKTIVER ── -->
+  <section class="section" id="perspektiver">
+    <div class="section-header">
+      <div class="section-icon">👁️</div>
+      <div>
+        <h2>Perspektiver</h2>
+        <div class="section-sub">Filtrer kartet for ulike målgrupper</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <p>Et perspektiv er et navngitt filter som viser kun et utvalg kategorier. Bruk perspektiver for å lage skreddersydde visninger for ulike målgrupper – styret ser bare mål og KPI-er, IT-direktøren ser kapabiliteter og systemer, osv.</p>
+    </div>
+
+    <div class="two-col">
+      <div class="card">
+        <h3>Opprette perspektiv</h3>
+        <div class="steps">
+          <div class="step">
+            <div class="step-num">1</div>
+            <div class="step-body"><strong>Klikk "Perspektiver"</strong><p>I topplisten øverst i appen.</p></div>
+          </div>
+          <div class="step">
+            <div class="step-num">2</div>
+            <div class="step-body"><strong>Klikk "+ Nytt perspektiv"</strong><p>Gi perspektivet et navn og en beskrivelse.</p></div>
+          </div>
+          <div class="step">
+            <div class="step-num">3</div>
+            <div class="step-body"><strong>Velg kategorier</strong><p>Kryss av hvilke kategorier som skal være synlige i dette perspektivet.</p></div>
+          </div>
+        </div>
+      </div>
+      <div class="card">
+        <h3>Eksempler på perspektiver</h3>
+        <ul>
+          <li><strong>Styrevisning</strong> – Strategiske mål + KPI-er</li>
+          <li><strong>Porteføljevisning</strong> – Kapabiliteter + Initiativer</li>
+          <li><strong>Teknologikart</strong> – Kapabiliteter + IT-systemer</li>
+          <li><strong>Operasjonell</strong> – Prosesser + Systemer + Team</li>
+        </ul>
+        <div class="note" style="margin-top:12px;">
+          <span class="tip-icon">✅</span>
+          <div>"Alle" viser alltid alle kategorier og er det aktive standard-perspektivet.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>Søk i kartet</h3>
+      <p>Trykk <kbd>/</kbd> eller <kbd>Ctrl</kbd>+<kbd>K</kbd> for å aktivere søk. Skriv inn søketekst for å:</p>
+      <ul>
+        <li>Dimme ikke-matchende noder i grafisk visning</li>
+        <li>Filtrere rader i tabellvisning</li>
+        <li>Søket matcher mot nodetitler og parameterverdier</li>
+      </ul>
+      <p>Trykk <kbd>Esc</kbd> for å fjerne søket.</p>
+    </div>
+  </section>
+
+  <!-- ── IMPORT / EKSPORT ── -->
+  <section class="section" id="import-eksport">
+    <div class="section-header">
+      <div class="section-icon">💾</div>
+      <div>
+        <h2>Import og Eksport</h2>
+        <div class="section-sub">Backup, deling og integrasjon</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>Full backup – JSON</h3>
+      <div class="two-col">
+        <div>
+          <strong>Eksporter</strong>
+          <p style="margin-top:6px;">Klikk <strong>"Eksporter JSON"</strong> i verktøylinjen. Filen inneholder hele kartet inkludert kategorier, parametere, noder, koblinger og perspektiver.</p>
+        </div>
+        <div>
+          <strong>Importer</strong>
+          <p style="margin-top:6px;">Klikk <strong>"Importer JSON"</strong> og velg en tidligere eksportert JSON-fil for å gjenopprette eller dele et kart.</p>
+        </div>
+      </div>
+      <div class="warn" style="margin-top:12px;">
+        <span class="tip-icon">⚠️</span>
+        <div>Import overskriver eksisterende data. Ta en eksport-backup før du importerer.</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>Eksport til bilde – SVG og PNG</h3>
+      <p>I grafisk visning klikker du <strong>eksportknappen</strong> i verktøylinjen og velger format:</p>
+      <ul>
+        <li><strong>SVG</strong> – Vektorformat, skalerbart uten kvalitetstap. Egnet for presentasjoner og trykk.</li>
+        <li><strong>PNG</strong> – Rasterbilde, enkel å lime inn i dokumenter og e-post.</li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <h3>Per-kategori eksport og import</h3>
+      <div class="two-col">
+        <div>
+          <p><strong>JSON-eksport</strong> per kategori gjøres fra tabellvisningens eksportmeny.</p>
+          <p style="margin-top:6px;"><strong>CSV-eksport</strong> lager en fil med UTF-8 BOM som åpnes korrekt i Excel. Alle parametere og koblingskolonner inkluderes.</p>
+        </div>
+        <div>
+          <p><strong>CSV-import</strong> via knappen i tabellvisningens verktøylinje. Du kan:</p>
+          <ul>
+            <li>Mappe CSV-kolonner til eksisterende parametere</li>
+            <li>Legge til i en eksisterende kategori</li>
+            <li>Opprette en ny kategori fra CSV-en</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>Angre og Gjør om</h3>
+      <p>Alle endringer kan angres inntil 20 steg tilbake:</p>
+      <ul>
+        <li><kbd>Ctrl</kbd>+<kbd>Z</kbd> – Angre siste handling</li>
+        <li><kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>Z</kbd> – Gjør om (etter angre)</li>
+        <li>Bruk også angre/gjørom-knappene i verktøylinjen</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- ── INNSTILLINGER ── -->
+  <section class="section" id="innstillinger">
+    <div class="section-header">
+      <div class="section-icon">⚙️</div>
+      <div>
+        <h2>Innstillinger</h2>
+        <div class="section-sub">Tilpass appen til dine behov</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <p>Åpne innstillinger ved å klikke <strong>tannhjulikonet (⚙)</strong> i topplisten. Innstillingsdialogen har to faner:</p>
+    </div>
+
+    <div class="two-col">
+      <div class="card">
+        <h3>Relasjonstyper</h3>
+        <p>Tilpass de fire relasjonene:</p>
+        <ul>
+          <li>Endre navn til noe meningsfylt i din kontekst</li>
+          <li>Velg farge for linjen</li>
+          <li>Velg stiplingsmønster (solid, stiplet, prikket)</li>
+          <li>Juster linjetykkelse</li>
+        </ul>
+        <div class="tip" style="margin-top:12px;">
+          <span class="tip-icon">💡</span>
+          <div>Endringer i relasjonstyper påvirker <em>alle</em> eksisterende koblinger av den typen umiddelbart.</div>
+        </div>
+      </div>
+      <div class="card">
+        <h3>Design</h3>
+        <p>Juster kartets utseende:</p>
+        <ul>
+          <li><strong>Hjørneradius</strong> – avrunding på nodekortene</li>
+          <li><strong>Minimumsbredde</strong> – minste bredde for noder i grafen</li>
+          <li><strong>Karttittel</strong> – tittel som vises i kartet og i eksportfilens navn</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── TASTATURSNARVEIER ── -->
+  <section class="section" id="snarveier">
+    <div class="section-header">
+      <div class="section-icon">⌨️</div>
+      <div>
+        <h2>Tastatursnarveier</h2>
+        <div class="section-sub">Effektiv bruk av tastaturet</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="shortcut-grid">
+
+        <div class="shortcut-row">
+          <span>Søk</span>
+          <div class="kbd-group">
+            <kbd>/</kbd>
+            <span class="kbd-sep">eller</span>
+            <kbd>Ctrl</kbd><span class="kbd-sep">+</span><kbd>K</kbd>
+          </div>
+        </div>
+
+        <div class="shortcut-row">
+          <span>Lukk søk</span>
+          <div class="kbd-group"><kbd>Esc</kbd></div>
+        </div>
+
+        <div class="shortcut-row">
+          <span>Angre</span>
+          <div class="kbd-group"><kbd>Ctrl</kbd><span class="kbd-sep">+</span><kbd>Z</kbd></div>
+        </div>
+
+        <div class="shortcut-row">
+          <span>Gjør om</span>
+          <div class="kbd-group"><kbd>Ctrl</kbd><span class="kbd-sep">+</span><kbd>Shift</kbd><span class="kbd-sep">+</span><kbd>Z</kbd></div>
+        </div>
+
+        <div class="shortcut-row">
+          <span>Slett valgt node / kobling</span>
+          <div class="kbd-group"><kbd>Del</kbd></div>
+        </div>
+
+        <div class="shortcut-row">
+          <span>Opprett ny node</span>
+          <div class="kbd-group">Dobbelt-klikk på canvas</div>
+        </div>
+
+        <div class="shortcut-row">
+          <span>Flytt til neste celle (tabell)</span>
+          <div class="kbd-group"><kbd>Tab</kbd></div>
+        </div>
+
+        <div class="shortcut-row">
+          <span>Bekreft og gå ned (tabell)</span>
+          <div class="kbd-group"><kbd>Enter</kbd></div>
+        </div>
+
+      </div>
+
+      <div class="tip" style="margin-top:16px;">
+        <span class="tip-icon">💡</span>
+        <div>På Mac bruker du <kbd>⌘</kbd> i stedet for <kbd>Ctrl</kbd> for angre og gjørom.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── TIPS OG TRIKS ── -->
+  <section class="section" id="tips">
+    <div class="section-header">
+      <div class="section-icon">✨</div>
+      <div>
+        <h2>Tips og triks</h2>
+        <div class="section-sub">Kom raskere i mål</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>Anbefalt oppsett for ny virksomhet</h3>
+      <div class="steps">
+        <div class="step">
+          <div class="step-num">1</div>
+          <div class="step-body">
+            <strong>Start med kategoriene</strong>
+            <p>Definer de strategiske lagene du vil kartlegge: f.eks. Mål → KPI → Kapabilitet → Initiativ → IT-system.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">2</div>
+          <div class="step-body">
+            <strong>Definer parameterne</strong>
+            <p>For hver kategori, legg til de feltene du trenger. Tenk gjennom hva du vil rapportere på – status, eier, frist, kostnad?</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">3</div>
+          <div class="step-body">
+            <strong>Legg inn data i tabellvisning</strong>
+            <p>Tabellvisning er ofte raskere enn grafisk visning for bulk-innlegging av noder og verdier.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">4</div>
+          <div class="step-body">
+            <strong>Tegn koblinger i grafisk visning</strong>
+            <p>Bytt til grafisk visning og dra relasjoner mellom nodene for å bygge opp avhengighetskartet.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">5</div>
+          <div class="step-body">
+            <strong>Opprett perspektiver</strong>
+            <p>Lag perspektiver for ulike målgrupper og del kartet som PNG eller JSON.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="two-col">
+      <div class="card">
+        <h3>Bruk auto-layout</h3>
+        <p>Etter at du har lagt inn mange noder og koblinger kan grafen bli rotete. Klikk <strong>Auto-layout</strong> i verktøylinjen for å rydde opp automatisk. Resultatet kan justeres manuelt etterpå.</p>
+      </div>
+      <div class="card">
+        <h3>Matrisen som verktøy</h3>
+        <p>Bruk matrisevisning for å raskt se "hvite flekker" – manglende koblinger mellom kategorier. En tom rad eller kolonne i matrisen kan bety at et IT-system ikke støtter noen kapabilitet.</p>
+      </div>
+    </div>
+
+    <div class="note">
+      <span class="tip-icon">✅</span>
+      <div><strong>Husk backup!</strong> Eksporter JSON-backup jevnlig, spesielt etter store endringer. Lagre filen et trygt sted – den er din eneste kopi utenfor nettleseren.</div>
+    </div>
+  </section>
+
+
+  <!-- ── TIDSLINJE ── -->
+  <section class="section" id="tidslinje">
+    <div class="section-header">
+      <div class="section-icon">📅</div>
+      <div>
+        <h2>Tidslinje / Gantt-visning</h2>
+        <div class="section-sub">Visualiser noder på en tidsakse</div>
+      </div>
+    </div>
+
+    <p>Tidslinjevisningen viser noder som horisontale stolper på en kalenderbasert tidslinje — akkurat som et Gantt-diagram. Den er nyttig for initiativ, prosjekter, milepæler og andre noder som har dato-parametere.</p>
+
+    <h3 style="margin:20px 0 10px">Forutsetning</h3>
+    <p>Kategorien du vil vise må ha minst én parameter av typen <strong>Dato</strong>. Uten dato-parametere vil tidslinjen vise en advarsel.</p>
+
+    <div class="tip">
+      <span class="tip-icon">💡</span>
+      <div>Legg til parameterne <strong>«Startdato»</strong> og <strong>«Sluttdato»</strong> (begge type Dato) i kategorier som Initiativ eller Prosjekt for å få fulle Gantt-stolper med varighet.</div>
+    </div>
+
+    <h3 style="margin:20px 0 10px">Slik bruker du tidslinjen</h3>
+    <ol style="padding-left:20px;line-height:2">
+      <li>Klikk <strong>«Tidslinje»</strong> i topbaren</li>
+      <li>Velg hvilken <strong>kategori</strong> som skal vises som rader</li>
+      <li>Velg <strong>startdato-parameter</strong> (f.eks. «Startdato»)</li>
+      <li>Velg <strong>sluttdato-parameter</strong> (f.eks. «Sluttdato») — valgfri, ellers vises punktmarkering</li>
+      <li>Klikk en rad eller stolpe for å åpne noden i sidepanelet</li>
+    </ol>
+
+    <h3 style="margin:20px 0 10px">Hva vises</h3>
+    <table class="ref-table" style="margin-top:0">
+      <thead><tr><th>Element</th><th>Beskrivelse</th></tr></thead>
+      <tbody>
+        <tr><td>Farget stolpe</td><td>Noden sin varighet fra startdato til sluttdato</td></tr>
+        <tr><td>Rød strek</td><td>«I dag»-markør for enkel statusvurdering</td></tr>
+        <tr><td>Månedshoder</td><td>Automatisk månedsinndeling langs x-aksen</td></tr>
+        <tr><td>Venstre kolonne</td><td>Nodenavn — klikk for å åpne i sidepanel</td></tr>
+      </tbody>
+    </table>
+
+    <div class="callout note">
+      <span class="tip-icon">📌</span>
+      <div>Tidslinjen oppdateres automatisk når du endrer dato-verdier i tabell- eller grafvisningen. Tidslinjevalget (kategori og parametere) lagres i nettleseren.</div>
+    </div>
+  </section>
+
+  <!-- ── GRUPPERINGSBOKSER ── -->
+  <section class="section" id="grupperingsbokser">
+    <div class="section-header">
+      <div class="section-icon">⬜</div>
+      <div>
+        <h2>Grupperingsbokser</h2>
+        <div class="section-sub">Visuelle containere og svømmebaner i grafisk visning</div>
+      </div>
+    </div>
+
+    <p>Grupperingsbokser er visuelle rektangler du tegner over kartet for å samle relaterte noder. De er rene overlay-elementer — de påvirker ikke data, beregninger eller koblinger, men gjør kartet langt lettere å lese for andre.</p>
+
+    <h3 style="margin:20px 0 10px">Opprette en gruppe</h3>
+    <ol style="padding-left:20px;line-height:2">
+      <li>Gå til <strong>Grafisk visning</strong></li>
+      <li>Klikk <strong>«⬜ Gruppe»</strong> i verktøylinjen</li>
+      <li>En ny boks plasseres midt i det synlige kartutsnitttet</li>
+      <li>Dra boksen med etiketten og resize med hjørnehåndtaket</li>
+    </ol>
+
+    <h3 style="margin:20px 0 10px">Redigere en gruppe</h3>
+    <p>Klikk på boksen for å velge den — sidepanelet åpnes med:</p>
+    <ul style="padding-left:20px;line-height:2">
+      <li><strong>Navn</strong> — skriv direkte i feltet, oppdateres umiddelbart</li>
+      <li><strong>Farge</strong> — velg blant de 12 palettfargene</li>
+      <li><strong>Slett gruppe</strong> — fjerner boksen (kan angres med Ctrl+Z)</li>
+    </ul>
+
+    <div class="tip">
+      <span class="tip-icon">💡</span>
+      <div>Bruk grupperingsbokser som <strong>svømmebaner</strong>: én boks per forretningsdomene, én per fase, eller én per team. Dra noder inn i boksene for å organisere kartet visuelt.</div>
+    </div>
+
+    <h3 style="margin:20px 0 10px">Tastatur og interaksjon</h3>
+    <table class="ref-table" style="margin-top:0">
+      <thead><tr><th>Handling</th><th>Slik gjør du</th></tr></thead>
+      <tbody>
+        <tr><td>Flytt gruppe</td><td>Dra i etiketten øverst til venstre</td></tr>
+        <tr><td>Endre størrelse</td><td>Dra hjørnehåndtaket (●) nede til høyre</td></tr>
+        <tr><td>Velg gruppe</td><td>Klikk på boksen</td></tr>
+        <tr><td>Slett gruppe</td><td>Velg den, trykk <kbd>Del</kbd></td></tr>
+        <tr><td>Angre</td><td><kbd>Ctrl</kbd>+<kbd>Z</kbd></td></tr>
+      </tbody>
+    </table>
+
+    <div class="callout note">
+      <span class="tip-icon">📌</span>
+      <div>Grupper tegnes <em>bak</em> noder og koblinger, slik at de aldri skjuler innhold. Du kan ha ubegrenset antall grupper per kart.</div>
+    </div>
+  </section>
+
+  <!-- ── BETINGET FORMATERING ── -->
+  <section class="section" id="betinget-formatering">
+    <div class="section-header">
+      <div class="section-icon">🎨</div>
+      <div>
+        <h2>Betinget formatering</h2>
+        <div class="section-sub">Fargelegg rader og noder automatisk basert på verdier</div>
+      </div>
+    </div>
+
+    <p>Betinget formatering lar deg sette opp regler som automatisk fargesetter rader i tabellen og noder i grafvisningen basert på parameterverdier. Regelen «Hvis status er rød → gul radfarge» gjør at kritiske elementer hopper i øynene umiddelbart.</p>
+
+    <h3 style="margin:20px 0 10px">Opprette regler</h3>
+    <ol style="padding-left:20px;line-height:2">
+      <li>Gå til <strong>Tabellvisning</strong></li>
+      <li>Klikk <strong>«Formatering»</strong>-knappen ved siden av «Kolonner» for ønsket kategori</li>
+      <li>Klikk <strong>«+ Legg til regel»</strong></li>
+      <li>Velg <strong>parameter</strong>, <strong>operator</strong> og <strong>verdi</strong></li>
+      <li>Velg <strong>radfarge</strong>, <strong>tekstfarge</strong> og eventuelt <strong>fet skrift</strong></li>
+      <li>Klikk <strong>«Lagre»</strong></li>
+    </ol>
+
+    <h3 style="margin:20px 0 10px">Tilgjengelige operatorer</h3>
+    <table class="ref-table" style="margin-top:0">
+      <thead><tr><th>Operator</th><th>Brukes til</th><th>Eksempel</th></tr></thead>
+      <tbody>
+        <tr><td><code>er lik</code></td><td>Eksakt match</td><td>Status er lik <code>red</code></td></tr>
+        <tr><td><code>er ikke lik</code></td><td>Alle andre verdier</td><td>Status er ikke lik <code>green</code></td></tr>
+        <tr><td><code>er større enn</code></td><td>Tall over grense</td><td>Kostnad &gt; <code>1000000</code></td></tr>
+        <tr><td><code>er mindre enn</code></td><td>Tall under grense</td><td>Score &lt; <code>50</code></td></tr>
+        <tr><td><code>&gt;=</code> / <code>&lt;=</code></td><td>Tall inkl. grense</td><td>Fremdrift &gt;= <code>100</code></td></tr>
+        <tr><td><code>inneholder</code></td><td>Delstreng-søk</td><td>Navn inneholder <code>risiko</code></td></tr>
+        <tr><td><code>er tom</code></td><td>Manglende verdi</td><td>Eier er tom</td></tr>
+        <tr><td><code>er ikke tom</code></td><td>Verdi finnes</td><td>Startdato er ikke tom</td></tr>
+      </tbody>
+    </table>
+
+    <div class="tip">
+      <span class="tip-icon">💡</span>
+      <div>For status-parametere brukes verdiene <code>red</code>, <code>yellow</code> og <code>green</code> i reglene (ikke «Rød»/«Gul»/«Grønn»).</div>
+    </div>
+
+    <h3 style="margin:20px 0 10px">Hvor gjelder reglene?</h3>
+    <ul style="padding-left:20px;line-height:2">
+      <li><strong>Tabellvisning</strong> — hele raden farges med valgt radfarge og tekstfarge</li>
+      <li><strong>Grafisk visning</strong> — noder som matcher får en farget topplinje og justert tittelstil</li>
+    </ul>
+
+    <h3 style="margin:20px 0 10px">Eksempler på nyttige regler</h3>
+    <table class="ref-table" style="margin-top:0">
+      <thead><tr><th>Regel</th><th>Strekfarge</th><th>Effekt</th></tr></thead>
+      <tbody>
+        <tr><td>Status er lik <code>red</code></td><td style="background:#fee2e2">Rød</td><td>Kritiske elementer spretter ut</td></tr>
+        <tr><td>Status er lik <code>yellow</code></td><td style="background:#fef9c3">Gul</td><td>Elementer som trenger oppfølging</td></tr>
+        <tr><td>Fremdrift &lt; <code>30</code></td><td style="background:#fee2e2">Rød</td><td>Prosjekter som henger etter</td></tr>
+        <tr><td>Eier er tom</td><td style="background:#fff7ed">Oransje</td><td>Elementer uten ansvarlig</td></tr>
+        <tr><td>Prioritet er lik <code>Høy</code></td><td style="background:#eff6ff">Blå</td><td>Høyprioriterte saker fremheves</td></tr>
+      </tbody>
+    </table>
+
+    <div class="callout note">
+      <span class="tip-icon">📌</span>
+      <div>Regler evalueres i den rekkefølgen de er opprettet. Hvis flere regler matcher, slås stilene sammen — siste regel vinner ved konflikt.</div>
+    </div>
+  </section>
+
+</div>
+
+<!-- ── FOOTER ── -->
+<footer>
+  <p style="margin-bottom:8px;">
+    <strong style="color:#fff;">Virksomhetskartlegger</strong> – Strategisk kartlegging i nettleseren
+  </p>
+  <p>
+    <a href="mapper_edit.html">Åpne appen</a>
+    &nbsp;&nbsp;·&nbsp;&nbsp;
+    Data lagres lokalt i nettleseren (localStorage)
+    &nbsp;&nbsp;·&nbsp;&nbsp;
+    Ingen server, ingen innlogging
+  </p>
+</footer>
+
+</body>
+</html>
