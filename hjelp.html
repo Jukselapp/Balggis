@@ -645,6 +645,7 @@
     <a href="#tidslinje">Tidslinje</a>
     <a href="#grupperingsbokser">Grupperingsbokser</a>
     <a href="#betinget-formatering">Betinget formatering</a>
+    <a href="#dashboard">Dashboard</a>
     <a href="#import-eksport">Import/Eksport</a>
     <a href="#innstillinger">Innstillinger</a>
     <a href="#snarveier">Snarveier</a>
@@ -1681,6 +1682,86 @@
     <div class="callout note">
       <span class="tip-icon">📌</span>
       <div>Regler evalueres i den rekkefølgen de er opprettet. Hvis flere regler matcher, slås stilene sammen — siste regel vinner ved konflikt.</div>
+    </div>
+  </section>
+
+  <!-- ── DASHBOARD ── -->
+  <section id="dashboard">
+    <div class="section-icon">◫</div>
+    <div class="section-content">
+        <h2>Dashboard</h2>
+        <p class="section-lead">Dashboard-visningen lar deg sette sammen et egendefinert kontrollpanel med widgets fra ulike kategorier og objekter — ideelt for ledermøter, statusgjennomganger og digitale skjermvisninger.</p>
+
+      <h3>Kom i gang</h3>
+      <p>Klikk <strong>«Dashboard»</strong> i topbaren for å åpne visningen. Dashboard er tomt ved oppstart. Klikk <strong>«+ Legg til widget»</strong> eller aktiver <strong>«✎ Rediger»</strong>-modus og velg «+ Widget» for å starte.</p>
+
+      <h3>Widget-typer</h3>
+      <div class="tips-grid">
+        <div class="tip-card">
+          <div class="tip-title">KPI / enkeltverdi</div>
+          <div class="tip-desc">Viser én parameterverdi fra ett objekt i stor, fremtredende skrift. Perfekt for nøkkeltall som «Kundetilfredshet: 87 %» eller statusindikator. Du kan velge en mål-parameter for å vise en fremdriftslinje under verdien.</div>
+        </div>
+        <div class="tip-card">
+          <div class="tip-title">Antall objekter</div>
+          <div class="tip-desc">Stor teller som viser antall noder i en kategori. Nyttig for «12 initiativer», «5 IT-systemer» osv.</div>
+        </div>
+        <div class="tip-card">
+          <div class="tip-title">Statusfordeling</div>
+          <div class="tip-desc">Fargesegmentlinje (grønn / gul / rød) som viser fordelingen av trafikklys-statuser i en kategori. Gir et øyeblikksbilde av porteføljehelse.</div>
+        </div>
+        <div class="tip-card">
+          <div class="tip-title">Fremdriftsindikator</div>
+          <div class="tip-desc">Progress bar for en numerisk eller beregnet parameter. Farges automatisk: grønn ≥ 75 %, gul ≥ 40 %, rød under 40 %. Du setter maks-verdi (standard 100).</div>
+        </div>
+        <div class="tip-card">
+          <div class="tip-title">Objektliste</div>
+          <div class="tip-desc">Mini-tabell med alle noder i en kategori og valgfrie kolonner. Betinget formatering fra kategorireglene er aktiv i tabellen.</div>
+        </div>
+        <div class="tip-card">
+          <div class="tip-title">Tekst / overskrift</div>
+          <div class="tip-desc">Fritekstboks for overskrifter, beskrivelser eller annen kontekstuell informasjon som organiserer dashboardet.</div>
+        </div>
+        <div class="tip-card">
+          <div class="tip-title">Avviksliste</div>
+          <div class="tip-desc">Viser automatisk alle objekter i en kategori som utløser betingede formateringsregler — en rask oversikt over hva som trenger oppmerksomhet.</div>
+        </div>
+      </div>
+
+      <h3>Rutenett og posisjonering</h3>
+      <p>Dashboardet bruker et usynlig 12-kolonne-rutenett med rader à 100 px. Hver widget plasseres med fire verdier:</p>
+      <table class="shortcut-table">
+        <thead><tr><th>Verdi</th><th>Beskrivelse</th><th>Eksempel</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Kolonne</strong></td><td>Startkolonne (1–12)</td><td>1 = helt til venstre</td></tr>
+          <tr><td><strong>Rad</strong></td><td>Startrad (1–N)</td><td>1 = øverst</td></tr>
+          <tr><td><strong>Bredde</strong></td><td>Antall kolonner widgeten strekker seg over (1–12)</td><td>4 = en tredjedel av bredden</td></tr>
+          <tr><td><strong>Høyde</strong></td><td>Antall rader (1–10)</td><td>2 = 200 px høy</td></tr>
+        </tbody>
+      </table>
+      <p>I <strong>redigeringsmodus</strong> kan du dra og slippe widgets til nye posisjoner ved å holde og dra i widget-headeren.</p>
+
+      <h3>Redigere og konfigurere</h3>
+      <ol>
+        <li>Klikk <strong>«✎ Rediger»</strong> for å aktivere redigeringsmodus</li>
+        <li>Klikk <strong>«+ Widget»</strong> for å legge til en ny widget</li>
+        <li>Velg widgettype og konfigurer datakilde, posisjon, bredde og høyde i dialogen</li>
+        <li>Klikk <strong>tannhjulikonet</strong> (⚙) på en widget for å endre den</li>
+        <li>Klikk <strong>✕</strong> på en widget for å slette den</li>
+        <li>Klikk <strong>«Ferdig»</strong> for å gå ut av redigeringsmodus</li>
+      </ol>
+      <div class="callout callout-tip">
+        <strong>Tips:</strong> Kombiner statusfordelingswidget, KPI-kort og avviksliste for en effektiv styringsvisning. Bruk tekstwidgets som overskrifter for å dele dashboardet inn i seksjoner.
+      </div>
+
+      <h3>Eksport</h3>
+      <p>Dashboard-eksport finnes i <strong>Fil ▾</strong>-menyen i topbaren:</p>
+      <ul>
+        <li><strong>Dashboard som HTML</strong> — Frittstående HTML-fil med alle widgets, egnet for distribusjon eller arkivering. Inkluderer en «Skriv ut / Lagre PDF»-knapp.</li>
+        <li><strong>Dashboard som PNG</strong> — Åpner dashboardet i et nytt vindu klar for utskrift. Bruk nettleserens utskrift-til-PDF-funksjon for å lagre som bilde.</li>
+      </ul>
+      <div class="callout callout-note">
+        <strong>Merk:</strong> Dashboard-data lagres i nettleseren (localStorage) som en del av kartet. Bruk <strong>Fil ▾ → JSON (backup)</strong> for å ta sikkerhetskopi som inkluderer dashboardoppsettet.
+      </div>
     </div>
   </section>
 

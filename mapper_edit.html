@@ -542,6 +542,52 @@ input[type=color]{width:34px;height:28px;border:1px solid var(--border);border-r
 .group-rh{position:absolute;width:10px;height:10px;background:currentColor;border-radius:2px;opacity:.6;cursor:se-resize}
 .group-rh.br{bottom:4px;right:4px}
 .group-selected .group-box-inner{opacity:0.14;border-style:solid}
+
+/* ══════════════════ DASHBOARD VIEW ══════════════════ */
+#dashboard-view{flex:1;display:none;overflow:auto;padding:0;flex-direction:column}
+#dashboard-view.active{display:flex}
+.dash-toolbar{display:flex;align-items:center;gap:10px;padding:10px 20px;background:var(--surface);border-bottom:1px solid var(--border);flex-shrink:0;flex-wrap:wrap}
+.dash-toolbar-title{font-size:13px;font-weight:600;color:var(--text);flex:1}
+.dash-grid-wrap{flex:1;overflow:auto;padding:20px}
+#dash-grid{display:grid;grid-template-columns:repeat(12,1fr);gap:10px;position:relative}
+.dash-widget{background:var(--surface);border:1px solid var(--border);border-radius:12px;overflow:hidden;display:flex;flex-direction:column;box-shadow:var(--sh);transition:box-shadow .15s}
+.dash-edit-mode .dash-widget{border-style:dashed;border-color:var(--p5)}
+.dash-edit-mode .dash-widget:hover{box-shadow:0 0 0 2px var(--p5)}
+.dw-header{padding:8px 12px 6px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:6px;flex-shrink:0;background:var(--bg)}
+.dash-edit-mode .dw-header{cursor:move}
+.dw-header-title{font-size:10px;font-weight:700;color:var(--text3);letter-spacing:.06em;text-transform:uppercase;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.dw-edit-btns{display:none;gap:4px;flex-shrink:0}
+.dash-edit-mode .dw-edit-btns{display:flex}
+.dw-edit-btn{width:22px;height:22px;border-radius:4px;border:1px solid var(--border);background:var(--surface);color:var(--text2);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:11px}
+.dw-edit-btn:hover{background:var(--p12);color:var(--p5)}
+.dw-body{flex:1;overflow:auto;padding:12px;display:flex;flex-direction:column;gap:6px;min-height:0}
+.dw-kpi-value{font-size:clamp(22px,3.5vw,44px);font-weight:700;line-height:1.1;text-align:center}
+.dw-kpi-node{font-size:11px;color:var(--text3);text-align:center;margin-top:2px}
+.dw-kpi-bar-wrap{height:6px;border-radius:3px;background:var(--border);overflow:hidden;margin-top:8px}
+.dw-kpi-bar{height:100%;border-radius:3px;transition:width .3s}
+.dw-count-number{font-size:clamp(32px,5vw,64px);font-weight:700;text-align:center;line-height:1}
+.dw-count-label{font-size:12px;color:var(--text3);text-align:center;margin-top:4px}
+.dw-status-bar{display:flex;height:22px;border-radius:6px;overflow:hidden;gap:2px}
+.dw-status-seg{display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:#fff;border-radius:4px;min-width:0;overflow:hidden}
+.dw-status-legend{display:flex;gap:10px;flex-wrap:wrap}
+.dw-status-legend-item{display:flex;align-items:center;gap:5px;font-size:11px;color:var(--text2)}
+.dw-sdot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.dw-progress-value{font-size:30px;font-weight:700;text-align:center}
+.dw-progress-bar-wrap{height:10px;border-radius:5px;background:var(--border);overflow:hidden}
+.dw-progress-bar{height:100%;border-radius:5px;transition:width .3s;max-width:100%}
+.dw-progress-node{font-size:11px;color:var(--text3);text-align:center}
+.dw-list-table{width:100%;border-collapse:collapse;font-size:12px}
+.dw-list-table th{text-align:left;padding:4px 8px;background:var(--bg);color:var(--text3);font-size:10px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;border-bottom:1px solid var(--border);position:sticky;top:0;z-index:1}
+.dw-list-table td{padding:5px 8px;border-bottom:1px solid var(--border);color:var(--text);vertical-align:middle;max-width:180px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.dw-list-table tr:last-child td{border-bottom:none}
+.dw-list-table tr:hover td{background:var(--p12)}
+.dw-text-content{color:var(--text);font-size:14px;line-height:1.6;white-space:pre-wrap}
+.dw-alert-item{display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid var(--border);font-size:12px;color:var(--text);cursor:pointer}
+.dw-alert-item:last-child{border-bottom:none}
+.dw-alert-item:hover{opacity:.75}
+.dw-alert-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.dash-dragging{opacity:.25;pointer-events:none}
+.dash-ghost{position:fixed;border:2px dashed var(--p5);border-radius:12px;background:var(--p12);pointer-events:none;z-index:9999}
 </style>
 </head>
 <body>
@@ -557,6 +603,7 @@ input[type=color]{width:34px;height:28px;border:1px solid var(--border);border-r
     <button class="tb-view-btn" id="v-table" onclick="switchView('table')">Tabell</button>
     <button class="tb-view-btn" id="v-matrix" onclick="switchView('matrix')">Matrise</button>
     <button class="tb-view-btn" id="v-timeline" onclick="switchView('timeline')">Tidslinje</button>
+    <button class="tb-view-btn" id="v-dashboard" onclick="switchView('dashboard')">Dashboard</button>
   </div>
   <div id="tb-persp"></div>
   <div class="tb-spacer"></div>
@@ -601,7 +648,17 @@ input[type=color]{width:34px;height:28px;border:1px solid var(--border);border-r
         </div>
         <div class="col-menu-item" onclick="exportReport();toggleTbMenu('tb-fil-menu')">
           <svg width="11" height="11" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" style="flex-shrink:0"><path d="M2 2h5l3 3v5H2zM4 6h4M4 8h3"/></svg>
-          HTML-rapport
+          HTML-rapport (tabell)
+        </div>
+        <div style="height:1px;background:var(--border);margin:4px 0"></div>
+        <div style="padding:4px 10px 2px;font-size:10px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--text3)">Dashboard</div>
+        <div class="col-menu-item" onclick="exportDashReport();toggleTbMenu('tb-fil-menu')">
+          <svg width="11" height="11" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" style="flex-shrink:0"><path d="M2 2h5l3 3v5H2zM4 6h4M4 8h3"/></svg>
+          Dashboard som HTML
+        </div>
+        <div class="col-menu-item" onclick="exportDashPNG();toggleTbMenu('tb-fil-menu')">
+          <svg width="11" height="11" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" style="flex-shrink:0"><rect x="1" y="2" width="10" height="8" rx="1"/><circle cx="4" cy="5" r="1"/><path d="M1 9l3-3 2 2 2-2 3 3"/></svg>
+          Dashboard som PNG
         </div>
       </div>
     </div>
@@ -699,6 +756,9 @@ input[type=color]{width:34px;height:28px;border:1px solid var(--border);border-r
   <!-- TIMELINE VIEW -->
   <div id="timeline-view"></div>
 
+  <!-- DASHBOARD VIEW -->
+  <div id="dashboard-view"></div>
+
   <!-- SIDE PANEL -->
   <div id="side-panel"></div>
 </div>
@@ -768,6 +828,7 @@ function blankState() {
     timelineCatId: null,
     timelineDateStartParam: null,
     timelineDateEndParam: null,
+    dashWidgets: [],
     settings: { edgeTypes:[], nodeRadius:10, showCatLabel:true, nodeMinW:160,
                 nodeStyle:'card', nodeShadow:'subtle', canvasBg:'dots', canvasBgColor:'#f1f1f1',
                 showEdges:true, title:'' },
@@ -947,19 +1008,16 @@ function render() {
   if (S.view==='graph') { renderGraph(); renderSidePanel(); }
   else if (S.view==='matrix') { renderMatrix(); renderSidePanel(); }
   else if (S.view==='timeline') { renderTimeline(); renderSidePanel(); }
+  else if (S.view==='dashboard') { renderDashboard(); }
   else { renderTable(); renderSidePanel(); }
 }
 
 function switchView(v) {
   S.view=v;
-  document.getElementById('graph-view').classList.toggle('active',v==='graph');
-  document.getElementById('table-view').classList.toggle('active',v==='table');
-  document.getElementById('matrix-view').classList.toggle('active',v==='matrix');
-  document.getElementById('timeline-view').classList.toggle('active',v==='timeline');
-  document.getElementById('v-graph').classList.toggle('active',v==='graph');
-  document.getElementById('v-table').classList.toggle('active',v==='table');
-  document.getElementById('v-matrix').classList.toggle('active',v==='matrix');
-  document.getElementById('v-timeline').classList.toggle('active',v==='timeline');
+  ['graph','table','matrix','timeline','dashboard'].forEach(n=>{
+    document.getElementById(n+'-view')?.classList.toggle('active',v===n);
+    document.getElementById('v-'+n)?.classList.toggle('active',v===n);
+  });
   save(); render();
 }
 
@@ -3375,11 +3433,447 @@ function toast(msg,dur=2000){
 }
 
 // ════════════════════════════════════════════════════════
+//  DASHBOARD VIEW
+// ════════════════════════════════════════════════════════
+
+let _dashEditMode = false;
+let _ddrag = {active:false};
+
+function renderDashboard() {
+  const view = document.getElementById('dashboard-view');
+  if (!view) return;
+  if (!S.dashWidgets) S.dashWidgets = [];
+  const widgets = S.dashWidgets;
+  const maxRow = widgets.reduce((m,w)=>Math.max(m,(w.row||1)+(w.h||2)),4);
+
+  view.innerHTML = `
+    <div class="dash-toolbar">
+      <span class="dash-toolbar-title">${_dashEditMode?'✎ Rediger dashboard':'Dashboard'}</span>
+      <div style="display:flex;gap:6px;flex-wrap:wrap">
+        ${_dashEditMode
+          ? `<button class="gt-btn" onclick="openDashWidgetModal(null)" style="background:var(--p5);color:#fff;border-color:var(--p5)">+ Widget</button>
+             <button class="gt-btn" onclick="toggleDashEditMode()">Ferdig</button>`
+          : `<button class="gt-btn" onclick="toggleDashEditMode()">✎ Rediger</button>`
+        }
+      </div>
+    </div>
+    <div class="dash-grid-wrap">
+      ${widgets.length === 0
+        ? `<div style="display:flex;flex-direction:column;align-items:center;justify-content:center;height:340px;color:var(--text3)">
+             <div style="font-size:44px;margin-bottom:14px;opacity:.3">◫</div>
+             <div style="font-size:15px;font-weight:600;margin-bottom:6px;color:var(--text2)">Dashboard er tomt</div>
+             <div style="font-size:13px;margin-bottom:20px">Legg til widgets for å visualisere nøkkelinformasjon</div>
+             <button class="tb-btn tb-btn-primary" onclick="toggleDashEditMode();openDashWidgetModal(null)">+ Legg til widget</button>
+           </div>`
+        : `<div id="dash-grid" class="${_dashEditMode?'dash-edit-mode':''}" style="grid-template-rows:repeat(${maxRow},100px)">
+             ${widgets.map(w=>renderDashWidgetHTML(w)).join('')}
+           </div>`
+      }
+    </div>
+  `;
+  if (_dashEditMode && widgets.length > 0) bindDashDrag();
+}
+
+function renderDashWidgetHTML(w) {
+  const titleStr = esc(w.title || dashWidgetDefaultTitle(w));
+  const accentBorder = w.color ? `border-top:3px solid ${w.color};` : '';
+  return `
+    <div class="dash-widget" id="dw-${w.id}"
+         style="grid-column:${w.col||1}/span ${w.w||3};grid-row:${w.row||1}/span ${w.h||2};${accentBorder}"
+         data-wid="${w.id}">
+      <div class="dw-header" data-dw-drag="${w.id}">
+        <span class="dw-header-title">${titleStr}</span>
+        <div class="dw-edit-btns">
+          <button class="dw-edit-btn" onclick="openDashWidgetModal('${w.id}')" title="Konfigurer">
+            <svg width="11" height="11" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="6" cy="6" r="2"/><path d="M6 1v1M6 10v1M1 6h1M10 6h1M2.6 2.6l.7.7M8.7 8.7l.7.7M2.6 9.4l.7-.7M8.7 3.3l.7-.7"/></svg>
+          </button>
+          <button class="dw-edit-btn" onclick="deleteDashWidget('${w.id}')" title="Fjern" style="color:#e74c3c">
+            <svg width="11" height="11" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5"><line x1="2" y1="2" x2="10" y2="10"/><line x1="10" y1="2" x2="2" y2="10"/></svg>
+          </button>
+        </div>
+      </div>
+      <div class="dw-body">${dashWidgetBody(w)}</div>
+    </div>`;
+}
+
+function dashWidgetDefaultTitle(w) {
+  if (w.type==='text') return 'Tekst';
+  if (w.type==='count') { const c=getCat(w.catId); return c?c.name:'Antall'; }
+  if (w.type==='kpi') { const p=S.params.find(pp=>pp.id===w.paramId); return p?p.name:'KPI'; }
+  if (w.type==='progress') { const p=S.params.find(pp=>pp.id===w.paramId); return p?p.name:'Fremgang'; }
+  if (w.type==='status-dist') { const c=getCat(w.catId); return c?c.name+' – status':'Statusfordeling'; }
+  if (w.type==='list') { const c=getCat(w.catId); return c?c.name:'Liste'; }
+  if (w.type==='alert') return 'Avvik / varsler';
+  return 'Widget';
+}
+
+function dashWidgetBody(w) {
+  try {
+    switch(w.type) {
+      case 'kpi':         return _dwKPI(w);
+      case 'count':       return _dwCount(w);
+      case 'status-dist': return _dwStatusDist(w);
+      case 'progress':    return _dwProgress(w);
+      case 'list':        return _dwList(w);
+      case 'text':        return `<div class="dw-text-content">${esc(w.content||'Klikk ✎ for å redigere tekst')}</div>`;
+      case 'alert':       return _dwAlert(w);
+      default: return '<span style="color:var(--text3);font-size:12px">Ukjent type</span>';
+    }
+  } catch(e) { return '<span style="color:#e74c3c;font-size:12px">Feil ved visning</span>'; }
+}
+
+function _dwKPI(w) {
+  const node=getNode(w.nodeId); if(!node) return '<span style="color:var(--text3);font-size:12px">Velg objekt i innstillinger</span>';
+  const params=getCatParams(node.catId);
+  const p=params.find(pp=>pp.id===w.paramId); if(!p) return '<span style="color:var(--text3);font-size:12px">Velg parameter</span>';
+  const val=computeVal(node,p,params);
+  let display=val!==null&&val!==undefined&&val!==''?String(val):'—';
+  let color=w.color||'var(--p5)';
+  if(p.type==='status'){const sc={red:'#e74c3c',yellow:'#f39c12',green:'#27ae60'};const sl={red:'Rød',yellow:'Gul',green:'Grønn'};color=sc[val]||'#ccc';display=sl[val]||val||'—';}
+  else if(p.unit){display+='\u202f'+p.unit;}
+  let barHTML='';
+  if(w.targetParamId&&p.type==='number'){
+    const tp=params.find(pp=>pp.id===w.targetParamId);
+    if(tp){const tgt=parseFloat(computeVal(node,tp,params))||0;const act=parseFloat(val)||0;const pct=tgt>0?Math.min(100,Math.round(act/tgt*100)):0;
+      barHTML=`<div class="dw-kpi-bar-wrap"><div class="dw-kpi-bar" style="width:${pct}%;background:${color}"></div></div><div style="font-size:10px;color:var(--text3);text-align:center">Mål: ${tgt}${p.unit?' '+p.unit:''} (${pct}%)</div>`;}
+  }
+  return `<div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px">
+    <div class="dw-kpi-value" style="color:${color}">${esc(display)}</div>
+    <div class="dw-kpi-node">${esc(node.title)}</div>${barHTML}</div>`;
+}
+
+function _dwCount(w) {
+  const cat=getCat(w.catId); if(!cat) return '<span style="color:var(--text3);font-size:12px">Velg kategori</span>';
+  const color=w.color||cat.color||'var(--p5)';
+  return `<div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center">
+    <div class="dw-count-number" style="color:${color}">${getCatNodes(w.catId).length}</div>
+    <div class="dw-count-label">${esc(cat.name)}</div></div>`;
+}
+
+function _dwStatusDist(w) {
+  const cat=getCat(w.catId); if(!cat) return '<span style="color:var(--text3);font-size:12px">Velg kategori</span>';
+  const params=getCatParams(w.catId);
+  const sp=params.find(p=>p.id===w.paramId)||params.find(p=>p.type==='status');
+  if(!sp) return '<span style="color:var(--text3);font-size:12px">Ingen statusparameter</span>';
+  const nodes=getCatNodes(w.catId);
+  const c={green:0,yellow:0,red:0,none:0};
+  nodes.forEach(n=>{const v=computeVal(n,sp,params);if(v==='green')c.green++;else if(v==='yellow')c.yellow++;else if(v==='red')c.red++;else c.none++;});
+  const t=nodes.length||1;
+  const seg=(cnt,col)=>cnt?`<div class="dw-status-seg" style="flex:${cnt};background:${col}">${Math.round(cnt/t*100)>12?Math.round(cnt/t*100)+'%':''}</div>`:'';
+  return `<div style="flex:1;display:flex;flex-direction:column;justify-content:center;gap:8px">
+    <div class="dw-status-bar">${seg(c.green,'#27ae60')}${seg(c.yellow,'#f39c12')}${seg(c.red,'#e74c3c')}${seg(c.none,'#ccc')}</div>
+    <div class="dw-status-legend">
+      <div class="dw-status-legend-item"><div class="dw-sdot" style="background:#27ae60"></div>${c.green} grønn</div>
+      <div class="dw-status-legend-item"><div class="dw-sdot" style="background:#f39c12"></div>${c.yellow} gul</div>
+      <div class="dw-status-legend-item"><div class="dw-sdot" style="background:#e74c3c"></div>${c.red} rød</div>
+      ${c.none?`<div class="dw-status-legend-item"><div class="dw-sdot" style="background:#ccc"></div>${c.none} uten</div>`:''}
+    </div></div>`;
+}
+
+function _dwProgress(w) {
+  const node=getNode(w.nodeId); if(!node) return '<span style="color:var(--text3);font-size:12px">Velg objekt</span>';
+  const params=getCatParams(node.catId);
+  const p=params.find(pp=>pp.id===w.paramId); if(!p) return '<span style="color:var(--text3);font-size:12px">Velg parameter</span>';
+  const val=parseFloat(computeVal(node,p,params))||0;
+  const max=w.maxVal||100;
+  const pct=Math.min(100,Math.max(0,Math.round(val/max*100)));
+  const color=w.color||(pct>=75?'#27ae60':pct>=40?'#f39c12':'#e74c3c');
+  return `<div style="flex:1;display:flex;flex-direction:column;justify-content:center;gap:6px">
+    <div class="dw-progress-value" style="color:${color}">${val}${p.unit?'\u202f'+p.unit:''}</div>
+    <div class="dw-progress-bar-wrap"><div class="dw-progress-bar" style="width:${pct}%;background:${color}"></div></div>
+    <div class="dw-progress-node">${esc(node.title)} — mål: ${max}${p.unit?' '+p.unit:''} (${pct}%)</div></div>`;
+}
+
+function _dwList(w) {
+  const cat=getCat(w.catId); if(!cat) return '<span style="color:var(--text3);font-size:12px">Velg kategori</span>';
+  const allP=getCatParams(w.catId);
+  const visP=allP.filter(p=>!w.paramIds||!w.paramIds.length||w.paramIds.includes(p.id));
+  const nodes=getCatNodes(w.catId);
+  const sdots={red:`<span style="display:inline-block;width:7px;height:7px;border-radius:50%;background:#e74c3c;margin-right:3px;vertical-align:middle"></span>`,yellow:`<span style="display:inline-block;width:7px;height:7px;border-radius:50%;background:#f39c12;margin-right:3px;vertical-align:middle"></span>`,green:`<span style="display:inline-block;width:7px;height:7px;border-radius:50%;background:#27ae60;margin-right:3px;vertical-align:middle"></span>`};
+  const rows=nodes.map((n,ri)=>{
+    const bg=ri%2===0?'':'background:var(--bg)';
+    const cs=getCondStyle(n,cat.id);const rowBg=cs.rowBg?`background:${cs.rowBg}`:bg;
+    const cells=visP.map(p=>{const v=computeVal(n,p,allP);if(v===null||v===undefined||v==='')return`<td style="${rowBg}">—</td>`;
+      if(p.type==='status')return`<td style="${rowBg}">${sdots[v]||''}${v==='green'?'Grønn':v==='yellow'?'Gul':v==='red'?'Rød':esc(String(v))}</td>`;
+      return`<td style="${rowBg}" title="${esc(String(v))}">${esc(String(v))}${p.unit?'\u202f'+p.unit:''}</td>`;}).join('');
+    return`<tr><td style="font-weight:500;${rowBg}">${esc(n.title)}</td>${cells}</tr>`;}).join('');
+  return `<div style="overflow:auto;flex:1"><table class="dw-list-table">
+    <thead><tr><th>Navn</th>${visP.map(p=>`<th>${esc(p.name)}</th>`).join('')}</tr></thead>
+    <tbody>${rows||'<tr><td colspan="99" style="color:var(--text3);padding:10px">Ingen objekter</td></tr>'}</tbody>
+    </table></div>`;
+}
+
+function _dwAlert(w) {
+  const cat=getCat(w.catId); if(!cat) return '<span style="color:var(--text3);font-size:12px">Velg kategori</span>';
+  if(!(S.condRules||[]).some(r=>r.catId===w.catId)) return '<span style="color:var(--text3);font-size:12px">Ingen betingede regler for kategorien</span>';
+  const nodes=getCatNodes(w.catId);
+  const alerts=[];
+  nodes.forEach(n=>{const cs=getCondStyle(n,w.catId);if(cs.rowBg||cs.textColor)alerts.push({n,color:cs.rowBg||cs.textColor||'#e74c3c'});});
+  if(!alerts.length) return `<div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;color:var(--text3)">
+    <span style="font-size:26px">✓</span><span style="font-size:12px;margin-top:4px">Ingen avvik i ${esc(cat.name)}</span></div>`;
+  return `<div style="overflow:auto;flex:1">${alerts.map(a=>`<div class="dw-alert-item" onclick="openNodeInPanel('${a.n.id}')">
+    <div class="dw-alert-dot" style="background:${a.color}"></div><span>${esc(a.n.title)}</span></div>`).join('')}</div>`;
+}
+
+function toggleDashEditMode() { _dashEditMode=!_dashEditMode; renderDashboard(); }
+function deleteDashWidget(wid) { pushUndo();S.dashWidgets=(S.dashWidgets||[]).filter(w=>w.id!==wid);save();renderDashboard(); }
+
+// ─── Widget config modal ──────────────────────────────
+function openDashWidgetModal(wid) {
+  const ex=wid?(S.dashWidgets||[]).find(w=>w.id===wid):null;
+  window._dwEx=ex;
+  const typeOpts=[
+    {v:'kpi',l:'KPI / enkeltverdi',d:'Stor visning av én verdi fra ett objekt'},
+    {v:'count',l:'Antall objekter',d:'Tell objekter i en kategori'},
+    {v:'status-dist',l:'Statusfordeling',d:'Fordeling av trafikklys-statuser'},
+    {v:'progress',l:'Fremdriftsindikator',d:'Fremgang mot et mål (progress bar)'},
+    {v:'list',l:'Objektliste',d:'Minitable med valgte parametere'},
+    {v:'text',l:'Tekst / overskrift',d:'Fri tekst for organisering'},
+    {v:'alert',l:'Avviksliste',d:'Objekter som utløser betingede regler'},
+  ];
+  const div=document.createElement('div');div.className='modal-bg';div.id='dash-widget-modal';
+  div.innerHTML=`<div class="modal" style="width:520px;max-width:95vw">
+    <div class="modal-head">
+      <h2>${ex?'Konfigurer widget':'Legg til widget'}</h2>
+      <button class="sp-close" onclick="closeModal('dash-widget-modal')">✕</button>
+    </div>
+    <div class="modal-body" style="display:flex;flex-direction:column;gap:14px">
+      <div><label class="field-label">Widgettype</label>
+        <select id="dw-type" onchange="updateDashModalBody()">
+          ${typeOpts.map(t=>`<option value="${t.v}" ${(ex?.type||'kpi')===t.v?'selected':''}>${t.l} — ${t.d}</option>`).join('')}
+        </select></div>
+      <div id="dw-modal-body"></div>
+      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px">
+        <div><label class="field-label">Kolonne (1–12)</label>
+          <input type="number" id="dw-col" min="1" max="12" value="${ex?.col||1}"></div>
+        <div><label class="field-label">Rad</label>
+          <input type="number" id="dw-row" min="1" max="20" value="${ex?.row||1}"></div>
+        <div><label class="field-label">Bredde (kol.)</label>
+          <input type="number" id="dw-w" min="1" max="12" value="${ex?.w||4}"></div>
+        <div><label class="field-label">Høyde (rader)</label>
+          <input type="number" id="dw-h" min="1" max="10" value="${ex?.h||2}"></div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+        <div><label class="field-label">Tittel (valgfri)</label>
+          <input type="text" id="dw-title" placeholder="Automatisk" value="${esc(ex?.title||'')}"></div>
+        <div><label class="field-label">Aksentfarge</label>
+          <input type="color" id="dw-color" value="${ex?.color||'#008761'}" style="height:36px;padding:2px 4px"></div>
+      </div>
+    </div>
+    <div class="modal-foot">
+      <button class="btn btn-ghost" onclick="closeModal('dash-widget-modal')">Avbryt</button>
+      <button class="btn btn-primary" onclick="saveDashWidget('${wid||''}')">Lagre</button>
+    </div></div>`;
+  document.body.appendChild(div);
+  div.addEventListener('click',e=>{if(e.target===div)closeModal('dash-widget-modal');});
+  updateDashModalBody();
+}
+
+function updateDashModalBody() {
+  const typeEl=document.getElementById('dw-type');if(!typeEl)return;
+  const type=typeEl.value;
+  const body=document.getElementById('dw-modal-body');if(!body)return;
+  const ex=window._dwEx;
+  const cats=getCatsSorted();
+  const catSel=(id,sel)=>`<select class="param-inp" id="${id}">${cats.map(c=>`<option value="${c.id}" ${c.id===sel?'selected':''}>${esc(c.name)}</option>`).join('')}</select>`;
+  const paramSel=(id,catId,sel,types)=>{const ps=getCatParams(catId).filter(p=>!types||types.includes(p.type));return`<select class="param-inp" id="${id}">${ps.map(p=>`<option value="${p.id}" ${p.id===sel?'selected':''}>${esc(p.name)} (${p.type})</option>`).join('')}</select>`;};
+  const nodeSel=(id,catId,sel)=>{const ns=getCatNodes(catId);return`<select class="param-inp" id="${id}">${ns.map(n=>`<option value="${n.id}" ${n.id===sel?'selected':''}>${esc(n.title)}</option>`).join('')}</select>`;};
+
+  if(type==='kpi'){
+    const catId=ex?.catId||cats[0]?.id||'';
+    body.innerHTML=`<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+      <div><label class="field-label">Kategori</label>${catSel('dw-cat',catId)}</div>
+      <div><label class="field-label">Objekt</label>${nodeSel('dw-node',catId,ex?.nodeId)}</div>
+      <div><label class="field-label">Parameter</label>${paramSel('dw-param',catId,ex?.paramId)}</div>
+      <div><label class="field-label">Mål-parameter (for fremdriftslinje)</label>
+        <select class="param-inp" id="dw-target-param"><option value="">Ingen</option>
+          ${getCatParams(catId).filter(p=>p.type==='number'||p.type==='calc').map(p=>`<option value="${p.id}" ${p.id===ex?.targetParamId?'selected':''}>${esc(p.name)}</option>`).join('')}
+        </select></div></div>`;
+    document.getElementById('dw-cat').onchange=function(){window._dwEx={...(window._dwEx||{}),catId:this.value};updateDashModalBody();};
+  } else if(type==='count'){
+    body.innerHTML=`<div><label class="field-label">Kategori</label>${catSel('dw-cat',ex?.catId||cats[0]?.id)}</div>`;
+  } else if(type==='status-dist'){
+    const catId=ex?.catId||cats[0]?.id||'';
+    body.innerHTML=`<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+      <div><label class="field-label">Kategori</label>${catSel('dw-cat',catId)}</div>
+      <div><label class="field-label">Statusparameter</label>${paramSel('dw-param',catId,ex?.paramId,['status'])}</div></div>`;
+    document.getElementById('dw-cat').onchange=function(){window._dwEx={...(window._dwEx||{}),catId:this.value};updateDashModalBody();};
+  } else if(type==='progress'){
+    const catId=ex?.catId||cats[0]?.id||'';
+    body.innerHTML=`<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+      <div><label class="field-label">Kategori</label>${catSel('dw-cat',catId)}</div>
+      <div><label class="field-label">Objekt</label>${nodeSel('dw-node',catId,ex?.nodeId)}</div>
+      <div><label class="field-label">Parameter (tall/beregnet)</label>${paramSel('dw-param',catId,ex?.paramId,['number','calc'])}</div>
+      <div><label class="field-label">Maks-verdi</label>
+        <input class="param-inp" type="number" id="dw-max-val" value="${ex?.maxVal||100}" min="1"></div></div>`;
+    document.getElementById('dw-cat').onchange=function(){window._dwEx={...(window._dwEx||{}),catId:this.value};updateDashModalBody();};
+  } else if(type==='list'){
+    const catId=ex?.catId||cats[0]?.id||'';
+    const params=getCatParams(catId);
+    body.innerHTML=`<div><label class="field-label">Kategori</label>${catSel('dw-cat',catId)}</div>
+      <div style="margin-top:10px"><label class="field-label">Parametere som vises</label>
+        <div class="ms-list" id="dw-param-list" style="max-height:140px;overflow:auto;border:1px solid var(--border);border-radius:6px;padding:6px">
+          ${params.map(p=>`<label class="ms-item"><input type="checkbox" class="dw-param-check" value="${p.id}" ${!ex?.paramIds||ex.paramIds.includes(p.id)?'checked':''}><span>${esc(p.name)}</span></label>`).join('')}
+        </div></div>`;
+    document.getElementById('dw-cat').onchange=function(){window._dwEx={...(window._dwEx||{}),catId:this.value};updateDashModalBody();};
+  } else if(type==='text'){
+    body.innerHTML=`<div><label class="field-label">Innhold</label>
+      <textarea class="param-inp" id="dw-content" rows="4" placeholder="Skriv inn tekst...">${esc(ex?.content||'')}</textarea></div>`;
+  } else if(type==='alert'){
+    body.innerHTML=`<div><label class="field-label">Kategori (med betingede formateringsregler)</label>${catSel('dw-cat',ex?.catId||cats[0]?.id)}</div>`;
+  }
+}
+
+function saveDashWidget(wid) {
+  const type=document.getElementById('dw-type')?.value;
+  const col=Math.max(1,parseInt(document.getElementById('dw-col')?.value)||1);
+  const row=Math.max(1,parseInt(document.getElementById('dw-row')?.value)||1);
+  const w=Math.min(12,Math.max(1,parseInt(document.getElementById('dw-w')?.value)||4));
+  const h=Math.max(1,parseInt(document.getElementById('dw-h')?.value)||2);
+  const title=document.getElementById('dw-title')?.value.trim()||'';
+  const color=document.getElementById('dw-color')?.value||'';
+  const widget={id:wid||uid(),type,col,row,w,h,title,color};
+  if(type==='kpi'){widget.catId=document.getElementById('dw-cat')?.value;widget.nodeId=document.getElementById('dw-node')?.value;widget.paramId=document.getElementById('dw-param')?.value;widget.targetParamId=document.getElementById('dw-target-param')?.value||'';}
+  else if(type==='count'){widget.catId=document.getElementById('dw-cat')?.value;}
+  else if(type==='status-dist'){widget.catId=document.getElementById('dw-cat')?.value;widget.paramId=document.getElementById('dw-param')?.value;}
+  else if(type==='progress'){widget.catId=document.getElementById('dw-cat')?.value;widget.nodeId=document.getElementById('dw-node')?.value;widget.paramId=document.getElementById('dw-param')?.value;widget.maxVal=parseFloat(document.getElementById('dw-max-val')?.value)||100;}
+  else if(type==='list'){widget.catId=document.getElementById('dw-cat')?.value;widget.paramIds=[...document.querySelectorAll('.dw-param-check')].filter(c=>c.checked).map(c=>c.value);}
+  else if(type==='text'){widget.content=document.getElementById('dw-content')?.value||'';}
+  else if(type==='alert'){widget.catId=document.getElementById('dw-cat')?.value;}
+  pushUndo();
+  if(!S.dashWidgets)S.dashWidgets=[];
+  const idx=wid?(S.dashWidgets.findIndex(dw=>dw.id===wid)):-1;
+  if(idx>=0)S.dashWidgets[idx]=widget; else S.dashWidgets.push(widget);
+  save();closeModal('dash-widget-modal');window._dwEx=null;renderDashboard();
+}
+
+// ─── Drag to reposition ───────────────────────────────
+function bindDashDrag() {
+  const grid=document.getElementById('dash-grid');if(!grid)return;
+  grid.querySelectorAll('[data-dw-drag]').forEach(hdr=>{
+    hdr.addEventListener('mousedown',e=>{
+      if(e.button!==0||e.target.closest('.dw-edit-btn'))return;
+      e.preventDefault();
+      const wid=hdr.dataset.dwDrag;
+      const w=(S.dashWidgets||[]).find(dw=>dw.id===wid);if(!w)return;
+      const el=document.getElementById('dw-'+wid);if(!el)return;
+      const elRect=el.getBoundingClientRect();
+      const ghost=document.createElement('div');ghost.className='dash-ghost';
+      ghost.style.cssText=`width:${elRect.width}px;height:${elRect.height}px;left:${elRect.left}px;top:${elRect.top}px;`;
+      document.body.appendChild(ghost);
+      el.classList.add('dash-dragging');
+      const offX=e.clientX-elRect.left,offY=e.clientY-elRect.top;
+      _ddrag={active:true,wid,el,ghost,offX,offY,targetCol:w.col,targetRow:w.row};
+      const onMove=e2=>{
+        if(!_ddrag.active)return;
+        ghost.style.left=(e2.clientX-offX)+'px';ghost.style.top=(e2.clientY-offY)+'px';
+        const gr=grid.getBoundingClientRect();
+        const colW=gr.width/12,rowH=110;
+        _ddrag.targetCol=Math.max(1,Math.min(12,Math.round((e2.clientX-offX-gr.left)/colW)+1));
+        _ddrag.targetRow=Math.max(1,Math.round((e2.clientY-offY-gr.top)/rowH)+1);
+      };
+      const onUp=()=>{
+        if(!_ddrag.active)return;
+        _ddrag.active=false;ghost.remove();el.classList.remove('dash-dragging');
+        document.removeEventListener('mousemove',onMove);document.removeEventListener('mouseup',onUp);
+        const dw=(S.dashWidgets||[]).find(dw=>dw.id===wid);
+        if(dw){pushUndo();dw.col=Math.max(1,Math.min(13-(dw.w||4),_ddrag.targetCol));dw.row=Math.max(1,_ddrag.targetRow);save();renderDashboard();}
+      };
+      document.addEventListener('mousemove',onMove);document.addEventListener('mouseup',onUp);
+    });
+  });
+}
+
+// ─── Dashboard export ─────────────────────────────────
+function exportDashPNG() {
+  const html=_buildDashHTML();
+  const win=window.open('','_blank');
+  if(!win){toast('Popup blokkert – tillat popup for eksport');return;}
+  win.document.write(html);win.document.close();
+  setTimeout(()=>win.print(),600);
+  toast('Åpnet for utskrift/PNG-lagring');
+}
+function exportDashReport() {
+  const html=_buildDashHTML();
+  const blob=new Blob([html],{type:'text/html;charset=utf-8'});
+  const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=tsFilename('dashboard')+'.html';a.click();
+  toast('Dashboard HTML eksportert ✓');
+}
+
+function _buildDashHTML() {
+  const title=S.settings?.title||'Dashboard';
+  const activeV=S.activeView?S.views.find(v=>v.id===S.activeView):null;
+  const perspName=activeV?activeV.name:'Alle';
+  const dateStr=new Date().toLocaleDateString('no-NO',{year:'numeric',month:'long',day:'numeric'});
+  const widgets=S.dashWidgets||[];
+  const maxRow=widgets.reduce((m,w)=>Math.max(m,(w.row||1)+(w.h||2)),4);
+  const widgetsHTML=widgets.map(w=>{
+    const ts=resc(w.title||dashWidgetDefaultTitle(w));
+    const ab=w.color?`border-top:3px solid ${w.color};`:'';
+    return`<div class="dash-widget" style="grid-column:${w.col||1}/span ${w.w||4};grid-row:${w.row||1}/span ${w.h||2};${ab}">
+      <div class="dw-header"><span class="dw-header-title">${ts}</span></div>
+      <div class="dw-body">${_dwBodyForExport(w)}</div></div>`;}).join('');
+  return`<!DOCTYPE html>
+<html lang="no"><head><meta charset="UTF-8"><title>${resc(title)} – Dashboard</title>
+<style>*{box-sizing:border-box;margin:0;padding:0}body{font-family:'Segoe UI',system-ui,sans-serif;background:#f1f3f5;color:#1a1a2e}
+.report-header{background:#1a1a2e;color:#fff;padding:24px 32px;display:flex;justify-content:space-between;align-items:center}
+.report-title{font-size:20px;font-weight:700}.report-meta{font-size:12px;opacity:.55;margin-top:3px}
+.dash-grid-wrap{padding:20px}
+#dash-grid{display:grid;grid-template-columns:repeat(12,1fr);grid-template-rows:repeat(${maxRow},100px);gap:10px}
+.dash-widget{background:#fff;border:1px solid #e5e7eb;border-radius:10px;overflow:hidden;display:flex;flex-direction:column}
+.dw-header{padding:7px 12px;border-bottom:1px solid #e5e7eb;background:#f8f9fa}.dw-header-title{font-size:10px;font-weight:700;color:#888;letter-spacing:.06em;text-transform:uppercase}
+.dw-body{flex:1;overflow:auto;padding:10px;display:flex;flex-direction:column;gap:5px}
+.dw-kpi-value{font-size:36px;font-weight:700;text-align:center;line-height:1}.dw-kpi-node{font-size:11px;color:#888;text-align:center}
+.dw-count-number{font-size:52px;font-weight:700;text-align:center}.dw-count-label{font-size:12px;color:#888;text-align:center}
+.dw-status-bar{display:flex;height:20px;border-radius:5px;overflow:hidden;gap:2px}
+.dw-status-seg{display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:#fff;border-radius:4px}
+.dw-status-legend{display:flex;gap:10px;flex-wrap:wrap}.dw-status-legend-item{display:flex;align-items:center;gap:4px;font-size:11px;color:#555}
+.dw-sdot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.dw-progress-value{font-size:28px;font-weight:700;text-align:center}.dw-progress-bar-wrap{height:8px;border-radius:4px;background:#e5e7eb;overflow:hidden}.dw-progress-bar{height:100%;border-radius:4px}.dw-progress-node{font-size:11px;color:#888;text-align:center}
+.dw-kpi-bar-wrap{height:5px;border-radius:3px;background:#e5e7eb;overflow:hidden;margin-top:6px}.dw-kpi-bar{height:100%;border-radius:3px}
+.dw-list-table{width:100%;border-collapse:collapse;font-size:11px}.dw-list-table th{text-align:left;padding:3px 7px;background:#f1f3f5;font-size:10px;font-weight:700;color:#888;border-bottom:1px solid #e5e7eb}.dw-list-table td{padding:4px 7px;border-bottom:1px solid #f1f3f5}
+.dw-text-content{font-size:13px;line-height:1.6;white-space:pre-wrap}.dw-alert-item{display:flex;align-items:center;gap:6px;padding:5px 0;border-bottom:1px solid #f1f3f5;font-size:12px}.dw-alert-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.print-btn{position:fixed;top:14px;right:14px;padding:7px 16px;background:#008761;color:#fff;border:none;border-radius:6px;font-size:12px;font-weight:600;cursor:pointer}
+@media print{.print-btn{display:none}body{background:#fff}.dash-grid-wrap{padding:0}}</style></head>
+<body><button class="print-btn" onclick="window.print()">Skriv ut / Lagre PDF</button>
+<div class="report-header"><div><div class="report-title">${resc(title)} – Dashboard</div>
+<div class="report-meta">Perspektiv: ${resc(perspName)} · ${resc(dateStr)}</div></div>
+<div style="font-size:32px;opacity:.2">◫</div></div>
+<div class="dash-grid-wrap"><div id="dash-grid">${widgetsHTML}</div></div></body></html>`;
+}
+
+function _dwBodyForExport(w) {
+  try {
+    switch(w.type) {
+      case 'kpi': {
+        const node=getNode(w.nodeId);if(!node)return'—';
+        const params=getCatParams(node.catId);const p=params.find(pp=>pp.id===w.paramId);if(!p)return'—';
+        const val=computeVal(node,p,params);
+        let display=val!==null&&val!==undefined&&val!==''?String(val):'—';
+        let color=w.color||'#008761';
+        if(p.type==='status'){const sc={red:'#e74c3c',yellow:'#f39c12',green:'#27ae60'};color=sc[val]||'#ccc';display={red:'Rød',yellow:'Gul',green:'Grønn'}[val]||val||'—';}
+        else if(p.unit)display+='\u202f'+p.unit;
+        let barHTML='';
+        if(w.targetParamId&&p.type==='number'){const tp=params.find(pp=>pp.id===w.targetParamId);if(tp){const tgt=parseFloat(computeVal(node,tp,params))||0;const act=parseFloat(val)||0;const pct=tgt>0?Math.min(100,Math.round(act/tgt*100)):0;barHTML=`<div class="dw-kpi-bar-wrap"><div class="dw-kpi-bar" style="width:${pct}%;background:${color}"></div></div><div style="font-size:10px;color:#888;text-align:center">Mål:${tgt}${p.unit?' '+p.unit:''} (${pct}%)</div>`;}}
+        return`<div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px"><div class="dw-kpi-value" style="color:${color}">${resc(display)}</div><div class="dw-kpi-node">${resc(node.title)}</div>${barHTML}</div>`;
+      }
+      case 'count': {const cat=getCat(w.catId);if(!cat)return'—';return`<div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center"><div class="dw-count-number" style="color:${w.color||cat.color||'#008761'}">${getCatNodes(w.catId).length}</div><div class="dw-count-label">${resc(cat.name)}</div></div>`;}
+      case 'status-dist': {const cat=getCat(w.catId);if(!cat)return'—';const params=getCatParams(w.catId);const sp=params.find(p=>p.id===w.paramId)||params.find(p=>p.type==='status');if(!sp)return'—';const nodes=getCatNodes(w.catId);const c={green:0,yellow:0,red:0,none:0};nodes.forEach(n=>{const v=computeVal(n,sp,params);if(v==='green')c.green++;else if(v==='yellow')c.yellow++;else if(v==='red')c.red++;else c.none++;});const t=nodes.length||1;const seg=(cnt,col)=>cnt?`<div class="dw-status-seg" style="flex:${cnt};background:${col}">${Math.round(cnt/t*100)>12?Math.round(cnt/t*100)+'%':''}</div>`:'';return`<div style="flex:1;display:flex;flex-direction:column;justify-content:center;gap:6px"><div class="dw-status-bar">${seg(c.green,'#27ae60')}${seg(c.yellow,'#f39c12')}${seg(c.red,'#e74c3c')}${seg(c.none,'#ccc')}</div><div class="dw-status-legend"><div class="dw-status-legend-item"><div class="dw-sdot" style="background:#27ae60"></div>${c.green} grønn</div><div class="dw-status-legend-item"><div class="dw-sdot" style="background:#f39c12"></div>${c.yellow} gul</div><div class="dw-status-legend-item"><div class="dw-sdot" style="background:#e74c3c"></div>${c.red} rød</div></div></div>`;}
+      case 'progress': {const node=getNode(w.nodeId);if(!node)return'—';const params=getCatParams(node.catId);const p=params.find(pp=>pp.id===w.paramId);if(!p)return'—';const val=parseFloat(computeVal(node,p,params))||0;const max=w.maxVal||100;const pct=Math.min(100,Math.max(0,Math.round(val/max*100)));const color=w.color||(pct>=75?'#27ae60':pct>=40?'#f39c12':'#e74c3c');return`<div style="flex:1;display:flex;flex-direction:column;justify-content:center;gap:5px"><div class="dw-progress-value" style="color:${color}">${val}${p.unit?'\u202f'+p.unit:''}</div><div class="dw-progress-bar-wrap"><div class="dw-progress-bar" style="width:${pct}%;background:${color}"></div></div><div class="dw-progress-node">${resc(node.title)} — mål: ${max}${p.unit?' '+p.unit:''} (${pct}%)</div></div>`;}
+      case 'list': {const cat=getCat(w.catId);if(!cat)return'—';const allP=getCatParams(w.catId);const visP=allP.filter(p=>!w.paramIds||!w.paramIds.length||w.paramIds.includes(p.id));const nodes=getCatNodes(w.catId);const sdots={red:`<span style="display:inline-block;width:7px;height:7px;border-radius:50%;background:#e74c3c;margin-right:3px"></span>`,yellow:`<span style="display:inline-block;width:7px;height:7px;border-radius:50%;background:#f39c12;margin-right:3px"></span>`,green:`<span style="display:inline-block;width:7px;height:7px;border-radius:50%;background:#27ae60;margin-right:3px"></span>`};const rows=nodes.map((n,ri)=>{const bg=ri%2===0?'':'background:#f8f9fa';const cells=visP.map(p=>{const v=computeVal(n,p,allP);if(v===null||v===undefined||v==='')return`<td style="${bg}">—</td>`;if(p.type==='status')return`<td style="${bg}">${sdots[v]||''}${v==='green'?'Grønn':v==='yellow'?'Gul':v==='red'?'Rød':resc(String(v))}</td>`;return`<td style="${bg}">${resc(String(v))}${p.unit?'\u202f'+p.unit:''}</td>`;}).join('');return`<tr><td style="font-weight:500;${bg}">${resc(n.title)}</td>${cells}</tr>`;}).join('');return`<div style="overflow:auto;flex:1"><table class="dw-list-table"><thead><tr><th>Navn</th>${visP.map(p=>`<th>${resc(p.name)}</th>`).join('')}</tr></thead><tbody>${rows}</tbody></table></div>`;}
+      case 'text': return`<div class="dw-text-content">${resc(w.content||'')}</div>`;
+      case 'alert': {const cat=getCat(w.catId);if(!cat)return'—';const nodes=getCatNodes(w.catId);const alerts=[];nodes.forEach(n=>{const cs=getCondStyle(n,w.catId);if(cs.rowBg||cs.textColor)alerts.push({n,color:cs.rowBg||cs.textColor||'#e74c3c'});});if(!alerts.length)return`<div style="text-align:center;padding:14px;color:#888">✓ Ingen avvik i ${resc(cat.name)}</div>`;return`<div>${alerts.map(a=>`<div class="dw-alert-item"><div class="dw-alert-dot" style="background:${a.color}"></div><span>${resc(a.n.title)}</span></div>`).join('')}</div>`;}
+      default: return'—';
+    }
+  } catch(e){return'—';}
+}
+
+// ════════════════════════════════════════════════════════
 //  EXPORT / IMPORT
 // ════════════════════════════════════════════════════════
 
 function exportJSON() {
-  const data={cats:S.cats,params:S.params,nodes:S.nodes,edges:S.edges,vp:S.vp,views:S.views,activeView:S.activeView,settings:S.settings};
+  const data={cats:S.cats,params:S.params,nodes:S.nodes,edges:S.edges,vp:S.vp,views:S.views,activeView:S.activeView,settings:S.settings,groups:S.groups,condRules:S.condRules,dashWidgets:S.dashWidgets};
   const blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'});
   const a=document.createElement('a');
   a.href=URL.createObjectURL(blob);
@@ -3404,6 +3898,9 @@ function importJSON() {
         if(!confirm('Erstatte eksisterende data med import?'))return;
         S.cats=d.cats||[];S.params=d.params||[];S.nodes=d.nodes||[];S.edges=d.edges||[];
         if(d.vp)S.vp=d.vp;S.sel=null;
+        if(d.views)S.views=d.views;if(d.activeView!==undefined)S.activeView=d.activeView;
+        if(d.settings)S.settings=d.settings;if(d.groups)S.groups=d.groups;
+        if(d.condRules)S.condRules=d.condRules;if(d.dashWidgets)S.dashWidgets=d.dashWidgets;
         save();render();renderSidePanel();toast('Import vellykket ✓');
       }catch(err){alert('Ugyldig JSON-fil: '+err.message);}
     };r.readAsText(f);
