@@ -506,7 +506,7 @@ input[type=color]{width:34px;height:28px;border:1px solid var(--border);border-r
 .matrix-table{border-collapse:collapse}
 .matrix-corner{min-width:180px;max-width:220px;background:var(--bg);border:1px solid var(--border);padding:8px 14px;font-size:10px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--text3);vertical-align:bottom;position:sticky;left:0;top:0;z-index:6;border-right:2px solid var(--border);border-bottom:2px solid var(--border)}
 .matrix-col-hd{background:var(--bg);border:1px solid var(--border);font-size:11px;font-weight:600;color:var(--text2);text-align:center;vertical-align:bottom;width:52px;min-width:52px;max-width:52px;position:sticky;top:0;z-index:4;border-bottom:2px solid var(--border)}
-.matrix-col-hd-inner{writing-mode:vertical-rl;text-orientation:mixed;transform:rotate(180deg);height:110px;display:flex;align-items:center;padding:6px 0;overflow:hidden;white-space:nowrap;font-size:11px}
+.matrix-col-hd-inner{writing-mode:vertical-rl;text-orientation:mixed;transform:rotate(180deg);height:160px;display:flex;align-items:center;padding:8px 0;overflow:hidden;white-space:nowrap;font-size:11px}
 .matrix-row-hd{background:var(--surface);border:1px solid var(--border);border-right:2px solid var(--border);padding:8px 14px;font-size:12px;font-weight:500;color:var(--text);white-space:nowrap;max-width:220px;overflow:hidden;text-overflow:ellipsis;position:sticky;left:0;z-index:3}
 .matrix-cell{border:1px solid var(--border);cursor:pointer;vertical-align:middle;height:44px;width:52px;min-width:52px;max-width:52px;text-align:center;transition:background .12s}
 .matrix-cell:hover{background:var(--p12)!important}
@@ -629,6 +629,7 @@ input[type=color]{width:34px;height:28px;border:1px solid var(--border);border-r
         <div class="col-menu-item" onclick="importJSON();toggleTbMenu('tb-fil-menu')">↓ Importer JSON</div>
         <div class="col-menu-item" onclick="importCSV();toggleTbMenu('tb-fil-menu')">↓ Importer CSV</div>
         <div class="col-menu-item" onclick="exportJSON();toggleTbMenu('tb-fil-menu')">↑ Eksporter JSON</div>
+        <div class="col-menu-item" onclick="exportAI();toggleTbMenu('tb-fil-menu')" style="color:var(--p5)">✦ Eksporter for KI-analyse</div>
         <div style="height:1px;background:var(--border);margin:4px 0"></div>
         <!-- KART -->
         <div style="padding:4px 10px 2px;font-size:10px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--text3)">Kartvisning</div>
@@ -668,12 +669,6 @@ input[type=color]{width:34px;height:28px;border:1px solid var(--border);border-r
       <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="6" cy="6" r="5"/><path d="M6 8v-1c0-1 2-1.5 2-3a2 2 0 1 0-4 0"/><circle cx="6" cy="9.5" r=".5" fill="currentColor" stroke="none"/></svg>
       Hjelp
     </a>
-    <div style="width:1px;height:22px;background:rgba(255,255,255,.15)"></div>
-    <!-- Primær handling -->
-    <button class="tb-btn tb-btn-primary" onclick="openCatModal(null)">
-      <svg width="11" height="11" viewBox="0 0 11 11" fill="none" stroke="currentColor" stroke-width="2"><line x1="5.5" y1="1" x2="5.5" y2="10"/><line x1="1" y1="5.5" x2="10" y2="5.5"/></svg>
-      + Kategori
-    </button>
   </div>
 </div>
 
@@ -2005,7 +2000,10 @@ function spSetVal(nid,pid,val,type) {
   pushUndo();
   if(!node.vals)node.vals={};
   node.vals[pid]= type==='number'?(val===''?null:parseFloat(val)) : (val===''?null:val);
-  save();renderNodes();
+  save();
+  if(S.view==='timeline') renderTimeline();
+  else if(S.view==='dashboard') renderDashboard();
+  else renderNodes();
 }
 
 function liveUpdate(nid,field,val) {
@@ -2892,6 +2890,8 @@ function tblUpdate(nid,field,val,type) {
   save();
   if(S.view==='graph') renderNodes();
   else if(S.view==='table') renderTable();
+  else if(S.view==='timeline') renderTimeline();
+  else if(S.view==='dashboard') renderDashboard();
 }
 
 function tblToggleCol(catId,paramId,on) {
@@ -3522,12 +3522,12 @@ function renderDashWidgetHTML(w) {
     const fontWeight=style==='text'?'400':'700';
     const textAlign=style==='text'?'left':'center';
     const bg=w.color?`background:${w.color};`:'';
-    return `<div class="dash-widget" id="dw-${w.id}" style="grid-column:${w.col||1}/span ${w.w||3};grid-row:${w.row||1}/span ${w.h||1};${accentBorder}${bg};position:relative" data-wid="${w.id}">
+    return `<div class="dash-widget" id="dw-${w.id}" data-dw-drag="${w.id}" style="grid-column:${w.col||1}/span ${w.w||3};grid-row:${w.row||1}/span ${w.h||1};${accentBorder}${bg}position:relative;cursor:${_dashEditMode?'move':'default'}" data-wid="${w.id}">
       ${_dashEditMode?`<div style="position:absolute;top:4px;right:4px;display:flex;gap:3px;z-index:10">
-        <button class="dw-edit-btn" onclick="openDashWidgetModal('${w.id}')" title="Konfigurer"><svg width="11" height="11" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="6" cy="6" r="2"/><path d="M6 1v1M6 10v1M1 6h1M10 6h1M2.6 2.6l.7.7M8.7 8.7l.7.7M2.6 9.4l.7-.7M8.7 3.3l.7-.7"/></svg></button>
-        <button class="dw-edit-btn" onclick="deleteDashWidget('${w.id}')" title="Fjern" style="color:#e74c3c"><svg width="11" height="11" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5"><line x1="2" y1="2" x2="10" y2="10"/><line x1="10" y1="2" x2="2" y2="10"/></svg></button>
+        <button class="dw-edit-btn" onclick="event.stopPropagation();openDashWidgetModal('${w.id}')" title="Konfigurer"><svg width="11" height="11" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="6" cy="6" r="2"/><path d="M6 1v1M6 10v1M1 6h1M10 6h1M2.6 2.6l.7.7M8.7 8.7l.7.7M2.6 9.4l.7-.7M8.7 3.3l.7-.7"/></svg></button>
+        <button class="dw-edit-btn" onclick="event.stopPropagation();deleteDashWidget('${w.id}')" title="Fjern" style="color:#e74c3c"><svg width="11" height="11" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5"><line x1="2" y1="2" x2="10" y2="10"/><line x1="10" y1="2" x2="2" y2="10"/></svg></button>
       </div>`:''}
-      <div style="flex:1;display:flex;align-items:center;justify-content:${textAlign==='center'?'center':'flex-start'};padding:16px 20px;overflow:hidden">
+      <div style="flex:1;display:flex;align-items:center;justify-content:${textAlign==='center'?'center':'flex-start'};padding:16px 20px;overflow:hidden;pointer-events:none">
         <div style="font-size:${fontSize};font-weight:${fontWeight};color:${color};text-align:${textAlign};line-height:1.3;white-space:pre-wrap;width:100%">${esc(w.content||'Overskrift')}</div>
       </div>
     </div>`;
@@ -4047,6 +4047,85 @@ function exportTimelineReport() {
 // ════════════════════════════════════════════════════════
 //  EXPORT / IMPORT
 // ════════════════════════════════════════════════════════
+
+function exportAI() {
+  const etypes = getEdgeTypes();
+  const statusLabel = {red:'Rød',yellow:'Gul',green:'Grønn'};
+  const paramTypeLabel = {text:'Tekst',number:'Tall',status:'Status',boolean:'Ja/Nei',date:'Dato',select:'Valgliste',multiselect:'Flervalg',tags:'Tagger',calc:'Beregnet'};
+
+  // Build id→title lookup for nodes
+  const nodeTitle = n => n ? n.title : null;
+  const catName = c => c ? c.name : null;
+
+  const categories = getCatsSorted().map(cat => {
+    const params = getCatParams(cat.id);
+    const nodes = getCatNodes(cat.id);
+    return {
+      kategori: cat.name,
+      parametere: params.map(p => ({
+        navn: p.name,
+        type: paramTypeLabel[p.type] || p.type,
+        ...(p.unit ? {enhet: p.unit} : {}),
+        ...(p.type === 'calc' ? {formel: p.formula} : {}),
+        ...(p.options ? {alternativer: p.options} : {}),
+      })),
+      objekter: nodes.map(n => {
+        const vals = {};
+        params.forEach(p => {
+          const v = computeVal(n, p, params);
+          if (v === null || v === undefined || v === '') return;
+          if (p.type === 'status') vals[p.name] = statusLabel[v] || v;
+          else if (p.type === 'boolean') vals[p.name] = v ? 'Ja' : 'Nei';
+          else if (Array.isArray(v)) vals[p.name] = v.join(', ');
+          else vals[p.name] = v;
+        });
+        const koblinger = S.edges
+          .filter(e => e.src === n.id || e.tgt === n.id)
+          .map(e => {
+            const other = getNode(e.src === n.id ? e.tgt : e.src);
+            const otherCat = other ? getCat(other.catId) : null;
+            const et = etypes.find(t => t.v === e.type) || etypes[0];
+            return {
+              relasjon: et.l,
+              retning: e.src === n.id ? 'til' : 'fra',
+              objekt: nodeTitle(other),
+              kategori: catName(otherCat),
+            };
+          });
+        return {
+          navn: n.title,
+          verdier: vals,
+          ...(koblinger.length ? {koblinger} : {}),
+        };
+      }),
+    };
+  });
+
+  const perspektiver = S.views.map(v => ({
+    navn: v.name,
+    ...(v.description ? {beskrivelse: v.description} : {}),
+    kategorier: (v.catIds || []).map(id => { const c = getCat(id); return c ? c.name : id; }),
+  }));
+
+  const output = {
+    tittel: S.settings?.title || 'Virksomhetskartlegger',
+    eksportert: new Date().toISOString(),
+    sammendrag: {
+      antallKategorier: S.cats.length,
+      antallObjekter: S.nodes.length,
+      antallRelasjoner: S.edges.length,
+    },
+    kategorier: categories,
+    ...(perspektiver.length ? {perspektiver} : {}),
+  };
+
+  const blob = new Blob([JSON.stringify(output, null, 2)], {type:'application/json'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = tsFilename('ai-analyse') + '.json';
+  a.click();
+  toast('KI-eksport lastet ned ✓');
+}
 
 function exportJSON() {
   const data={cats:S.cats,params:S.params,nodes:S.nodes,edges:S.edges,vp:S.vp,views:S.views,activeView:S.activeView,settings:S.settings,groups:S.groups,condRules:S.condRules,dashboards:S.dashboards,activeDashId:S.activeDashId};
