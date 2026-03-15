@@ -553,9 +553,10 @@ input[type=color]{width:34px;height:28px;border:1px solid var(--border);border-r
 .dash-widget{background:var(--surface);border:1px solid var(--border);border-radius:12px;overflow:hidden;display:flex;flex-direction:column;box-shadow:var(--sh);transition:box-shadow .15s}
 .dash-edit-mode .dash-widget{border-style:dashed;border-color:var(--p5)}
 .dash-edit-mode .dash-widget:hover{box-shadow:0 0 0 2px var(--p5)}
-.dw-header{padding:8px 12px 6px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:6px;flex-shrink:0;background:var(--bg)}
+.dw-header{padding:10px 12px 8px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:6px;flex-shrink:0;background:var(--bg)}
 .dash-edit-mode .dw-header{cursor:move}
-.dw-header-title{font-size:10px;font-weight:700;color:var(--text3);letter-spacing:.06em;text-transform:uppercase;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.dw-header-title{font-size:12px;font-weight:700;color:var(--text2);letter-spacing:.02em;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;text-align:center}
+.dw-cp-swatch.sel{border:2px solid #1a1a2e!important;box-shadow:0 0 0 1px #fff inset}
 .dw-edit-btns{display:none;gap:4px;flex-shrink:0}
 .dash-edit-mode .dw-edit-btns{display:flex}
 .dw-edit-btn{width:22px;height:22px;border-radius:4px;border:1px solid var(--border);background:var(--surface);color:var(--text2);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:11px}
@@ -622,44 +623,38 @@ input[type=color]{width:34px;height:28px;border:1px solid var(--border);border-r
         <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 2h5l3 3v5H2z"/><path d="M7 2v3h3"/></svg>
         Fil ▾
       </button>
-      <div class="img-export-menu" id="tb-fil-menu" style="display:none;min-width:180px">
-        <div style="padding:4px 10px 2px;font-size:10px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--text3)">Importer</div>
-        <div class="col-menu-item" onclick="importJSON();toggleTbMenu('tb-fil-menu')">
-          <svg width="11" height="11" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" style="flex-shrink:0"><path d="M6 1v7M3 5l3 3 3-3M1 10h10"/></svg>
-          JSON (full backup)
-        </div>
-        <div class="col-menu-item" onclick="importCSV();toggleTbMenu('tb-fil-menu')">
-          <svg width="11" height="11" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" style="flex-shrink:0"><path d="M6 1v7M3 5l3 3 3-3M1 10h10"/></svg>
-          CSV til kategori
-        </div>
+      <div class="img-export-menu" id="tb-fil-menu" style="display:none;min-width:220px">
+        <!-- DATA -->
+        <div style="padding:4px 10px 2px;font-size:10px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--text3)">Data</div>
+        <div class="col-menu-item" onclick="importJSON();toggleTbMenu('tb-fil-menu')">↓ Importer JSON</div>
+        <div class="col-menu-item" onclick="importCSV();toggleTbMenu('tb-fil-menu')">↓ Importer CSV</div>
+        <div class="col-menu-item" onclick="exportJSON();toggleTbMenu('tb-fil-menu')">↑ Eksporter JSON</div>
         <div style="height:1px;background:var(--border);margin:4px 0"></div>
-        <div style="padding:4px 10px 2px;font-size:10px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--text3)">Eksporter</div>
-        <div class="col-menu-item" onclick="exportJSON();toggleTbMenu('tb-fil-menu')">
-          <svg width="11" height="11" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" style="flex-shrink:0"><path d="M6 8V1M3 4l3-3 3 3M1 10h10"/></svg>
-          JSON (backup)
-        </div>
-        <div class="col-menu-item" onclick="exportGraphSVG();toggleTbMenu('tb-fil-menu')">
-          <svg width="11" height="11" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" style="flex-shrink:0"><rect x="1" y="2" width="10" height="8" rx="1"/><circle cx="4" cy="5" r="1"/><path d="M1 9l3-3 2 2 2-2 3 3"/></svg>
-          Kart som SVG
-        </div>
-        <div class="col-menu-item" onclick="exportGraphPNG();toggleTbMenu('tb-fil-menu')">
-          <svg width="11" height="11" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" style="flex-shrink:0"><rect x="1" y="2" width="10" height="8" rx="1"/><circle cx="4" cy="5" r="1"/><path d="M1 9l3-3 2 2 2-2 3 3"/></svg>
-          Kart som PNG
-        </div>
-        <div class="col-menu-item" onclick="exportReport();toggleTbMenu('tb-fil-menu')">
-          <svg width="11" height="11" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" style="flex-shrink:0"><path d="M2 2h5l3 3v5H2zM4 6h4M4 8h3"/></svg>
-          HTML-rapport (tabell)
-        </div>
+        <!-- KART -->
+        <div style="padding:4px 10px 2px;font-size:10px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--text3)">Kartvisning</div>
+        <div class="col-menu-item" onclick="exportGraphSVG();toggleTbMenu('tb-fil-menu')">SVG</div>
+        <div class="col-menu-item" onclick="exportGraphPNG();toggleTbMenu('tb-fil-menu')">PNG</div>
+        <div class="col-menu-item" onclick="exportReport();toggleTbMenu('tb-fil-menu')">HTML-rapport</div>
         <div style="height:1px;background:var(--border);margin:4px 0"></div>
+        <!-- TABELL -->
+        <div style="padding:4px 10px 2px;font-size:10px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--text3)">Tabellvisning</div>
+        <div class="col-menu-item" onclick="exportViewPNG('table');toggleTbMenu('tb-fil-menu')">PNG</div>
+        <div class="col-menu-item" onclick="exportReport();toggleTbMenu('tb-fil-menu')">HTML-rapport</div>
+        <div style="height:1px;background:var(--border);margin:4px 0"></div>
+        <!-- MATRISE -->
+        <div style="padding:4px 10px 2px;font-size:10px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--text3)">Matrisevisning</div>
+        <div class="col-menu-item" onclick="exportViewPNG('matrix');toggleTbMenu('tb-fil-menu')">PNG</div>
+        <div class="col-menu-item" onclick="exportMatrixReport();toggleTbMenu('tb-fil-menu')">HTML-rapport</div>
+        <div style="height:1px;background:var(--border);margin:4px 0"></div>
+        <!-- TIDSLINJE -->
+        <div style="padding:4px 10px 2px;font-size:10px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--text3)">Tidslinje</div>
+        <div class="col-menu-item" onclick="exportViewPNG('timeline');toggleTbMenu('tb-fil-menu')">PNG</div>
+        <div class="col-menu-item" onclick="exportTimelineReport();toggleTbMenu('tb-fil-menu')">HTML-rapport</div>
+        <div style="height:1px;background:var(--border);margin:4px 0"></div>
+        <!-- DASHBOARD -->
         <div style="padding:4px 10px 2px;font-size:10px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--text3)">Dashboard</div>
-        <div class="col-menu-item" onclick="exportDashReport();toggleTbMenu('tb-fil-menu')">
-          <svg width="11" height="11" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" style="flex-shrink:0"><path d="M2 2h5l3 3v5H2zM4 6h4M4 8h3"/></svg>
-          Dashboard som HTML
-        </div>
-        <div class="col-menu-item" onclick="exportDashPNG();toggleTbMenu('tb-fil-menu')">
-          <svg width="11" height="11" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" style="flex-shrink:0"><rect x="1" y="2" width="10" height="8" rx="1"/><circle cx="4" cy="5" r="1"/><path d="M1 9l3-3 2 2 2-2 3 3"/></svg>
-          Dashboard som PNG
-        </div>
+        <div class="col-menu-item" onclick="exportDashPNG();toggleTbMenu('tb-fil-menu')">PNG</div>
+        <div class="col-menu-item" onclick="exportDashReport();toggleTbMenu('tb-fil-menu')">HTML-rapport</div>
       </div>
     </div>
     <div style="width:1px;height:22px;background:rgba(255,255,255,.15)"></div>
@@ -828,7 +823,8 @@ function blankState() {
     timelineCatId: null,
     timelineDateStartParam: null,
     timelineDateEndParam: null,
-    dashWidgets: [],
+    dashboards: [{id:'default',name:'Dashboard',widgets:[]}],
+    activeDashId: 'default',
     settings: { edgeTypes:[], nodeRadius:10, showCatLabel:true, nodeMinW:160,
                 nodeStyle:'card', nodeShadow:'subtle', canvasBg:'dots', canvasBgColor:'#f1f1f1',
                 showEdges:true, title:'' },
@@ -866,6 +862,14 @@ if(!S.matrixColCat && S.cats.length) S.matrixColCat = S.cats[1]?.id || S.cats[0]
 // New features backward compat
 if(!S.groups) S.groups=[];
 if(!S.condRules) S.condRules=[];
+// Migrate old dashWidgets to new dashboards format
+if(!S.dashboards){
+  S.dashboards=[{id:'default',name:'Dashboard',widgets:S.dashWidgets||[]}];
+  S.activeDashId='default';
+}
+if(!S.activeDashId||!S.dashboards.find(d=>d.id===S.activeDashId)){
+  S.activeDashId=S.dashboards[0]?.id||'default';
+}
 if(S.selGroup===undefined) S.selGroup=null;
 if(S.timelineCatId===undefined) S.timelineCatId=null;
 if(S.timelineDateStartParam===undefined) S.timelineDateStartParam=null;
@@ -3436,19 +3440,46 @@ function toast(msg,dur=2000){
 //  DASHBOARD VIEW
 // ════════════════════════════════════════════════════════
 
+function getActiveDash(){
+  return S.dashboards.find(d=>d.id===S.activeDashId)||S.dashboards[0]||{id:'default',name:'Dashboard',widgets:[]};
+}
+
+function switchDash(id){ S.activeDashId=id; save(); renderDashboard(); }
+
+function addDash(){
+  const name=prompt('Navn på nytt dashboard:','Dashboard '+(S.dashboards.length+1));
+  if(!name)return;
+  const d={id:uid(),name:name.trim(),widgets:[]};
+  pushUndo(); S.dashboards.push(d); S.activeDashId=d.id; save(); renderDashboard();
+}
+
+function renameDash(){
+  const d=getActiveDash();
+  const name=prompt('Nytt navn:',d.name);
+  if(!name||name.trim()===d.name)return;
+  pushUndo(); d.name=name.trim(); save(); renderDashboard();
+}
+
+function deleteDashFn(){
+  if(S.dashboards.length<=1){toast('Kan ikke slette siste dashboard');return;}
+  if(!confirm('Slette «'+getActiveDash().name+'»?'))return;
+  pushUndo(); S.dashboards=S.dashboards.filter(d=>d.id!==S.activeDashId);
+  S.activeDashId=S.dashboards[0].id; save(); renderDashboard();
+}
+
 let _dashEditMode = false;
 let _ddrag = {active:false};
 
 function renderDashboard() {
   const view = document.getElementById('dashboard-view');
   if (!view) return;
-  if (!S.dashWidgets) S.dashWidgets = [];
-  const widgets = S.dashWidgets;
+  const dash = getActiveDash();
+  const widgets = dash.widgets;
   const maxRow = widgets.reduce((m,w)=>Math.max(m,(w.row||1)+(w.h||2)),4);
 
   view.innerHTML = `
     <div class="dash-toolbar">
-      <span class="dash-toolbar-title">${_dashEditMode?'✎ Rediger dashboard':'Dashboard'}</span>
+      <span class="dash-toolbar-title">${_dashEditMode?'✎ Rediger dashboard':esc(dash.name)}</span>
       <div style="display:flex;gap:6px;flex-wrap:wrap">
         ${_dashEditMode
           ? `<button class="gt-btn" onclick="openDashWidgetModal(null)" style="background:var(--p5);color:#fff;border-color:var(--p5)">+ Widget</button>
@@ -3456,6 +3487,14 @@ function renderDashboard() {
           : `<button class="gt-btn" onclick="toggleDashEditMode()">✎ Rediger</button>`
         }
       </div>
+    </div>
+    <div style="display:flex;align-items:center;gap:8px;padding:6px 20px 0;flex-shrink:0">
+      <select style="font-size:12px;padding:3px 8px;border:1px solid var(--border);border-radius:5px;background:var(--surface);color:var(--text)" onchange="switchDash(this.value)">
+        ${S.dashboards.map(d=>`<option value="${d.id}" ${d.id===S.activeDashId?'selected':''}>${esc(d.name)}</option>`).join('')}
+      </select>
+      <button class="gt-btn" onclick="addDash()" title="Nytt dashboard">+</button>
+      <button class="gt-btn" onclick="renameDash()" title="Gi nytt navn">✎</button>
+      ${S.dashboards.length>1?`<button class="gt-btn" onclick="deleteDashFn()" title="Slett dashboard" style="color:#e74c3c">✕</button>`:''}
     </div>
     <div class="dash-grid-wrap">
       ${widgets.length === 0
@@ -3475,8 +3514,26 @@ function renderDashboard() {
 }
 
 function renderDashWidgetHTML(w) {
-  const titleStr = esc(w.title || dashWidgetDefaultTitle(w));
   const accentBorder = w.color ? `border-top:3px solid ${w.color};` : '';
+  if(w.type==='text'){
+    const style=w.textStyle||'heading-1';
+    const color=w.textColor||'var(--text)';
+    const fontSize=style==='heading-1'?'clamp(18px,2.5vw,32px)':style==='heading-2'?'clamp(14px,2vw,22px)':style==='heading-3'?'clamp(12px,1.5vw,16px)':'14px';
+    const fontWeight=style==='text'?'400':'700';
+    const textAlign=style==='text'?'left':'center';
+    const bg=w.color?`background:${w.color};`:'';
+    return `<div class="dash-widget" id="dw-${w.id}" style="grid-column:${w.col||1}/span ${w.w||3};grid-row:${w.row||1}/span ${w.h||1};${accentBorder}${bg};position:relative" data-wid="${w.id}">
+      ${_dashEditMode?`<div style="position:absolute;top:4px;right:4px;display:flex;gap:3px;z-index:10">
+        <button class="dw-edit-btn" onclick="openDashWidgetModal('${w.id}')" title="Konfigurer"><svg width="11" height="11" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="6" cy="6" r="2"/><path d="M6 1v1M6 10v1M1 6h1M10 6h1M2.6 2.6l.7.7M8.7 8.7l.7.7M2.6 9.4l.7-.7M8.7 3.3l.7-.7"/></svg></button>
+        <button class="dw-edit-btn" onclick="deleteDashWidget('${w.id}')" title="Fjern" style="color:#e74c3c"><svg width="11" height="11" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5"><line x1="2" y1="2" x2="10" y2="10"/><line x1="10" y1="2" x2="2" y2="10"/></svg></button>
+      </div>`:''}
+      <div style="flex:1;display:flex;align-items:center;justify-content:${textAlign==='center'?'center':'flex-start'};padding:16px 20px;overflow:hidden">
+        <div style="font-size:${fontSize};font-weight:${fontWeight};color:${color};text-align:${textAlign};line-height:1.3;white-space:pre-wrap;width:100%">${esc(w.content||'Overskrift')}</div>
+      </div>
+    </div>`;
+  }
+  // Normal widget with header
+  const titleStr = esc(w.title || dashWidgetDefaultTitle(w));
   return `
     <div class="dash-widget" id="dw-${w.id}"
          style="grid-column:${w.col||1}/span ${w.w||3};grid-row:${w.row||1}/span ${w.h||2};${accentBorder}"
@@ -3616,11 +3673,11 @@ function _dwAlert(w) {
 }
 
 function toggleDashEditMode() { _dashEditMode=!_dashEditMode; renderDashboard(); }
-function deleteDashWidget(wid) { pushUndo();S.dashWidgets=(S.dashWidgets||[]).filter(w=>w.id!==wid);save();renderDashboard(); }
+function deleteDashWidget(wid) { pushUndo();const dash=getActiveDash();dash.widgets=dash.widgets.filter(w=>w.id!==wid);save();renderDashboard(); }
 
 // ─── Widget config modal ──────────────────────────────
 function openDashWidgetModal(wid) {
-  const ex=wid?(S.dashWidgets||[]).find(w=>w.id===wid):null;
+  const ex=wid?getActiveDash().widgets.find(w=>w.id===wid):null;
   window._dwEx=ex;
   const typeOpts=[
     {v:'kpi',l:'KPI / enkeltverdi',d:'Stor visning av én verdi fra ett objekt'},
@@ -3628,7 +3685,7 @@ function openDashWidgetModal(wid) {
     {v:'status-dist',l:'Statusfordeling',d:'Fordeling av trafikklys-statuser'},
     {v:'progress',l:'Fremdriftsindikator',d:'Fremgang mot et mål (progress bar)'},
     {v:'list',l:'Objektliste',d:'Minitable med valgte parametere'},
-    {v:'text',l:'Tekst / overskrift',d:'Fri tekst for organisering'},
+    {v:'text',l:'Tekst / overskrift',d:'Overskrift eller fritekst uten header-bar'},
     {v:'alert',l:'Avviksliste',d:'Objekter som utløser betingede regler'},
   ];
   const div=document.createElement('div');div.className='modal-bg';div.id='dash-widget-modal';
@@ -3657,7 +3714,12 @@ function openDashWidgetModal(wid) {
         <div><label class="field-label">Tittel (valgfri)</label>
           <input type="text" id="dw-title" placeholder="Automatisk" value="${esc(ex?.title||'')}"></div>
         <div><label class="field-label">Aksentfarge</label>
-          <input type="color" id="dw-color" value="${ex?.color||'#008761'}" style="height:36px;padding:2px 4px"></div>
+          <div id="dw-color-picker" style="display:flex;gap:5px;flex-wrap:wrap;padding:4px 0">
+            ${PALETTE.map(c=>`<div onclick="document.getElementById('dw-color-val').value='${c}';document.querySelectorAll('#dw-color-picker .dw-cp-swatch').forEach(s=>s.classList.toggle('sel',s.dataset.c==='${c}'))" class="dw-cp-swatch${(ex?.color||'#008761')===c?' sel':''}" data-c="${c}" style="width:20px;height:20px;border-radius:4px;background:${c};cursor:pointer;border:2px solid ${(ex?.color||'#008761')===c?'#1a1a2e':'transparent'}"></div>`).join('')}
+            <div onclick="document.getElementById('dw-color-val').value='';document.querySelectorAll('#dw-color-picker .dw-cp-swatch').forEach(s=>s.classList.remove('sel'))" class="dw-cp-swatch" style="width:20px;height:20px;border-radius:4px;background:var(--border);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:10px;color:var(--text3)" title="Ingen farge">✕</div>
+          </div>
+          <input type="hidden" id="dw-color-val" value="${ex?.color||'#008761'}">
+        </div>
       </div>
     </div>
     <div class="modal-foot">
@@ -3717,8 +3779,33 @@ function updateDashModalBody() {
         </div></div>`;
     document.getElementById('dw-cat').onchange=function(){window._dwEx={...(window._dwEx||{}),catId:this.value};updateDashModalBody();};
   } else if(type==='text'){
-    body.innerHTML=`<div><label class="field-label">Innhold</label>
-      <textarea class="param-inp" id="dw-content" rows="4" placeholder="Skriv inn tekst...">${esc(ex?.content||'')}</textarea></div>`;
+    body.innerHTML=`
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+        <div>
+          <label class="field-label">Stil</label>
+          <select id="dw-text-style">
+            <option value="heading-1" ${ex?.textStyle==='heading-1'||!ex?.textStyle?'selected':''}>Stor overskrift (H1)</option>
+            <option value="heading-2" ${ex?.textStyle==='heading-2'?'selected':''}>Mellomstor overskrift (H2)</option>
+            <option value="heading-3" ${ex?.textStyle==='heading-3'?'selected':''}>Liten overskrift (H3)</option>
+            <option value="text" ${ex?.textStyle==='text'?'selected':''}>Brødtekst</option>
+          </select>
+        </div>
+        <div>
+          <label class="field-label">Tekstfarge</label>
+          <select id="dw-text-color">
+            <option value="">Standard</option>
+            <option value="#1a1a2e" ${ex?.textColor==='#1a1a2e'?'selected':''}>Mørk</option>
+            <option value="#ffffff" ${ex?.textColor==='#ffffff'?'selected':''}>Hvit</option>
+            <option value="#008761" ${ex?.textColor==='#008761'?'selected':''}>Grønn</option>
+            <option value="#0047ba" ${ex?.textColor==='#0047ba'?'selected':''}>Blå</option>
+            <option value="#cd465e" ${ex?.textColor==='#cd465e'?'selected':''}>Rød</option>
+          </select>
+        </div>
+      </div>
+      <div style="margin-top:10px">
+        <label class="field-label">Innhold</label>
+        <textarea id="dw-content" rows="3" placeholder="Skriv inn tekst...">${esc(ex?.content||'')}</textarea>
+      </div>`;
   } else if(type==='alert'){
     body.innerHTML=`<div><label class="field-label">Kategori (med betingede formateringsregler)</label>${catSel('dw-cat',ex?.catId||cats[0]?.id)}</div>`;
   }
@@ -3731,19 +3818,19 @@ function saveDashWidget(wid) {
   const w=Math.min(12,Math.max(1,parseInt(document.getElementById('dw-w')?.value)||4));
   const h=Math.max(1,parseInt(document.getElementById('dw-h')?.value)||2);
   const title=document.getElementById('dw-title')?.value.trim()||'';
-  const color=document.getElementById('dw-color')?.value||'';
+  const color=document.getElementById('dw-color-val')?.value||'';
   const widget={id:wid||uid(),type,col,row,w,h,title,color};
   if(type==='kpi'){widget.catId=document.getElementById('dw-cat')?.value;widget.nodeId=document.getElementById('dw-node')?.value;widget.paramId=document.getElementById('dw-param')?.value;widget.targetParamId=document.getElementById('dw-target-param')?.value||'';}
   else if(type==='count'){widget.catId=document.getElementById('dw-cat')?.value;}
   else if(type==='status-dist'){widget.catId=document.getElementById('dw-cat')?.value;widget.paramId=document.getElementById('dw-param')?.value;}
   else if(type==='progress'){widget.catId=document.getElementById('dw-cat')?.value;widget.nodeId=document.getElementById('dw-node')?.value;widget.paramId=document.getElementById('dw-param')?.value;widget.maxVal=parseFloat(document.getElementById('dw-max-val')?.value)||100;}
   else if(type==='list'){widget.catId=document.getElementById('dw-cat')?.value;widget.paramIds=[...document.querySelectorAll('.dw-param-check')].filter(c=>c.checked).map(c=>c.value);}
-  else if(type==='text'){widget.content=document.getElementById('dw-content')?.value||'';}
+  else if(type==='text'){widget.content=document.getElementById('dw-content')?.value||'';widget.textStyle=document.getElementById('dw-text-style')?.value||'heading-1';widget.textColor=document.getElementById('dw-text-color')?.value||'';}
   else if(type==='alert'){widget.catId=document.getElementById('dw-cat')?.value;}
   pushUndo();
-  if(!S.dashWidgets)S.dashWidgets=[];
-  const idx=wid?(S.dashWidgets.findIndex(dw=>dw.id===wid)):-1;
-  if(idx>=0)S.dashWidgets[idx]=widget; else S.dashWidgets.push(widget);
+  const dash=getActiveDash();
+  const idx=wid?(dash.widgets.findIndex(dw=>dw.id===wid)):-1;
+  if(idx>=0)dash.widgets[idx]=widget; else dash.widgets.push(widget);
   save();closeModal('dash-widget-modal');window._dwEx=null;renderDashboard();
 }
 
@@ -3755,7 +3842,7 @@ function bindDashDrag() {
       if(e.button!==0||e.target.closest('.dw-edit-btn'))return;
       e.preventDefault();
       const wid=hdr.dataset.dwDrag;
-      const w=(S.dashWidgets||[]).find(dw=>dw.id===wid);if(!w)return;
+      const w=getActiveDash().widgets.find(dw=>dw.id===wid);if(!w)return;
       const el=document.getElementById('dw-'+wid);if(!el)return;
       const elRect=el.getBoundingClientRect();
       const ghost=document.createElement('div');ghost.className='dash-ghost';
@@ -3776,7 +3863,7 @@ function bindDashDrag() {
         if(!_ddrag.active)return;
         _ddrag.active=false;ghost.remove();el.classList.remove('dash-dragging');
         document.removeEventListener('mousemove',onMove);document.removeEventListener('mouseup',onUp);
-        const dw=(S.dashWidgets||[]).find(dw=>dw.id===wid);
+        const dw=getActiveDash().widgets.find(dw=>dw.id===wid);
         if(dw){pushUndo();dw.col=Math.max(1,Math.min(13-(dw.w||4),_ddrag.targetCol));dw.row=Math.max(1,_ddrag.targetRow);save();renderDashboard();}
       };
       document.addEventListener('mousemove',onMove);document.addEventListener('mouseup',onUp);
@@ -3801,11 +3888,12 @@ function exportDashReport() {
 }
 
 function _buildDashHTML() {
-  const title=S.settings?.title||'Dashboard';
+  const dash=getActiveDash();
+  const title=S.settings?.title||dash.name||'Dashboard';
   const activeV=S.activeView?S.views.find(v=>v.id===S.activeView):null;
   const perspName=activeV?activeV.name:'Alle';
   const dateStr=new Date().toLocaleDateString('no-NO',{year:'numeric',month:'long',day:'numeric'});
-  const widgets=S.dashWidgets||[];
+  const widgets=dash.widgets||[];
   const maxRow=widgets.reduce((m,w)=>Math.max(m,(w.row||1)+(w.h||2)),4);
   const widgetsHTML=widgets.map(w=>{
     const ts=resc(w.title||dashWidgetDefaultTitle(w));
@@ -3868,12 +3956,100 @@ function _dwBodyForExport(w) {
   } catch(e){return'—';}
 }
 
+// ─── View PNG / report exports ───────────────────────────
+function exportViewPNG(viewName) {
+  const prevView = S.view;
+  switchView(viewName);
+  setTimeout(() => {
+    const viewEl = document.getElementById(viewName + '-view');
+    if (!viewEl) { toast('Visning ikke tilgjengelig'); switchView(prevView); return; }
+    const title = S.settings?.title || 'Virksomhetskartlegger';
+    const styles = [...document.styleSheets].map(ss => {
+      try { return [...ss.cssRules].map(r=>r.cssText).join('\n'); } catch(e) { return ''; }
+    }).join('\n');
+    const html = `<!DOCTYPE html><html lang="no"><head><meta charset="UTF-8"><title>${resc(title)}</title>
+      <style>${styles}</style></head><body style="margin:0">${viewEl.outerHTML}
+      <script>document.addEventListener('DOMContentLoaded',()=>setTimeout(()=>window.print(),400));<\/script>
+      </body></html>`;
+    const win = window.open('','_blank');
+    if(!win){toast('Popup blokkert');return;}
+    win.document.write(html);win.document.close();
+    toast('Åpnet for utskrift/PNG');
+  }, 200);
+}
+
+function exportMatrixReport() {
+  const activeV = S.activeView ? S.views.find(v=>v.id===S.activeView) : null;
+  const title = S.settings?.title || 'Virksomhetskartlegger';
+  const perspName = activeV ? activeV.name : 'Alle';
+  const dateStr = new Date().toLocaleDateString('no-NO',{year:'numeric',month:'long',day:'numeric'});
+  const rowCat = getCat(S.matrixRowCat); const colCat = getCat(S.matrixColCat);
+  if(!rowCat||!colCat){toast('Velg rad- og kolonnekategori i matrisevisningen først');return;}
+  const rowNodes = getCatNodes(rowCat.id); const colNodes = getCatNodes(colCat.id);
+  const etypes = getEdgeTypes();
+  const edgeMap = {};
+  S.edges.forEach(e=>{ const k=e.src+'_'+e.tgt; edgeMap[k]=e; const k2=e.tgt+'_'+e.src; edgeMap[k2]=e; });
+  const thead=`<tr><th style="background:#f5f6f8;padding:8px 12px;border:1px solid #e5e7eb;min-width:140px"></th>${colNodes.map(n=>`<th style="background:#f5f6f8;padding:8px;border:1px solid #e5e7eb;font-size:11px;font-weight:600;color:#444;writing-mode:vertical-rl;transform:rotate(180deg);height:100px;vertical-align:bottom">${resc(n.title)}</th>`).join('')}</tr>`;
+  const tbody=rowNodes.map(rn=>`<tr><td style="padding:8px 12px;border:1px solid #e5e7eb;font-size:12px;font-weight:500;background:#fff;min-width:140px">${resc(rn.title)}</td>${colNodes.map(cn=>{
+    if(rn.id===cn.id)return`<td style="border:1px solid #e5e7eb;background:repeating-linear-gradient(135deg,transparent,transparent 4px,#e5e7eb 4px,#e5e7eb 5px)"></td>`;
+    const e=edgeMap[rn.id+'_'+cn.id];
+    if(!e)return`<td style="border:1px solid #e5e7eb;padding:8px;text-align:center">—</td>`;
+    const et=etypes.find(t=>t.v===e.type)||etypes[0];
+    return`<td style="border:1px solid #e5e7eb;padding:8px;text-align:center;background:${et.color}15"><span style="display:inline-block;width:10px;height:10px;border-radius:50%;background:${et.color}"></span></td>`;
+  }).join('')}</tr>`).join('');
+  const html=`<!DOCTYPE html><html lang="no"><head><meta charset="UTF-8"><title>${resc(title)} – Matrise</title>
+  <style>*{box-sizing:border-box;margin:0;padding:0}body{font-family:'Segoe UI',system-ui,sans-serif;background:#f1f3f5;color:#1a1a2e}
+  .header{background:#1a1a2e;color:#fff;padding:24px 32px}.header h1{font-size:20px;font-weight:700}.header p{font-size:12px;opacity:.55;margin-top:3px}
+  .wrap{padding:20px;overflow:auto}table{border-collapse:collapse;background:#fff}
+  .print-btn{position:fixed;top:14px;right:14px;padding:7px 16px;background:#008761;color:#fff;border:none;border-radius:6px;font-size:12px;font-weight:600;cursor:pointer}
+  @media print{.print-btn{display:none}body{background:#fff}}</style></head>
+  <body><button class="print-btn" onclick="window.print()">Skriv ut / Lagre PDF</button>
+  <div class="header"><h1>${resc(title)} – Matrise</h1><p>${resc(rowCat.name)} × ${resc(colCat.name)} · Perspektiv: ${resc(perspName)} · ${resc(dateStr)}</p></div>
+  <div class="wrap"><table><thead>${thead}</thead><tbody>${tbody}</tbody></table></div></body></html>`;
+  const blob=new Blob([html],{type:'text/html;charset=utf-8'});
+  const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=tsFilename('matrise')+'.html';a.click();
+  toast('Matrise HTML eksportert ✓');
+}
+
+function exportTimelineReport() {
+  const cat = getCat(S.timelineCatId);
+  if(!cat){toast('Velg kategori i tidslinjevisningen først');return;}
+  const activeV = S.activeView ? S.views.find(v=>v.id===S.activeView) : null;
+  const title = S.settings?.title || 'Virksomhetskartlegger';
+  const perspName = activeV ? activeV.name : 'Alle';
+  const dateStr = new Date().toLocaleDateString('no-NO',{year:'numeric',month:'long',day:'numeric'});
+  const nodes = getCatNodes(cat.id);
+  const allParams = getCatParams(cat.id);
+  const startP = allParams.find(p=>p.id===S.timelineDateStartParam);
+  const endP = allParams.find(p=>p.id===S.timelineDateEndParam);
+  const rows = nodes.map((n,ri)=>{
+    const bg=ri%2===0?'#fff':'#f8f9fa';
+    const sv=startP?computeVal(n,startP,allParams):'';
+    const ev=endP?computeVal(n,endP,allParams):'';
+    return`<tr><td style="padding:7px 12px;border-bottom:1px solid #e5e7eb;background:${bg};font-weight:500">${resc(n.title)}</td>
+      <td style="padding:7px 12px;border-bottom:1px solid #e5e7eb;background:${bg}">${resc(String(sv||'—'))}</td>
+      <td style="padding:7px 12px;border-bottom:1px solid #e5e7eb;background:${bg}">${resc(String(ev||'—'))}</td></tr>`;}).join('');
+  const html=`<!DOCTYPE html><html lang="no"><head><meta charset="UTF-8"><title>${resc(title)} – Tidslinje</title>
+  <style>*{box-sizing:border-box;margin:0;padding:0}body{font-family:'Segoe UI',system-ui,sans-serif;background:#f1f3f5;color:#1a1a2e}
+  .header{background:#1a1a2e;color:#fff;padding:24px 32px}.header h1{font-size:20px;font-weight:700}.header p{font-size:12px;opacity:.55;margin-top:3px}
+  .wrap{padding:20px}table{width:100%;border-collapse:collapse;background:#fff;border-radius:8px;overflow:hidden;box-shadow:0 1px 4px rgba(0,0,0,.08)}
+  th{text-align:left;padding:8px 12px;background:#f1f3f5;font-size:11px;font-weight:700;color:#666;border-bottom:2px solid #e5e7eb}
+  .print-btn{position:fixed;top:14px;right:14px;padding:7px 16px;background:#008761;color:#fff;border:none;border-radius:6px;font-size:12px;font-weight:600;cursor:pointer}
+  @media print{.print-btn{display:none}body{background:#fff}}</style></head>
+  <body><button class="print-btn" onclick="window.print()">Skriv ut / Lagre PDF</button>
+  <div class="header"><h1>${resc(title)} – Tidslinje</h1><p>${resc(cat.name)} · Perspektiv: ${resc(perspName)} · ${resc(dateStr)}</p></div>
+  <div class="wrap"><table><thead><tr><th>Navn</th><th>${resc(startP?.name||'Start')}</th><th>${resc(endP?.name||'Slutt')}</th></tr></thead><tbody>${rows}</tbody></table></div></body></html>`;
+  const blob=new Blob([html],{type:'text/html;charset=utf-8'});
+  const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=tsFilename('tidslinje')+'.html';a.click();
+  toast('Tidslinje HTML eksportert ✓');
+}
+
 // ════════════════════════════════════════════════════════
 //  EXPORT / IMPORT
 // ════════════════════════════════════════════════════════
 
 function exportJSON() {
-  const data={cats:S.cats,params:S.params,nodes:S.nodes,edges:S.edges,vp:S.vp,views:S.views,activeView:S.activeView,settings:S.settings,groups:S.groups,condRules:S.condRules,dashWidgets:S.dashWidgets};
+  const data={cats:S.cats,params:S.params,nodes:S.nodes,edges:S.edges,vp:S.vp,views:S.views,activeView:S.activeView,settings:S.settings,groups:S.groups,condRules:S.condRules,dashboards:S.dashboards,activeDashId:S.activeDashId};
   const blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'});
   const a=document.createElement('a');
   a.href=URL.createObjectURL(blob);
@@ -3900,7 +4076,10 @@ function importJSON() {
         if(d.vp)S.vp=d.vp;S.sel=null;
         if(d.views)S.views=d.views;if(d.activeView!==undefined)S.activeView=d.activeView;
         if(d.settings)S.settings=d.settings;if(d.groups)S.groups=d.groups;
-        if(d.condRules)S.condRules=d.condRules;if(d.dashWidgets)S.dashWidgets=d.dashWidgets;
+        if(d.condRules)S.condRules=d.condRules;
+        if(d.dashboards)S.dashboards=d.dashboards;
+        if(d.activeDashId)S.activeDashId=d.activeDashId;
+        if(d.dashWidgets&&!d.dashboards){S.dashboards=[{id:'default',name:'Dashboard',widgets:d.dashWidgets}];S.activeDashId='default';}
         save();render();renderSidePanel();toast('Import vellykket ✓');
       }catch(err){alert('Ugyldig JSON-fil: '+err.message);}
     };r.readAsText(f);
