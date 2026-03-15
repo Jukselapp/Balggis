@@ -23,14 +23,19 @@ Data is stored locally in the browser (`localStorage`). Back up regularly via **
 | **Table** | Structured table view per category with inline editing of all parameter values. |
 | **Matrix** | Cross-table between two categories — view and edit relations as dots in a grid. |
 | **Timeline** | Gantt-style view for nodes with date parameters. |
-| **Dashboard** | Customizable control panel with optional widgets from various categories and objects. |
+| **Dashboard** | Customizable control panel with widgets from various categories and objects. |
 
 ### Data model
 - **Categories** — groupings of objects (e.g. Strategic goal, KPI, Capability, Initiative, IT system)
 - **Objects** — nodes within a category, with custom parameter values
-- **Parameters** — field definitions per category: text, number, status (traffic light), date, select, multi-select, yes/no, calculated (formula)
-- **Relations** — links between objects with type: hierarchical, measures, supports, delivers to
-- **Perspectives** — filter views that determine which categories and group boxes are visible
+- **Parameters** — field definitions per category:
+  - `text`, `number`, `date`, `yes/no`
+  - `status` — traffic light (red/yellow/green), with optional auto-aggregation from child nodes
+  - `select`, `multi-select`
+  - `tags` — freeform chip-based tag input (Enter or comma to add)
+  - `calculated` — formula using `{ParamName}` references and math functions
+- **Relations** — links between objects: hierarchical, measures, supports, delivers to
+- **Perspectives** — filter views for different audiences (board, CIO, operations team)
 
 ### Dashboard widgets
 - KPI / single value (with optional progress bar toward target)
@@ -39,25 +44,29 @@ Data is stored locally in the browser (`localStorage`). Back up regularly via **
 - Progress indicator
 - Object list (mini-table)
 - Text / heading
-- Deviation list (objects triggering conditional rules)
+- Deviation list (objects triggering conditional formatting rules)
 
 ### Other features
-- **Group boxes** — visual swim lanes on the map
+- **Group boxes** — visual swim lanes on the map canvas
 - **Conditional formatting** — automatic coloring of nodes and table rows based on parameter values
-- **Calculated parameters** — formulas using `{ParamName}` references and math functions
-- **Perspective filtering** — tailored views for different audiences (board, CIO, operations team)
+- **Perspective filtering** — tailored views for different audiences
 - **Auto-layout** — automatic node placement on the map
-- **Undo / Redo** — full undo/redo support (Ctrl+Z / Ctrl+Shift+Z)
-- **Line style** — choose between curved bezier lines and right-angle (orthogonal) relation lines
+- **Undo / Redo** — full support (Ctrl+Z / Ctrl+Shift+Z), up to 20 steps
+- **Line style** — curved bezier or right-angle (orthogonal) relation lines
+- **Node styles** — 7 visual styles: flat, card, minimal, filled, outlined, tinted, duo
 - **Norwegian / English UI** — switch language in Settings → General
+- **Storage warning** — alerts when localStorage usage exceeds 3.5 MB of the ~5 MB browser limit
 
 ### Import and export
-- **JSON** — full backup and restore of all data
-- **CSV** — import objects to a category
-- **SVG / PNG** — export the map view as an image
-- **HTML report** — standalone report with tables and conditional formatting
-- **Dashboard HTML / PNG** — export the dashboard view
-- **AI analysis JSON** — clean export structured for AI/LLM analysis
+| Action | Description |
+|---|---|
+| **Import JSON** | Full restore of all data |
+| **Import CSV** | Add objects to a category; map columns manually |
+| **Export JSON** | Full backup of all data |
+| **Export for AI** | Clean JSON structured for LLM analysis |
+| **Map as SVG** | Vector export of the map view |
+| **Map as PNG** | Raster export of the map view |
+| **HTML report** | Unified report covering all views — tables, matrix, timeline and dashboard snapshot. Respects the active perspective. |
 
 ---
 
@@ -65,7 +74,7 @@ Data is stored locally in the browser (`localStorage`). Back up regularly via **
 
 | File | Description |
 |---|---|
-| `index.html` | The entire application — one self-contained HTML file (~5000 lines) |
+| `index.html` | The entire application — one self-contained HTML file |
 | `hjelp.html` | Full user guide in Norwegian |
 | `help.html` | Full user guide in English |
 
@@ -74,7 +83,7 @@ Data is stored locally in the browser (`localStorage`). Back up regularly via **
 ## Technical
 
 - **Pure vanilla JS + CSS** — no dependencies, no build step
-- **Single-file architecture** — everything in `index.html`: CSS (lines ~1–545), HTML shell (~545–720), JavaScript (~720–end)
+- **Single-file architecture** — everything in `index.html`: CSS, HTML shell, JavaScript
 - **Global state** `S` — all mutations call `save()` (localStorage) then `render()`
 - **localStorage key:** `nx2`
 - **i18n:** `STRINGS` object + `t(key)` function; language stored in `S.settings.lang`

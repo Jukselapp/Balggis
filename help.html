@@ -617,6 +617,92 @@
     color: var(--primary);
     margin: 2px;
   }
+
+  /* ── REF TABLE ── */
+  .ref-table, .shortcut-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.88rem;
+    margin: 12px 0;
+    background: var(--card);
+    border-radius: 8px;
+    overflow: hidden;
+    border: 1px solid var(--border);
+    box-shadow: 0 1px 4px rgba(0,33,105,0.05);
+  }
+
+  .ref-table th, .shortcut-table th {
+    background: var(--primary);
+    color: #fff;
+    padding: 9px 14px;
+    text-align: left;
+    font-weight: 600;
+    font-size: 0.8rem;
+  }
+
+  .ref-table td, .shortcut-table td {
+    padding: 9px 14px;
+    border-bottom: 1px solid var(--border);
+    vertical-align: top;
+  }
+
+  .ref-table tr:last-child td, .shortcut-table tr:last-child td {
+    border-bottom: none;
+  }
+
+  /* ── TIPS GRID (Dashboard widget types) ── */
+  .tips-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 14px;
+    margin: 14px 0;
+  }
+
+  .tip-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 16px 18px;
+    box-shadow: 0 1px 4px rgba(0,33,105,0.05);
+  }
+
+  .tip-title {
+    font-weight: 700;
+    font-size: 0.92rem;
+    color: var(--primary);
+    margin-bottom: 6px;
+  }
+
+  .tip-desc {
+    font-size: 0.84rem;
+    color: var(--text-muted);
+    line-height: 1.55;
+  }
+
+  /* ── CALLOUT (generic) ── */
+  .callout {
+    border-radius: 8px;
+    padding: 14px 18px;
+    margin: 14px 0;
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+    font-size: 0.9rem;
+    line-height: 1.6;
+  }
+
+  .callout.note { background: var(--success-bg); border-left: 4px solid var(--success-border); }
+  .callout.callout-tip { background: var(--tip-bg); border-left: 4px solid var(--tip-border); }
+  .callout.callout-note { background: var(--success-bg); border-left: 4px solid var(--success-border); }
+
+  /* ── SECTION CONTENT (Dashboard section uses this) ── */
+  #dashboard { margin-bottom: 64px; scroll-margin-top: calc(var(--nav-h) + 24px); }
+  #dashboard h2 { font-size: 1.5rem; font-weight: 800; letter-spacing: -0.02em; color: var(--primary); margin-bottom: 12px; }
+  #dashboard h3 { font-size: 1.05rem; font-weight: 700; color: var(--primary); margin-bottom: 8px; }
+  #dashboard p, #dashboard li { font-size: 0.92rem; }
+  #dashboard ol { padding-left: 20px; margin: 8px 0; }
+  .section-content { margin-top: 0; }
+  .section-lead { font-size: 1rem; color: var(--text-muted); margin-bottom: 20px; line-height: 1.7; }
 </style>
 </head>
 <body>
@@ -715,11 +801,13 @@
 
     <div class="two-col">
       <div class="card">
-        <h3>Three view modes</h3>
+        <h3>Five view modes</h3>
         <ul>
-          <li><strong>Map</strong> – interactive canvas with nodes and connections</li>
-          <li><strong>Table</strong> – structured table view with inline editing</li>
+          <li><strong>Map</strong> – interactive canvas with nodes and connections, group boxes, zoom and pan</li>
+          <li><strong>Table</strong> – structured table view with inline editing of all parameter values</li>
           <li><strong>Matrix</strong> – connection matrix between two categories</li>
+          <li><strong>Timeline</strong> – Gantt-style view for nodes with date parameters</li>
+          <li><strong>Dashboard</strong> – customisable control panel with widgets</li>
         </ul>
         <p style="margin-top:10px;">Switch between views using the buttons at the top of the toolbar.</p>
       </div>
@@ -734,6 +822,10 @@
         <div class="warn" style="margin-top:12px;">
           <span class="tip-icon">⚠️</span>
           <div>Clearing browser data will delete the map. Export a JSON backup regularly.</div>
+        </div>
+        <div class="warn" style="margin-top:8px;">
+          <span class="tip-icon">💾</span>
+          <div><strong>Storage limit:</strong> Browsers typically allow ~5 MB in localStorage. Bálggis shows a warning when you approach 3.5 MB. Recommended capacity is under 300 nodes and 500 relations. To reset to demo data, open the browser DevTools Console and run: <code>localStorage.removeItem('nx2'); location.reload();</code></div>
         </div>
       </div>
     </div>
@@ -905,7 +997,7 @@
         <span class="param-badge">Tags</span>
         <div>
           <strong>Free-text tag field</strong>
-          <span>Multiple freeform values as "tags". Suitable for keywords, owners, technologies.</span>
+          <span>Multiple freeform values as chips. Type a word and press <kbd>Enter</kbd> or comma to add. Click ✕ to remove. Suitable for keywords, owners, technologies.</span>
         </div>
         <span class="tag">#</span>
       </div>
@@ -1043,7 +1135,7 @@
     <div class="card">
       <h3>Canvas navigation</h3>
       <div class="shortcut-grid">
-        <div class="shortcut-row"><span>Pan (move the map)</span><div class="kbd-group">Drag on empty area</div></div>
+        <div class="shortcut-row"><span>Pan (move the map)</span><div class="kbd-group">Middle-mouse drag, or <kbd>Space</kbd> + drag</div></div>
         <div class="shortcut-row"><span>Zoom in/out</span><div class="kbd-group">Scroll wheel</div></div>
         <div class="shortcut-row"><span>Move a node</span><div class="kbd-group">Drag the node</div></div>
         <div class="shortcut-row"><span>Resize a node</span><div class="kbd-group">Drag a corner/edge</div></div>
@@ -1066,13 +1158,31 @@
       <div class="card">
         <h3>Toolbar functions</h3>
         <ul>
-          <li><strong>Auto-layout</strong> – Arranges nodes automatically (Sugiyama algorithm)</li>
+          <li><strong>Auto-layout</strong> – Arranges nodes automatically</li>
           <li><strong>Snap to grid</strong> – Locks nodes to a grid while moving</li>
-          <li><strong>Relation legend</strong> – Toggle legend for relation types</li>
+          <li><strong>Group box</strong> – Add a visual swim lane</li>
           <li><strong>Search</strong> – Find nodes by name or values</li>
           <li><strong>Export</strong> – SVG or PNG of the map</li>
           <li><strong>Undo/Redo</strong> – Ctrl+Z / Ctrl+Shift+Z</li>
         </ul>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>Node styles</h3>
+      <p>Each object is displayed as a node on the map. There are 7 visual styles to choose from — per category (in the category's settings) or globally (Settings → Nodes):</p>
+      <ul>
+        <li><strong>flat</strong> – Clean, flat card appearance (default)</li>
+        <li><strong>card</strong> – Card with drop shadow</li>
+        <li><strong>minimal</strong> – Title only, no background fill</li>
+        <li><strong>filled</strong> – Solid background in the category's colour</li>
+        <li><strong>outlined</strong> – White background with a coloured border</li>
+        <li><strong>tinted</strong> – Light tint from the category's colour</li>
+        <li><strong>duo</strong> – Two-tone top stripe + white body</li>
+      </ul>
+      <div class="tip">
+        <span class="tip-icon">💡</span>
+        <div>The default style applies globally to all nodes, but can also be set per category in the category settings.</div>
       </div>
     </div>
 
@@ -1290,16 +1400,18 @@
       </div>
     </div>
 
+    <p>All import and export options are found in the <strong>File ▾</strong> menu in the top bar.</p>
+
     <div class="card">
       <h3>Full backup – JSON</h3>
       <div class="two-col">
         <div>
-          <strong>Export</strong>
-          <p style="margin-top:6px;">Click <strong>"Export JSON"</strong> in the toolbar. The file contains the complete map including categories, parameters, nodes, connections and perspectives.</p>
+          <strong>Export JSON</strong>
+          <p style="margin-top:6px;">Takes a full backup of the entire map: categories, parameters, nodes, connections, perspectives and dashboard layout.</p>
         </div>
         <div>
-          <strong>Import</strong>
-          <p style="margin-top:6px;">Click <strong>"Import JSON"</strong> and select a previously exported JSON file to restore or share a map.</p>
+          <strong>Import JSON</strong>
+          <p style="margin-top:6px;">Select a previously exported JSON file to restore or share a map.</p>
         </div>
       </div>
       <div class="warn" style="margin-top:12px;">
@@ -1309,29 +1421,52 @@
     </div>
 
     <div class="card">
-      <h3>Export to image – SVG and PNG</h3>
-      <p>In map view, click the <strong>export button</strong> in the toolbar and choose a format:</p>
+      <h3>Export to image</h3>
       <ul>
-        <li><strong>SVG</strong> – Vector format, scalable without quality loss. Suitable for presentations and print.</li>
-        <li><strong>PNG</strong> – Raster image, easy to paste into documents and emails.</li>
+        <li><strong>Map as SVG</strong> – Vector format, scalable without quality loss. Suitable for presentations and print.</li>
+        <li><strong>Map as PNG</strong> – Raster image, easy to paste into documents and emails.</li>
       </ul>
     </div>
 
     <div class="card">
-      <h3>Per-category export and import</h3>
+      <h3>HTML report</h3>
+      <p>A single combined report covering all parts of the map — filtered by the active perspective (e.g. board view):</p>
+      <ul style="margin-top:8px">
+        <li>Tables for all visible categories with parameter values and connections</li>
+        <li>Matrix overview (if row and column categories are selected in the matrix view)</li>
+        <li>Timeline overview (if a category and date parameter are selected in the timeline view)</li>
+        <li>Dashboard widgets as a static snapshot</li>
+        <li>Conditional formatting is reflected in the tables</li>
+        <li>Print button for PDF/paper output</li>
+      </ul>
+      <div class="tip" style="margin-top:12px">
+        <span class="tip-icon">💡</span>
+        <div>Select the right perspective in the top bar <em>before</em> exporting — the report will only show categories visible in the active perspective.</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>Other export formats</h3>
+      <ul>
+        <li><strong>Export for AI analysis</strong> – Clean, structured JSON suitable for analysis in an AI tool (ChatGPT, Copilot, etc.).</li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <h3>CSV import and export</h3>
       <div class="two-col">
         <div>
-          <p><strong>JSON export</strong> per category is done from the table view export menu.</p>
-          <p style="margin-top:6px;"><strong>CSV export</strong> creates a file with a UTF-8 BOM that opens correctly in Excel. All parameters and dependency columns are included.</p>
+          <strong>CSV export</strong>
+          <p style="margin-top:6px;">Per category in table view: creates a file with a UTF-8 BOM that opens correctly in Excel. All parameters and dependency columns are included.</p>
         </div>
         <div>
-          <p><strong>CSV import</strong> via the button in the table view toolbar. You can:</p>
-          <ul>
-            <li>Map CSV columns to existing parameters</li>
-            <li>Add to an existing category</li>
-            <li>Create a new category from the CSV</li>
-          </ul>
+          <strong>CSV import</strong>
+          <p style="margin-top:6px;">Via <strong>Import CSV</strong> in the File menu. A dialog lets you map CSV columns to parameters, and you can choose to add to an existing category or create a new one.</p>
         </div>
+      </div>
+      <div class="tip" style="margin-top:12px;">
+        <span class="tip-icon">💡</span>
+        <div>CSV import is flexible: column names in the file do not need to match exactly — you map them manually in the import dialog.</div>
       </div>
     </div>
 
@@ -1357,32 +1492,49 @@
     </div>
 
     <div class="card">
-      <p>Open Settings by clicking the <strong>gear icon (⚙)</strong> in the top bar. The Settings dialog has two tabs:</p>
+      <p>Open Settings by clicking the <strong>gear icon (⚙)</strong> in the top bar. The Settings dialog has four tabs:</p>
     </div>
 
     <div class="two-col">
       <div class="card">
-        <h3>Relation types</h3>
-        <p>Customise the four relations:</p>
+        <h3>General</h3>
+        <ul>
+          <li><strong>Project title</strong> – shown in the map and in the export filename</li>
+          <li><strong>Language</strong> – switch the interface between Norwegian and English</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>Relations</h3>
+        <p>Customise the four relation types:</p>
         <ul>
           <li>Rename them to something meaningful in your context</li>
-          <li>Choose the line colour</li>
-          <li>Choose the dash pattern (solid, dashed, dotted)</li>
+          <li>Choose line colour and dash pattern</li>
           <li>Adjust the line thickness</li>
+          <li>Choose line style: curved (bezier) or right-angle (orthogonal)</li>
         </ul>
         <div class="tip" style="margin-top:12px;">
           <span class="tip-icon">💡</span>
           <div>Changes to relation types affect <em>all</em> existing connections of that type immediately.</div>
         </div>
       </div>
+    </div>
+
+    <div class="two-col">
       <div class="card">
-        <h3>General</h3>
-        <p>Adjust the map's appearance and general preferences:</p>
+        <h3>Nodes</h3>
         <ul>
+          <li><strong>Node style</strong> – choose a default style (7 options: flat, card, minimal, filled, outlined, tinted, duo)</li>
+          <li><strong>Shadow</strong> – enable/disable shadow on nodes</li>
           <li><strong>Corner radius</strong> – rounding on node cards</li>
           <li><strong>Minimum width</strong> – smallest width for nodes in the map</li>
-          <li><strong>Map title</strong> – title displayed in the map and in the export filename</li>
-          <li><strong>Language</strong> – switch the interface language between Norwegian and English (Settings → General → Language)</li>
+          <li><strong>Show category label</strong> – show/hide the category name on nodes</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>Map view</h3>
+        <ul>
+          <li><strong>Background pattern</strong> – grid, dots, or none</li>
+          <li><strong>Background colour</strong> – customise the canvas background colour</li>
         </ul>
       </div>
     </div>
@@ -1402,6 +1554,11 @@
       <div class="shortcut-grid">
 
         <div class="shortcut-row">
+          <span>Pan the map</span>
+          <div class="kbd-group"><kbd>Space</kbd><span class="kbd-sep">+</span>drag</div>
+        </div>
+
+        <div class="shortcut-row">
           <span>Search</span>
           <div class="kbd-group">
             <kbd>/</kbd>
@@ -1411,7 +1568,7 @@
         </div>
 
         <div class="shortcut-row">
-          <span>Close search</span>
+          <span>Close search / deselect</span>
           <div class="kbd-group"><kbd>Esc</kbd></div>
         </div>
 
@@ -1427,7 +1584,7 @@
 
         <div class="shortcut-row">
           <span>Delete selected node / connection</span>
-          <div class="kbd-group"><kbd>Del</kbd></div>
+          <div class="kbd-group"><kbd>Del</kbd><span class="kbd-sep">or</span><kbd>Backspace</kbd></div>
         </div>
 
         <div class="shortcut-row">
@@ -1533,37 +1690,41 @@
       </div>
     </div>
 
-    <p>The timeline view shows nodes as horizontal bars on a calendar-based timeline — just like a Gantt chart. It is useful for initiatives, projects, milestones and other nodes that have date parameters.</p>
-
-    <h3 style="margin:20px 0 10px">Prerequisite</h3>
-    <p>The category you want to display must have at least one parameter of type <strong>Date</strong>. Without date parameters the timeline will show a warning.</p>
+    <div class="card">
+      <p>The timeline view shows nodes as horizontal bars on a calendar-based timeline — just like a Gantt chart. It is useful for initiatives, projects, milestones and other nodes that have date parameters.</p>
+      <p><strong>Prerequisite:</strong> The category you want to display must have at least one parameter of type <strong>Date</strong>. Without date parameters the timeline will show a warning.</p>
+    </div>
 
     <div class="tip">
       <span class="tip-icon">💡</span>
       <div>Add parameters <strong>"Start date"</strong> and <strong>"End date"</strong> (both of type Date) to categories such as Initiative or Project to get full Gantt bars with duration.</div>
     </div>
 
-    <h3 style="margin:20px 0 10px">How to use the timeline</h3>
-    <ol style="padding-left:20px;line-height:2">
-      <li>Click <strong>"Timeline"</strong> in the top bar</li>
-      <li>Select which <strong>category</strong> should appear as rows</li>
-      <li>Select the <strong>start date parameter</strong> (e.g. "Start date")</li>
-      <li>Select the <strong>end date parameter</strong> (e.g. "End date") — optional; without it a point marker is shown</li>
-      <li>Click a row or bar to open the node in the side panel</li>
-    </ol>
+    <div class="card">
+      <h3>How to use the timeline</h3>
+      <ol>
+        <li>Click <strong>"Timeline"</strong> in the top bar</li>
+        <li>Select which <strong>category</strong> should appear as rows</li>
+        <li>Select the <strong>start date parameter</strong> (e.g. "Start date")</li>
+        <li>Select the <strong>end date parameter</strong> (e.g. "End date") — optional; without it a point marker is shown</li>
+        <li>Click a row or bar to open the node in the side panel</li>
+      </ol>
+    </div>
 
-    <h3 style="margin:20px 0 10px">What is shown</h3>
-    <table class="ref-table" style="margin-top:0">
-      <thead><tr><th>Element</th><th>Description</th></tr></thead>
-      <tbody>
-        <tr><td>Coloured bar</td><td>The node's duration from start date to end date</td></tr>
-        <tr><td>Red line</td><td>"Today" marker for quick status assessment</td></tr>
-        <tr><td>Month headers</td><td>Automatic month divisions along the x-axis</td></tr>
-        <tr><td>Left column</td><td>Node name — click to open in the side panel</td></tr>
-      </tbody>
-    </table>
+    <div class="card">
+      <h3>What is shown</h3>
+      <table class="ref-table" style="margin-top:0">
+        <thead><tr><th>Element</th><th>Description</th></tr></thead>
+        <tbody>
+          <tr><td>Coloured bar</td><td>The node's duration from start date to end date</td></tr>
+          <tr><td>Red line</td><td>"Today" marker for quick status assessment</td></tr>
+          <tr><td>Month headers</td><td>Automatic month divisions along the x-axis</td></tr>
+          <tr><td>Left column</td><td>Node name — click to open in the side panel</td></tr>
+        </tbody>
+      </table>
+    </div>
 
-    <div class="callout note">
+    <div class="note">
       <span class="tip-icon">📌</span>
       <div>The timeline updates automatically when you change date values in table or map view. The timeline selection (category and parameters) is saved in the browser.</div>
     </div>
@@ -1579,42 +1740,51 @@
       </div>
     </div>
 
-    <p>Group boxes are visual rectangles you draw over the map to gather related nodes. They are purely overlay elements — they do not affect data, calculations or connections, but make the map much easier to read for others.</p>
+    <div class="card">
+      <p>Group boxes are visual rectangles you draw over the map to gather related nodes. They are purely overlay elements — they do not affect data, calculations or connections, but make the map much easier to read for others.</p>
+    </div>
 
-    <h3 style="margin:20px 0 10px">Creating a group</h3>
-    <ol style="padding-left:20px;line-height:2">
-      <li>Go to <strong>Map view</strong></li>
-      <li>Click <strong>"⬜ Group"</strong> in the toolbar</li>
-      <li>A new box is placed in the centre of the current visible area</li>
-      <li>Drag the box by its label and resize with the corner handle</li>
-    </ol>
-
-    <h3 style="margin:20px 0 10px">Editing a group</h3>
-    <p>Click the box to select it — the side panel opens with:</p>
-    <ul style="padding-left:20px;line-height:2">
-      <li><strong>Name</strong> — type directly in the field; it updates immediately</li>
-      <li><strong>Colour</strong> — choose from the 12 palette colours</li>
-      <li><strong>Delete group</strong> — removes the box (can be undone with Ctrl+Z)</li>
-    </ul>
+    <div class="two-col">
+      <div class="card">
+        <h3>Creating a group</h3>
+        <ol>
+          <li>Go to <strong>Map view</strong></li>
+          <li>Click <strong>"⬜ Group"</strong> in the toolbar</li>
+          <li>A new box is placed in the centre of the current visible area</li>
+          <li>Drag the box by its label and resize with the corner handle</li>
+        </ol>
+      </div>
+      <div class="card">
+        <h3>Editing a group</h3>
+        <p>Click the box to select it — the side panel opens with:</p>
+        <ul>
+          <li><strong>Name</strong> — type directly in the field; it updates immediately</li>
+          <li><strong>Colour</strong> — choose from the 12 palette colours</li>
+          <li><strong>Delete group</strong> — removes the box (can be undone with Ctrl+Z)</li>
+        </ul>
+      </div>
+    </div>
 
     <div class="tip">
       <span class="tip-icon">💡</span>
       <div>Use group boxes as <strong>swim lanes</strong>: one box per business domain, one per phase, or one per team. Drag nodes into the boxes to organise the map visually.</div>
     </div>
 
-    <h3 style="margin:20px 0 10px">Keyboard and interaction</h3>
-    <table class="ref-table" style="margin-top:0">
-      <thead><tr><th>Action</th><th>How to do it</th></tr></thead>
-      <tbody>
-        <tr><td>Move group</td><td>Drag by the label at the top left</td></tr>
-        <tr><td>Resize</td><td>Drag the corner handle (●) at the bottom right</td></tr>
-        <tr><td>Select group</td><td>Click the box</td></tr>
-        <tr><td>Delete group</td><td>Select it, press <kbd>Del</kbd></td></tr>
-        <tr><td>Undo</td><td><kbd>Ctrl</kbd>+<kbd>Z</kbd></td></tr>
-      </tbody>
-    </table>
+    <div class="card">
+      <h3>Keyboard and interaction</h3>
+      <table class="ref-table" style="margin-top:0">
+        <thead><tr><th>Action</th><th>How to do it</th></tr></thead>
+        <tbody>
+          <tr><td>Move group</td><td>Drag by the label at the top left</td></tr>
+          <tr><td>Resize</td><td>Drag the corner handle (●) at the bottom right</td></tr>
+          <tr><td>Select group</td><td>Click the box</td></tr>
+          <tr><td>Delete group</td><td>Select it, press <kbd>Del</kbd></td></tr>
+          <tr><td>Undo</td><td><kbd>Ctrl</kbd>+<kbd>Z</kbd></td></tr>
+        </tbody>
+      </table>
+    </div>
 
-    <div class="callout note">
+    <div class="note">
       <span class="tip-icon">📌</span>
       <div>Groups are drawn <em>behind</em> nodes and connections so they never obscure content. You can have an unlimited number of groups per map.</div>
     </div>
@@ -1630,67 +1800,78 @@
       </div>
     </div>
 
-    <p>Conditional formatting lets you set up rules that automatically colour rows in the table and nodes in the map based on parameter values. A rule such as "If status is red → yellow row colour" makes critical items stand out immediately.</p>
-
-    <h3 style="margin:20px 0 10px">Creating rules</h3>
-    <ol style="padding-left:20px;line-height:2">
-      <li>Go to <strong>Table view</strong></li>
-      <li>Click the <strong>"Formatting"</strong> button next to "Columns" for the desired category</li>
-      <li>Click <strong>"+ Add rule"</strong></li>
-      <li>Select <strong>parameter</strong>, <strong>operator</strong> and <strong>value</strong></li>
-      <li>Select <strong>row colour</strong>, <strong>text colour</strong> and optionally <strong>bold text</strong></li>
-      <li>Click <strong>"Save"</strong></li>
-    </ol>
-
-    <h3 style="margin:20px 0 10px">Available operators</h3>
-    <table class="ref-table" style="margin-top:0">
-      <thead><tr><th>Operator</th><th>Used for</th><th>Example</th></tr></thead>
-      <tbody>
-        <tr><td><code>equals</code></td><td>Exact match</td><td>Status equals <code>red</code></td></tr>
-        <tr><td><code>does not equal</code></td><td>All other values</td><td>Status does not equal <code>green</code></td></tr>
-        <tr><td><code>is greater than</code></td><td>Numbers above a threshold</td><td>Cost &gt; <code>1000000</code></td></tr>
-        <tr><td><code>is less than</code></td><td>Numbers below a threshold</td><td>Score &lt; <code>50</code></td></tr>
-        <tr><td><code>&gt;=</code> / <code>&lt;=</code></td><td>Numbers including the threshold</td><td>Progress &gt;= <code>100</code></td></tr>
-        <tr><td><code>contains</code></td><td>Substring search</td><td>Name contains <code>risk</code></td></tr>
-        <tr><td><code>is empty</code></td><td>Missing value</td><td>Owner is empty</td></tr>
-        <tr><td><code>is not empty</code></td><td>Value exists</td><td>Start date is not empty</td></tr>
-      </tbody>
-    </table>
-
-    <div class="tip">
-      <span class="tip-icon">💡</span>
-      <div>For status parameters the values <code>red</code>, <code>yellow</code> and <code>green</code> are used in rules (not "Red"/"Yellow"/"Green").</div>
+    <div class="card">
+      <p>Conditional formatting lets you set up rules that automatically colour rows in the table and nodes in the map based on parameter values. A rule such as "If status is red → red row colour" makes critical items stand out immediately.</p>
     </div>
 
-    <h3 style="margin:20px 0 10px">Where do the rules apply?</h3>
-    <ul style="padding-left:20px;line-height:2">
-      <li><strong>Table view</strong> — the entire row is coloured with the chosen row colour and text colour</li>
-      <li><strong>Map view</strong> — matching nodes get a coloured top stripe and an adjusted title style</li>
-    </ul>
+    <div class="card">
+      <h3>Creating rules</h3>
+      <ol>
+        <li>Go to <strong>Table view</strong></li>
+        <li>Click the <strong>"Formatting"</strong> button next to "Columns" for the desired category</li>
+        <li>Click <strong>"+ Add rule"</strong></li>
+        <li>Select <strong>parameter</strong>, <strong>operator</strong> and <strong>value</strong></li>
+        <li>Select <strong>row colour</strong>, <strong>text colour</strong> and optionally <strong>bold text</strong></li>
+        <li>Click <strong>"Save"</strong></li>
+      </ol>
+    </div>
 
-    <h3 style="margin:20px 0 10px">Examples of useful rules</h3>
-    <table class="ref-table" style="margin-top:0">
-      <thead><tr><th>Rule</th><th>Stripe colour</th><th>Effect</th></tr></thead>
-      <tbody>
-        <tr><td>Status equals <code>red</code></td><td style="background:#fee2e2">Red</td><td>Critical items stand out</td></tr>
-        <tr><td>Status equals <code>yellow</code></td><td style="background:#fef9c3">Yellow</td><td>Items needing follow-up</td></tr>
-        <tr><td>Progress &lt; <code>30</code></td><td style="background:#fee2e2">Red</td><td>Projects falling behind</td></tr>
-        <tr><td>Owner is empty</td><td style="background:#fff7ed">Orange</td><td>Items without an owner</td></tr>
-        <tr><td>Priority equals <code>High</code></td><td style="background:#eff6ff">Blue</td><td>High-priority items highlighted</td></tr>
-      </tbody>
-    </table>
+    <div class="card">
+      <h3>Available operators</h3>
+      <table class="ref-table" style="margin-top:0">
+        <thead><tr><th>Operator</th><th>Used for</th><th>Example</th></tr></thead>
+        <tbody>
+          <tr><td><code>equals</code></td><td>Exact match</td><td>Status equals <code>red</code></td></tr>
+          <tr><td><code>does not equal</code></td><td>All other values</td><td>Status does not equal <code>green</code></td></tr>
+          <tr><td><code>is greater than</code></td><td>Numbers above a threshold</td><td>Cost &gt; <code>1000000</code></td></tr>
+          <tr><td><code>is less than</code></td><td>Numbers below a threshold</td><td>Score &lt; <code>50</code></td></tr>
+          <tr><td><code>&gt;=</code> / <code>&lt;=</code></td><td>Numbers including the threshold</td><td>Progress &gt;= <code>100</code></td></tr>
+          <tr><td><code>contains</code></td><td>Substring search</td><td>Name contains <code>risk</code></td></tr>
+          <tr><td><code>is empty</code></td><td>Missing value</td><td>Owner is empty</td></tr>
+          <tr><td><code>is not empty</code></td><td>Value exists</td><td>Start date is not empty</td></tr>
+        </tbody>
+      </table>
+      <div class="tip" style="margin-top:12px;">
+        <span class="tip-icon">💡</span>
+        <div>For status parameters the values <code>red</code>, <code>yellow</code> and <code>green</code> are used in rules (not "Red"/"Yellow"/"Green").</div>
+      </div>
+    </div>
 
-    <div class="callout note">
-      <span class="tip-icon">📌</span>
-      <div>Rules are evaluated in the order they were created. If multiple rules match, styles are merged — the last rule wins in case of conflict.</div>
+    <div class="two-col">
+      <div class="card">
+        <h3>Where do the rules apply?</h3>
+        <ul>
+          <li><strong>Table view</strong> — the entire row is coloured with the chosen row colour and text colour</li>
+          <li><strong>Map view</strong> — matching nodes get a coloured top stripe and an adjusted title style</li>
+        </ul>
+        <div class="note" style="margin-top:12px;">
+          <span class="tip-icon">📌</span>
+          <div>Rules are evaluated in the order they were created. The last rule wins in case of conflict.</div>
+        </div>
+      </div>
+      <div class="card">
+        <h3>Examples of useful rules</h3>
+        <ul>
+          <li>Status equals <code>red</code> → red row</li>
+          <li>Status equals <code>yellow</code> → yellow row</li>
+          <li>Progress &lt; <code>30</code> → red row</li>
+          <li>Owner is empty → orange row</li>
+          <li>Priority equals <code>High</code> → blue row</li>
+        </ul>
+      </div>
     </div>
   </section>
 
   <!-- ── DASHBOARD ── -->
-  <section id="dashboard">
-    <div class="section-icon">◫</div>
-    <div class="section-content">
+  <section class="section" id="dashboard">
+    <div class="section-header">
+      <div class="section-icon">◫</div>
+      <div>
         <h2>Dashboard</h2>
+        <div class="section-sub">Customisable control panel with widgets</div>
+      </div>
+    </div>
+    <div class="section-content">
         <p class="section-lead">The dashboard view lets you assemble a custom control panel with widgets from different categories and objects — ideal for management meetings, status reviews and digital screen displays.</p>
 
       <h3>Getting started</h3>

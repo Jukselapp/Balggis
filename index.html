@@ -636,27 +636,10 @@ input[type=color]{width:34px;height:28px;border:1px solid var(--border);border-r
         <div id="fil-sec-map" style="padding:4px 10px 2px;font-size:10px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--text3)">Kartvisning</div>
         <div class="col-menu-item" onclick="exportGraphSVG();toggleTbMenu('tb-fil-menu')">SVG</div>
         <div class="col-menu-item" onclick="exportGraphPNG();toggleTbMenu('tb-fil-menu')">PNG</div>
-        <div class="col-menu-item fil-html-label" onclick="exportReport();toggleTbMenu('tb-fil-menu')">HTML-rapport</div>
         <div style="height:1px;background:var(--border);margin:4px 0"></div>
-        <!-- TABELL -->
-        <div id="fil-sec-table" style="padding:4px 10px 2px;font-size:10px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--text3)">Tabellvisning</div>
-        <div class="col-menu-item" onclick="exportViewPNG('table');toggleTbMenu('tb-fil-menu')">PNG</div>
-        <div class="col-menu-item fil-html-label" onclick="exportReport();toggleTbMenu('tb-fil-menu')">HTML-rapport</div>
-        <div style="height:1px;background:var(--border);margin:4px 0"></div>
-        <!-- MATRISE -->
-        <div id="fil-sec-matrix" style="padding:4px 10px 2px;font-size:10px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--text3)">Matrisevisning</div>
-        <div class="col-menu-item" onclick="exportViewPNG('matrix');toggleTbMenu('tb-fil-menu')">PNG</div>
-        <div class="col-menu-item fil-html-label" onclick="exportMatrixReport();toggleTbMenu('tb-fil-menu')">HTML-rapport</div>
-        <div style="height:1px;background:var(--border);margin:4px 0"></div>
-        <!-- TIDSLINJE -->
-        <div id="fil-sec-timeline" style="padding:4px 10px 2px;font-size:10px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--text3)">Tidslinje</div>
-        <div class="col-menu-item" onclick="exportViewPNG('timeline');toggleTbMenu('tb-fil-menu')">PNG</div>
-        <div class="col-menu-item fil-html-label" onclick="exportTimelineReport();toggleTbMenu('tb-fil-menu')">HTML-rapport</div>
-        <div style="height:1px;background:var(--border);margin:4px 0"></div>
-        <!-- DASHBOARD -->
-        <div id="fil-sec-dashboard" style="padding:4px 10px 2px;font-size:10px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--text3)">Dashboard</div>
-        <div class="col-menu-item" onclick="exportDashPNG();toggleTbMenu('tb-fil-menu')">PNG</div>
-        <div class="col-menu-item fil-html-label" onclick="exportDashReport();toggleTbMenu('tb-fil-menu')">HTML-rapport</div>
+        <!-- RAPPORT -->
+        <div style="padding:4px 10px 2px;font-size:10px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--text3)" id="fil-sec-rapport">Rapport</div>
+        <div class="col-menu-item" id="fil-export-rapport" onclick="exportFullReport();toggleTbMenu('tb-fil-menu')">HTML-rapport</div>
       </div>
     </div>
     <div style="width:1px;height:22px;background:rgba(255,255,255,.15)"></div>
@@ -811,8 +794,7 @@ const STRINGS = {
     'view.graph':'Kart','view.table':'Tabell','view.matrix':'Matrise',
     'view.timeline':'Tidslinje','view.dashboard':'Dashboard',
     'topbar.file':'Fil ▾','topbar.settings':'Innstillinger','topbar.help':'Hjelp',
-    'fil.data':'Data','fil.map':'Kartvisning','fil.table':'Tabellvisning',
-    'fil.matrix':'Matrisevisning','fil.timeline':'Tidslinje','fil.dashboard':'Dashboard',
+    'fil.data':'Data','fil.map':'Kartvisning','fil.rapport':'Rapport',
     'fil.import.json':'↓ Importer JSON','fil.import.csv':'↓ Importer CSV',
     'fil.export.json':'↑ Eksporter JSON','fil.export.ai':'✦ Eksporter for KI-analyse',
     'fil.html':'HTML-rapport',
@@ -832,7 +814,7 @@ const STRINGS = {
     'auto.layout':'Auto-layout','search.ph':'Søk...',
     'persp.all':'Alle',
     'matrix.row':'Radkategori','matrix.col':'Kolonnekategori',
-    'tl.nodate':'Ingen datofelt funnet i denne kategorien.',
+    'tl.nodate':'Ingen datofelt funnet i denne kategorien.','tl.today':'I dag',
     'dash.edit':'Rediger','dash.done':'Ferdig','dash.add':'+ Widget','dash.new':'+ Nytt dashboard',
     'toast.settings':'Innstillinger lagret ✓','toast.deleted':'Slettet',
     'toast.imported':'Importert ✓','toast.saved':'Lagret ✓',
@@ -842,8 +824,7 @@ const STRINGS = {
     'view.graph':'Map','view.table':'Table','view.matrix':'Matrix',
     'view.timeline':'Timeline','view.dashboard':'Dashboard',
     'topbar.file':'File ▾','topbar.settings':'Settings','topbar.help':'Help',
-    'fil.data':'Data','fil.map':'Map view','fil.table':'Table view',
-    'fil.matrix':'Matrix view','fil.timeline':'Timeline','fil.dashboard':'Dashboard',
+    'fil.data':'Data','fil.map':'Map view','fil.rapport':'Report',
     'fil.import.json':'↓ Import JSON','fil.import.csv':'↓ Import CSV',
     'fil.export.json':'↑ Export JSON','fil.export.ai':'✦ Export for AI analysis',
     'fil.html':'HTML report',
@@ -863,7 +844,7 @@ const STRINGS = {
     'auto.layout':'Auto-layout','search.ph':'Search...',
     'persp.all':'All',
     'matrix.row':'Row category','matrix.col':'Column category',
-    'tl.nodate':'No date fields found for this category.',
+    'tl.nodate':'No date fields found for this category.','tl.today':'Today',
     'dash.edit':'Edit','dash.done':'Done','dash.add':'+ Widget','dash.new':'+ New dashboard',
     'toast.settings':'Settings saved ✓','toast.deleted':'Deleted',
     'toast.imported':'Imported ✓','toast.saved':'Saved ✓',
@@ -941,11 +922,26 @@ if(!S.activeDashId||!S.dashboards.find(d=>d.id===S.activeDashId)){
   S.activeDashId=S.dashboards[0]?.id||'default';
 }
 if(S.selGroup===undefined) S.selGroup=null;
+if(!S.settings.lang) S.settings.lang='no';
 if(S.timelineCatId===undefined) S.timelineCatId=null;
 if(S.timelineDateStartParam===undefined) S.timelineDateStartParam=null;
 if(S.timelineDateEndParam===undefined) S.timelineDateEndParam=null;
 
-function save() { try{localStorage.setItem('nx2',JSON.stringify(S));}catch(e){} }
+let _storageWarnedAt=0;
+function save() {
+  try {
+    const json=JSON.stringify(S);
+    localStorage.setItem('nx2',json);
+    const mb=json.length/1048576;
+    if(mb>3.5 && Date.now()-_storageWarnedAt>60000){
+      _storageWarnedAt=Date.now();
+      const pct=Math.round(mb/5*100);
+      toast(`⚠ Lagringsplass: ${mb.toFixed(1)} MB av ~5 MB brukt (${pct}%). Ta backup via Fil → Eksporter JSON.`,6000);
+    }
+  } catch(e) {
+    toast('⚠ Lagring feilet – nettleseren er full! Eksporter JSON umiddelbart.',8000);
+  }
+}
 function uid() { return (Math.random()*1e15|0).toString(36)+Date.now().toString(36) }
 
 // ─── FORMULA / COMPUTED PARAMS ───
@@ -1101,15 +1097,13 @@ function updateI18n() {
   const helpLink=document.getElementById('tb-help-link');
   if(helpLink){ const ic=helpLink.querySelector('svg');helpLink.textContent=t('topbar.help');if(ic)helpLink.prepend(ic);helpLink.href=t('help.url'); }
   // File menu section headers
-  ['data','map','table','matrix','timeline','dashboard'].forEach(s=>{
+  ['data','map','rapport'].forEach(s=>{
     const el=document.getElementById('fil-sec-'+s);
     if(el) el.textContent=t('fil.'+s);
   });
   // File menu items with IDs
   const filItems={'fil-import-json':'fil.import.json','fil-import-csv':'fil.import.csv','fil-export-json':'fil.export.json','fil-export-ai':'fil.export.ai'};
   Object.entries(filItems).forEach(([id,key])=>{const el=document.getElementById(id);if(el)el.textContent=t(key);});
-  // HTML report items
-  document.querySelectorAll('.fil-html-label').forEach(el=>el.textContent=t('fil.html'));
   // Graph empty state
   const ge=document.getElementById('graph-empty');
   if(ge){ const txt=ge.querySelector('.empty-text');if(txt)txt.textContent=t('graph.empty'); }
@@ -1784,7 +1778,7 @@ function renderTimeline() {
       <th class="tl-row-hd" style="border-left:3px solid ${tlCat?.color||'#999'}" onclick="openNodeInPanel('${n.id}')" title="${esc(n.title)}">${esc(n.title.length>26?n.title.slice(0,24)+'\u2026':n.title)}</th>
       <td class="tl-cell" style="width:${cellWidth}px;min-width:${cellWidth}px">
         ${barHTML}
-        ${todayPx>=0&&todayPx<=cellWidth?`<div class="tl-today" style="left:${todayPx}px"><span class="tl-today-label">I dag</span></div>`:''}
+        ${todayPx>=0&&todayPx<=cellWidth?`<div class="tl-today" style="left:${todayPx}px"><span class="tl-today-label">${t('tl.today')}</span></div>`:''}
       </td>
     </tr>`;
   }).join('');
@@ -2995,7 +2989,8 @@ function tblCell(n,p) {
   }
   if(p.type==='tags'){
     const tagArr=Array.isArray(val)?val:[];
-    return `<td><input class="il-input" value="${esc(tagArr.join(', '))}" placeholder="—" onchange="tblUpdateTags('${n.id}','${p.id}',this.value)" title="Kommaseparert liste"/></td>`;
+    const chips=tagArr.map(t=>`<span class="tag-chip" style="font-size:11px">${esc(t)}<button class="tag-chip-x" onclick="tblRemoveTag('${n.id}','${p.id}','${esc(t)}')">✕</button></span>`).join('');
+    return `<td><div class="tags-wrap" style="min-height:30px;padding:3px 6px;border-radius:6px" onclick="this.querySelector('.tags-input')&&this.querySelector('.tags-input').focus()">${chips}<input class="tags-input" placeholder="${tagArr.length?'':'Legg til…'}" style="font-size:12px" onkeydown="if(event.key==='Enter'||event.key===','){event.preventDefault();tblAddTag('${n.id}','${p.id}',this);}"/></div></td>`;
   }
   return `<td><input class="il-input" value="${val!==null&&val!==undefined?esc(String(val)):''}" placeholder="—" onchange="tblUpdate('${n.id}','${p.id}',this.value)"/></td>`;
 }
@@ -3007,6 +3002,24 @@ function tblUpdateTags(nid,pid,rawVal){
   const arr=rawVal.split(',').map(s=>s.trim()).filter(Boolean);
   node.vals[pid]=arr.length?arr:null;
   save();if(S.view==='graph')renderNodes();
+}
+function tblAddTag(nid,pid,inputEl){
+  const v=inputEl.value.trim().replace(/,+$/,'').trim();
+  if(!v)return;
+  const node=getNode(nid);if(!node)return;
+  if(!node.vals)node.vals={};
+  const arr=Array.isArray(node.vals[pid])?[...node.vals[pid]]:[];
+  if(arr.includes(v)){inputEl.value='';return;}
+  pushUndo();arr.push(v);node.vals[pid]=arr;
+  inputEl.value='';save();renderTable();
+}
+function tblRemoveTag(nid,pid,tag){
+  const node=getNode(nid);if(!node)return;
+  if(!node.vals)node.vals={};
+  const arr=Array.isArray(node.vals[pid])?[...node.vals[pid]]:[];
+  const idx=arr.indexOf(tag);if(idx<0)return;
+  pushUndo();arr.splice(idx,1);node.vals[pid]=arr;
+  save();renderTable();
 }
 
 function openMultiSelectPop(e,nid,pid,optsStr){
@@ -4031,20 +4044,228 @@ function bindDashDrag() {
   });
 }
 
-// ─── Dashboard export ─────────────────────────────────
-function exportDashPNG() {
-  const html=_buildDashHTML();
-  const win=window.open('','_blank');
-  if(!win){toast('Popup blokkert – tillat popup for eksport');return;}
-  win.document.write(html);win.document.close();
-  setTimeout(()=>win.print(),600);
-  toast('Åpnet for utskrift/PNG-lagring');
-}
-function exportDashReport() {
-  const html=_buildDashHTML();
+function exportFullReport() {
+  const catFilter = getActiveCatFilter();
+  const activeV = S.activeView ? S.views.find(v=>v.id===S.activeView) : null;
+  const allCats = getCatsSorted().filter(c => !catFilter || catFilter.includes(c.id));
+  const title = S.settings?.title || 'Bálggis';
+  const perspName = activeV ? activeV.name : 'Alle objekter';
+  const perspDesc = activeV?.description ? `<p style="margin-top:6px;font-size:14px;opacity:.7">${resc(activeV.description)}</p>` : '';
+  const dateStr = new Date().toLocaleDateString('no-NO',{year:'numeric',month:'long',day:'numeric'});
+  const etypes = getEdgeTypes();
+  const totalNodes = allCats.reduce((s,c)=>s+getCatNodes(c.id).length,0);
+  const totalEdges = S.edges.filter(e=>{
+    const src=getNode(e.src),tgt=getNode(e.tgt);
+    if(!src||!tgt)return false;
+    if(catFilter&&(!catFilter.includes(src.catId)||!catFilter.includes(tgt.catId)))return false;
+    return true;
+  }).length;
+
+  // ── Section 1: Category tables ──
+  const catSections = allCats.map(cat => {
+    const params = getCatParams(cat.id);
+    const nodes = getCatNodes(cat.id);
+    if (!nodes.length) return '';
+    const thead = `<tr>
+      <th style="text-align:left;padding:9px 14px;background:#f5f6f8;border-bottom:2px solid ${cat.color};font-size:12px;font-weight:700;color:#444;min-width:160px">Navn</th>
+      ${params.map(p=>`<th style="text-align:left;padding:9px 14px;background:#f5f6f8;border-bottom:2px solid ${cat.color};font-size:12px;font-weight:700;color:#444">${resc(p.name)}${p.unit?` <span style="font-weight:400;color:#999">(${resc(p.unit)})</span>`:''}</th>`).join('')}
+      <th style="text-align:left;padding:9px 14px;background:#f5f6f8;border-bottom:2px solid ${cat.color};font-size:12px;font-weight:700;color:#444">Koblinger</th>
+    </tr>`;
+    const tbody = nodes.map((n,ri) => {
+      const bg = ri%2===0?'#fff':'#fafafa';
+      const cs = getCondStyle(n, cat.id);
+      const rowBg = cs.rowBg || bg;
+      const rowColor = cs.textColor ? `color:${cs.textColor}` : '';
+      const rowBold = cs.bold ? 'font-weight:600' : '';
+      const edges = getNodeEdges(n.id).filter(e=>{
+        const oid=e.src===n.id?e.tgt:e.src;
+        const on=getNode(oid);if(!on)return false;
+        if(catFilter&&!catFilter.includes(on.catId))return false;
+        return true;
+      });
+      const connHTML = edges.length ? edges.map(e=>{
+        const oid=e.src===n.id?e.tgt:e.src;
+        const on=getNode(oid);if(!on)return '';
+        const et=etypes.find(t=>t.v===e.type)||etypes[0];
+        const dir=e.src===n.id?'→':'←';
+        return `<span style="display:inline-block;margin:1px 3px 1px 0;padding:1px 7px;border-radius:12px;font-size:10px;background:${et.color}18;color:${et.color};border:1px solid ${et.color}40">${dir} ${resc(on.title)}</span>`;
+      }).filter(Boolean).join('') : '<span style="color:#bbb;font-size:12px">—</span>';
+      const cells = params.map(p => {
+        const val = computeVal(n, p, params);
+        let display = '—';
+        if (val !== null && val !== undefined && val !== '') {
+          if (p.type==='status') {
+            const sc={red:'#e74c3c',yellow:'#f39c12',green:'#27ae60'};
+            const sl={red:'Rød',yellow:'Gul',green:'Grønn'};
+            display=`<span style="display:inline-flex;align-items:center;gap:4px"><span style="width:8px;height:8px;border-radius:50%;background:${sc[val]||'#ccc'}"></span>${sl[val]||val}</span>`;
+          } else if (p.type==='boolean') {
+            display = val==='ja'?'<span style="color:#27ae60;font-weight:600">Ja</span>':'<span style="color:#999">Nei</span>';
+          } else if (p.type==='date') {
+            const d=new Date(val);display=isNaN(d)?resc(String(val)):d.toLocaleDateString('no-NO');
+          } else if (Array.isArray(val)) {
+            display = val.map(v=>`<span style="display:inline-block;padding:1px 6px;border-radius:10px;background:#eee;font-size:11px;margin:1px">${resc(v)}</span>`).join('');
+          } else {
+            display = resc(String(val));
+          }
+        }
+        return `<td style="padding:8px 14px;border-bottom:1px solid #eee;font-size:13px;vertical-align:top">${display}</td>`;
+      }).join('');
+      return `<tr style="background:${rowBg};${rowColor};${rowBold}">
+        <td style="padding:8px 14px;border-bottom:1px solid #eee;font-size:13px;font-weight:600;vertical-align:top">${resc(n.title)}</td>
+        ${cells}
+        <td style="padding:8px 14px;border-bottom:1px solid #eee;font-size:13px;vertical-align:top">${connHTML}</td>
+      </tr>`;
+    }).join('');
+    return `<section style="margin-bottom:40px;break-inside:avoid">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px">
+        <div style="width:14px;height:14px;border-radius:3px;background:${cat.color};flex-shrink:0"></div>
+        <h2 style="font-size:17px;font-weight:700;color:#1a1a2e;margin:0">${resc(cat.name)}</h2>
+        <span style="font-size:12px;color:#999;margin-left:4px">${nodes.length} objekt${nodes.length!==1?'er':''}</span>
+      </div>
+      <div style="overflow-x:auto;border-radius:8px;border:1px solid #e5e7eb;box-shadow:0 1px 4px rgba(0,0,0,.05)">
+        <table style="width:100%;border-collapse:collapse;font-family:system-ui,sans-serif">
+          <thead>${thead}</thead><tbody>${tbody}</tbody>
+        </table>
+      </div>
+    </section>`;
+  }).join('');
+
+  // ── Section 2: Matrix (if configured) ──
+  let matrixSection = '';
+  const rowCat = getCat(S.matrixRowCat); const colCat = getCat(S.matrixColCat);
+  if(rowCat && colCat && rowCat.id !== colCat.id){
+    const rowNodes = getCatNodes(rowCat.id).filter(n=>!catFilter||catFilter.includes(n.catId));
+    const colNodes = getCatNodes(colCat.id).filter(n=>!catFilter||catFilter.includes(n.catId));
+    if(rowNodes.length && colNodes.length){
+      const edgeMap={};
+      S.edges.forEach(e=>{edgeMap[e.src+'_'+e.tgt]=e;edgeMap[e.tgt+'_'+e.src]=e;});
+      const thead=`<tr><th style="background:#f5f6f8;padding:8px 12px;border:1px solid #e5e7eb;min-width:140px"></th>${colNodes.map(n=>`<th style="background:#f5f6f8;padding:8px;border:1px solid #e5e7eb;font-size:11px;font-weight:600;color:#444;writing-mode:vertical-rl;transform:rotate(180deg);height:100px;vertical-align:bottom">${resc(n.title)}</th>`).join('')}</tr>`;
+      const tbody=rowNodes.map(rn=>`<tr><td style="padding:8px 12px;border:1px solid #e5e7eb;font-size:12px;font-weight:500;background:#fff;min-width:140px">${resc(rn.title)}</td>${colNodes.map(cn=>{
+        if(rn.id===cn.id)return`<td style="border:1px solid #e5e7eb;background:repeating-linear-gradient(135deg,transparent,transparent 4px,#e5e7eb 4px,#e5e7eb 5px)"></td>`;
+        const e=edgeMap[rn.id+'_'+cn.id];
+        if(!e)return`<td style="border:1px solid #e5e7eb;padding:8px;text-align:center"><span style="color:#ddd">—</span></td>`;
+        const et=etypes.find(t=>t.v===e.type)||etypes[0];
+        return`<td style="border:1px solid #e5e7eb;padding:8px;text-align:center;background:${et.color}15"><span style="display:inline-block;width:10px;height:10px;border-radius:50%;background:${et.color}" title="${resc(et.l)}"></span></td>`;
+      }).join('')}</tr>`).join('');
+      matrixSection=`<section style="margin-bottom:40px;break-inside:avoid">
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px">
+          <h2 style="font-size:17px;font-weight:700;color:#1a1a2e;margin:0">Matrise: ${resc(rowCat.name)} × ${resc(colCat.name)}</h2>
+        </div>
+        <div style="overflow-x:auto;border-radius:8px;border:1px solid #e5e7eb">
+          <table style="border-collapse:collapse"><thead>${thead}</thead><tbody>${tbody}</tbody></table>
+        </div>
+      </section>`;
+    }
+  }
+
+  // ── Section 3: Timeline (if configured) ──
+  let timelineSection = '';
+  const tlCat = getCat(S.timelineCatId);
+  const startP = tlCat ? getCatParams(tlCat.id).find(p=>p.id===S.timelineDateStartParam) : null;
+  const endP = tlCat ? getCatParams(tlCat.id).find(p=>p.id===S.timelineDateEndParam) : null;
+  if(tlCat && startP && (!catFilter || catFilter.includes(tlCat.id))){
+    const allTlParams=getCatParams(tlCat.id);
+    const tlNodes=getCatNodes(tlCat.id);
+    const rows=tlNodes.map((n,ri)=>{
+      const bg=ri%2===0?'#fff':'#fafafa';
+      const sv=computeVal(n,startP,allTlParams);
+      const ev=endP?computeVal(n,endP,allTlParams):'';
+      const fmtDate=v=>{if(!v)return'—';const d=new Date(v);return isNaN(d)?resc(String(v)):d.toLocaleDateString('no-NO');};
+      return`<tr><td style="padding:7px 12px;border-bottom:1px solid #eee;background:${bg};font-weight:500">${resc(n.title)}</td>
+        <td style="padding:7px 12px;border-bottom:1px solid #eee;background:${bg}">${fmtDate(sv)}</td>
+        <td style="padding:7px 12px;border-bottom:1px solid #eee;background:${bg}">${fmtDate(ev)}</td></tr>`;
+    }).join('');
+    timelineSection=`<section style="margin-bottom:40px;break-inside:avoid">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px">
+        <h2 style="font-size:17px;font-weight:700;color:#1a1a2e;margin:0">Tidslinje: ${resc(tlCat.name)}</h2>
+      </div>
+      <div style="overflow-x:auto;border-radius:8px;border:1px solid #e5e7eb;box-shadow:0 1px 4px rgba(0,0,0,.05)">
+        <table style="width:100%;border-collapse:collapse;font-family:system-ui,sans-serif;background:#fff">
+          <thead><tr>
+            <th style="text-align:left;padding:9px 14px;background:#f5f6f8;font-size:12px;font-weight:700;color:#444;border-bottom:2px solid ${tlCat.color}">Navn</th>
+            <th style="text-align:left;padding:9px 14px;background:#f5f6f8;font-size:12px;font-weight:700;color:#444;border-bottom:2px solid ${tlCat.color}">${resc(startP.name)}</th>
+            <th style="text-align:left;padding:9px 14px;background:#f5f6f8;font-size:12px;font-weight:700;color:#444;border-bottom:2px solid ${tlCat.color}">${resc(endP?.name||'Slutt')}</th>
+          </tr></thead>
+          <tbody>${rows}</tbody>
+        </table>
+      </div>
+    </section>`;
+  }
+
+  // ── Section 4: Dashboard widgets ──
+  let dashSection = '';
+  const dash = getActiveDash();
+  if(dash.widgets && dash.widgets.length){
+    const widgetCards = dash.widgets.map(w=>{
+      const ts=resc(w.title||dashWidgetDefaultTitle(w));
+      const ab=w.color?`border-top:3px solid ${w.color};`:'';
+      const body=_dwBodyForExport(w);
+      return`<div style="background:#fff;border:1px solid #e5e7eb;border-radius:10px;overflow:hidden;${ab}padding:0;min-height:120px;display:flex;flex-direction:column">
+        <div style="padding:7px 12px;border-bottom:1px solid #e5e7eb;background:#f8f9fa;font-size:10px;font-weight:700;color:#888;letter-spacing:.06em;text-transform:uppercase">${ts}</div>
+        <div style="flex:1;padding:10px;overflow:auto">${body}</div>
+      </div>`;
+    }).join('');
+    dashSection=`<section style="margin-bottom:40px;break-inside:avoid">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px">
+        <h2 style="font-size:17px;font-weight:700;color:#1a1a2e;margin:0">Dashboard: ${resc(dash.name||'Dashboard')}</h2>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:16px">
+        ${widgetCards}
+      </div>
+    </section>`;
+  }
+
+  // ── Full HTML ──
+  const html=`<!DOCTYPE html>
+<html lang="no">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>${resc(title)} – ${resc(perspName)}</title>
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:system-ui,-apple-system,sans-serif;background:#f4f5f7;color:#1a1a2e;padding:0}
+  @media print{body{background:#fff}.no-print{display:none}section{break-inside:avoid;page-break-inside:avoid}}
+</style>
+</head>
+<body>
+  <div style="background:#002169;color:#fff;padding:18px 40px;display:flex;align-items:center;justify-content:space-between;gap:16px" class="no-print">
+    <div>
+      <div style="font-size:11px;opacity:.6;letter-spacing:.08em;text-transform:uppercase;margin-bottom:2px">Rapport</div>
+      <div style="font-size:20px;font-weight:700">${resc(title)}</div>
+    </div>
+    <button onclick="window.print()" style="background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.3);color:#fff;padding:8px 18px;border-radius:6px;cursor:pointer;font-size:13px;font-family:inherit">Skriv ut / Lagre PDF</button>
+  </div>
+  <div style="background:#002169;color:#fff;padding:28px 40px 32px">
+    <div style="font-size:13px;opacity:.65;margin-bottom:6px">Perspektiv</div>
+    <div style="font-size:26px;font-weight:700;margin-bottom:4px">${resc(perspName)}</div>
+    ${perspDesc}
+    <div style="margin-top:20px;display:flex;gap:28px;flex-wrap:wrap">
+      <div><div style="font-size:11px;opacity:.6;text-transform:uppercase;letter-spacing:.07em">Kategorier</div><div style="font-size:24px;font-weight:700">${allCats.length}</div></div>
+      <div><div style="font-size:11px;opacity:.6;text-transform:uppercase;letter-spacing:.07em">Objekter</div><div style="font-size:24px;font-weight:700">${totalNodes}</div></div>
+      <div><div style="font-size:11px;opacity:.6;text-transform:uppercase;letter-spacing:.07em">Koblinger</div><div style="font-size:24px;font-weight:700">${totalEdges}</div></div>
+      <div><div style="font-size:11px;opacity:.6;text-transform:uppercase;letter-spacing:.07em">Generert</div><div style="font-size:14px;font-weight:600;margin-top:4px">${dateStr}</div></div>
+    </div>
+  </div>
+  <div style="max-width:1200px;margin:0 auto;padding:36px 40px">
+    ${catSections || '<p style="color:#999;text-align:center;padding:40px">Ingen objekter å vise</p>'}
+    ${matrixSection}
+    ${timelineSection}
+    ${dashSection}
+  </div>
+  <div style="border-top:1px solid #e5e7eb;padding:16px 40px;font-size:11px;color:#aaa;text-align:center;background:#fff">
+    Generert fra Bálggis · ${dateStr}
+  </div>
+</body>
+</html>`;
+
   const blob=new Blob([html],{type:'text/html;charset=utf-8'});
-  const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=tsFilename('dashboard')+'.html';a.click();
-  toast('Dashboard HTML eksportert ✓');
+  const a=document.createElement('a');
+  a.href=URL.createObjectURL(blob);
+  const safeName=perspName.replace(/[^a-zA-Z0-9æøåÆØÅ\-_ ]/g,'').replace(/\s+/g,'-').toLowerCase();
+  a.download=`rapport-${safeName}-${new Date().toISOString().slice(0,10)}.html`;
+  a.click();
+  toast('HTML-rapport eksportert ✓');
 }
 
 function _buildDashHTML() {
@@ -4116,94 +4337,6 @@ function _dwBodyForExport(w) {
   } catch(e){return'—';}
 }
 
-// ─── View PNG / report exports ───────────────────────────
-function exportViewPNG(viewName) {
-  const prevView = S.view;
-  switchView(viewName);
-  setTimeout(() => {
-    const viewEl = document.getElementById(viewName + '-view');
-    if (!viewEl) { toast('Visning ikke tilgjengelig'); switchView(prevView); return; }
-    const title = S.settings?.title || 'Virksomhetskartlegger';
-    const styles = [...document.styleSheets].map(ss => {
-      try { return [...ss.cssRules].map(r=>r.cssText).join('\n'); } catch(e) { return ''; }
-    }).join('\n');
-    const html = `<!DOCTYPE html><html lang="no"><head><meta charset="UTF-8"><title>${resc(title)}</title>
-      <style>${styles}</style></head><body style="margin:0">${viewEl.outerHTML}
-      <script>document.addEventListener('DOMContentLoaded',()=>setTimeout(()=>window.print(),400));<\/script>
-      </body></html>`;
-    const win = window.open('','_blank');
-    if(!win){toast('Popup blokkert');return;}
-    win.document.write(html);win.document.close();
-    toast('Åpnet for utskrift/PNG');
-  }, 200);
-}
-
-function exportMatrixReport() {
-  const activeV = S.activeView ? S.views.find(v=>v.id===S.activeView) : null;
-  const title = S.settings?.title || 'Virksomhetskartlegger';
-  const perspName = activeV ? activeV.name : 'Alle';
-  const dateStr = new Date().toLocaleDateString('no-NO',{year:'numeric',month:'long',day:'numeric'});
-  const rowCat = getCat(S.matrixRowCat); const colCat = getCat(S.matrixColCat);
-  if(!rowCat||!colCat){toast('Velg rad- og kolonnekategori i matrisevisningen først');return;}
-  const rowNodes = getCatNodes(rowCat.id); const colNodes = getCatNodes(colCat.id);
-  const etypes = getEdgeTypes();
-  const edgeMap = {};
-  S.edges.forEach(e=>{ const k=e.src+'_'+e.tgt; edgeMap[k]=e; const k2=e.tgt+'_'+e.src; edgeMap[k2]=e; });
-  const thead=`<tr><th style="background:#f5f6f8;padding:8px 12px;border:1px solid #e5e7eb;min-width:140px"></th>${colNodes.map(n=>`<th style="background:#f5f6f8;padding:8px;border:1px solid #e5e7eb;font-size:11px;font-weight:600;color:#444;writing-mode:vertical-rl;transform:rotate(180deg);height:100px;vertical-align:bottom">${resc(n.title)}</th>`).join('')}</tr>`;
-  const tbody=rowNodes.map(rn=>`<tr><td style="padding:8px 12px;border:1px solid #e5e7eb;font-size:12px;font-weight:500;background:#fff;min-width:140px">${resc(rn.title)}</td>${colNodes.map(cn=>{
-    if(rn.id===cn.id)return`<td style="border:1px solid #e5e7eb;background:repeating-linear-gradient(135deg,transparent,transparent 4px,#e5e7eb 4px,#e5e7eb 5px)"></td>`;
-    const e=edgeMap[rn.id+'_'+cn.id];
-    if(!e)return`<td style="border:1px solid #e5e7eb;padding:8px;text-align:center">—</td>`;
-    const et=etypes.find(t=>t.v===e.type)||etypes[0];
-    return`<td style="border:1px solid #e5e7eb;padding:8px;text-align:center;background:${et.color}15"><span style="display:inline-block;width:10px;height:10px;border-radius:50%;background:${et.color}"></span></td>`;
-  }).join('')}</tr>`).join('');
-  const html=`<!DOCTYPE html><html lang="no"><head><meta charset="UTF-8"><title>${resc(title)} – Matrise</title>
-  <style>*{box-sizing:border-box;margin:0;padding:0}body{font-family:'Segoe UI',system-ui,sans-serif;background:#f1f3f5;color:#1a1a2e}
-  .header{background:#1a1a2e;color:#fff;padding:24px 32px}.header h1{font-size:20px;font-weight:700}.header p{font-size:12px;opacity:.55;margin-top:3px}
-  .wrap{padding:20px;overflow:auto}table{border-collapse:collapse;background:#fff}
-  .print-btn{position:fixed;top:14px;right:14px;padding:7px 16px;background:#008761;color:#fff;border:none;border-radius:6px;font-size:12px;font-weight:600;cursor:pointer}
-  @media print{.print-btn{display:none}body{background:#fff}}</style></head>
-  <body><button class="print-btn" onclick="window.print()">Skriv ut / Lagre PDF</button>
-  <div class="header"><h1>${resc(title)} – Matrise</h1><p>${resc(rowCat.name)} × ${resc(colCat.name)} · Perspektiv: ${resc(perspName)} · ${resc(dateStr)}</p></div>
-  <div class="wrap"><table><thead>${thead}</thead><tbody>${tbody}</tbody></table></div></body></html>`;
-  const blob=new Blob([html],{type:'text/html;charset=utf-8'});
-  const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=tsFilename('matrise')+'.html';a.click();
-  toast('Matrise HTML eksportert ✓');
-}
-
-function exportTimelineReport() {
-  const cat = getCat(S.timelineCatId);
-  if(!cat){toast('Velg kategori i tidslinjevisningen først');return;}
-  const activeV = S.activeView ? S.views.find(v=>v.id===S.activeView) : null;
-  const title = S.settings?.title || 'Virksomhetskartlegger';
-  const perspName = activeV ? activeV.name : 'Alle';
-  const dateStr = new Date().toLocaleDateString('no-NO',{year:'numeric',month:'long',day:'numeric'});
-  const nodes = getCatNodes(cat.id);
-  const allParams = getCatParams(cat.id);
-  const startP = allParams.find(p=>p.id===S.timelineDateStartParam);
-  const endP = allParams.find(p=>p.id===S.timelineDateEndParam);
-  const rows = nodes.map((n,ri)=>{
-    const bg=ri%2===0?'#fff':'#f8f9fa';
-    const sv=startP?computeVal(n,startP,allParams):'';
-    const ev=endP?computeVal(n,endP,allParams):'';
-    return`<tr><td style="padding:7px 12px;border-bottom:1px solid #e5e7eb;background:${bg};font-weight:500">${resc(n.title)}</td>
-      <td style="padding:7px 12px;border-bottom:1px solid #e5e7eb;background:${bg}">${resc(String(sv||'—'))}</td>
-      <td style="padding:7px 12px;border-bottom:1px solid #e5e7eb;background:${bg}">${resc(String(ev||'—'))}</td></tr>`;}).join('');
-  const html=`<!DOCTYPE html><html lang="no"><head><meta charset="UTF-8"><title>${resc(title)} – Tidslinje</title>
-  <style>*{box-sizing:border-box;margin:0;padding:0}body{font-family:'Segoe UI',system-ui,sans-serif;background:#f1f3f5;color:#1a1a2e}
-  .header{background:#1a1a2e;color:#fff;padding:24px 32px}.header h1{font-size:20px;font-weight:700}.header p{font-size:12px;opacity:.55;margin-top:3px}
-  .wrap{padding:20px}table{width:100%;border-collapse:collapse;background:#fff;border-radius:8px;overflow:hidden;box-shadow:0 1px 4px rgba(0,0,0,.08)}
-  th{text-align:left;padding:8px 12px;background:#f1f3f5;font-size:11px;font-weight:700;color:#666;border-bottom:2px solid #e5e7eb}
-  .print-btn{position:fixed;top:14px;right:14px;padding:7px 16px;background:#008761;color:#fff;border:none;border-radius:6px;font-size:12px;font-weight:600;cursor:pointer}
-  @media print{.print-btn{display:none}body{background:#fff}}</style></head>
-  <body><button class="print-btn" onclick="window.print()">Skriv ut / Lagre PDF</button>
-  <div class="header"><h1>${resc(title)} – Tidslinje</h1><p>${resc(cat.name)} · Perspektiv: ${resc(perspName)} · ${resc(dateStr)}</p></div>
-  <div class="wrap"><table><thead><tr><th>Navn</th><th>${resc(startP?.name||'Start')}</th><th>${resc(endP?.name||'Slutt')}</th></tr></thead><tbody>${rows}</tbody></table></div></body></html>`;
-  const blob=new Blob([html],{type:'text/html;charset=utf-8'});
-  const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=tsFilename('tidslinje')+'.html';a.click();
-  toast('Tidslinje HTML eksportert ✓');
-}
-
 // ════════════════════════════════════════════════════════
 //  EXPORT / IMPORT
 // ════════════════════════════════════════════════════════
@@ -4268,7 +4401,7 @@ function exportAI() {
   }));
 
   const output = {
-    tittel: S.settings?.title || 'Virksomhetskartlegger',
+    tittel: S.settings?.title || 'Bálggis',
     eksportert: new Date().toISOString(),
     sammendrag: {
       antallKategorier: S.cats.length,
@@ -4537,159 +4670,6 @@ function exportCatCSV(catId) {
   a.click();toast('Eksportert CSV ✓');
 }
 
-// ════════════════════════════════════════════════════════
-//  HTML RAPPORT EKSPORT
-// ════════════════════════════════════════════════════════
-
-function exportReport() {
-  const catFilter = getActiveCatFilter();
-  const activeV = S.activeView ? S.views.find(v=>v.id===S.activeView) : null;
-  const allCats = getCatsSorted().filter(c => !catFilter || catFilter.includes(c.id));
-  const title = S.settings?.title || 'Virksomhetskartlegger';
-  const perspName = activeV ? activeV.name : 'Alle objekter';
-  const dateStr = new Date().toLocaleDateString('no-NO',{year:'numeric',month:'long',day:'numeric'});
-  const etypes = getEdgeTypes();
-
-  const totalNodes = allCats.reduce((s,c)=>s+getCatNodes(c.id).length,0);
-  const totalEdges = S.edges.length;
-
-  // ── Per-category sections ──
-  const catSections = allCats.map(cat => {
-    const params = getCatParams(cat.id);
-    const nodes = getCatNodes(cat.id);
-    if (!nodes.length) return '';
-
-    const thead = `<tr>
-      <th style="text-align:left;padding:9px 14px;background:#f5f6f8;border-bottom:2px solid ${cat.color};font-size:12px;font-weight:700;color:#444;min-width:160px">Navn</th>
-      ${params.map(p=>`<th style="text-align:left;padding:9px 14px;background:#f5f6f8;border-bottom:2px solid ${cat.color};font-size:12px;font-weight:700;color:#444">${resc(p.name)}${p.unit?` <span style="font-weight:400;color:#999">(${resc(p.unit)})</span>`:''}</th>`).join('')}
-      <th style="text-align:left;padding:9px 14px;background:#f5f6f8;border-bottom:2px solid ${cat.color};font-size:12px;font-weight:700;color:#444">Koblinger</th>
-    </tr>`;
-
-    const tbody = nodes.map((n,ri) => {
-      const bg = ri%2===0 ? '#fff' : '#fafafa';
-      // Conditional formatting
-      const cs = getCondStyle(n, cat.id);
-      const rowBg = cs.rowBg || bg;
-      const rowColor = cs.textColor ? `color:${cs.textColor}` : '';
-      const rowBold = cs.bold ? 'font-weight:600' : '';
-
-      const edges = getNodeEdges(n.id);
-      const connHTML = edges.length ? edges.map(e=>{
-        const oid = e.src===n.id ? e.tgt : e.src;
-        const on = getNode(oid); if(!on) return '';
-        const oc = getCat(on.catId);
-        const et = etypes.find(t=>t.v===e.type)||etypes[0];
-        const dir = e.src===n.id ? '→' : '←';
-        return `<span style="display:inline-block;margin:1px 3px 1px 0;padding:1px 7px;border-radius:12px;font-size:10px;background:${et.color}18;color:${et.color};border:1px solid ${et.color}40">${dir} ${resc(on.title)}</span>`;
-      }).filter(Boolean).join('') : '<span style="color:#bbb;font-size:12px">—</span>';
-
-      const cells = params.map(p => {
-        const val = computeVal(n, p, params);
-        let display = '—';
-        if (val !== null && val !== undefined && val !== '') {
-          if (p.type==='status') {
-            const sc={red:'#e74c3c',yellow:'#f39c12',green:'#27ae60'};
-            const sl={red:'Rød',yellow:'Gul',green:'Grønn'};
-            display=`<span style="display:inline-flex;align-items:center;gap:4px"><span style="width:8px;height:8px;border-radius:50%;background:${sc[val]||'#ccc'}"></span>${sl[val]||val}</span>`;
-          } else if (p.type==='boolean') {
-            display = val==='ja' ? '<span style="color:#27ae60;font-weight:600">Ja</span>' : '<span style="color:#999">Nei</span>';
-          } else if (p.type==='date') {
-            const d=new Date(val); display=isNaN(d)?resc(String(val)):d.toLocaleDateString('no-NO');
-          } else if (Array.isArray(val)) {
-            display = val.map(v=>`<span style="display:inline-block;padding:1px 6px;border-radius:10px;background:#eee;font-size:11px;margin:1px">${resc(v)}</span>`).join('');
-          } else {
-            display = resc(String(val));
-          }
-        }
-        return `<td style="padding:8px 14px;border-bottom:1px solid #eee;font-size:13px;vertical-align:top">${display}</td>`;
-      }).join('');
-
-      return `<tr style="background:${rowBg};${rowColor};${rowBold}">
-        <td style="padding:8px 14px;border-bottom:1px solid #eee;font-size:13px;font-weight:600;vertical-align:top">${resc(n.title)}</td>
-        ${cells}
-        <td style="padding:8px 14px;border-bottom:1px solid #eee;font-size:13px;vertical-align:top">${connHTML}</td>
-      </tr>`;
-    }).join('');
-
-    return `<section style="margin-bottom:40px;break-inside:avoid">
-      <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px">
-        <div style="width:14px;height:14px;border-radius:3px;background:${cat.color};flex-shrink:0"></div>
-        <h2 style="font-size:17px;font-weight:700;color:#1a1a2e;margin:0">${resc(cat.name)}</h2>
-        <span style="font-size:12px;color:#999;margin-left:4px">${nodes.length} objekt${nodes.length!==1?'er':''}</span>
-      </div>
-      <div style="overflow-x:auto;border-radius:8px;border:1px solid #e5e7eb;box-shadow:0 1px 4px rgba(0,0,0,.05)">
-        <table style="width:100%;border-collapse:collapse;font-family:system-ui,sans-serif">
-          <thead>${thead}</thead>
-          <tbody>${tbody}</tbody>
-        </table>
-      </div>
-    </section>`;
-  }).join('');
-
-  // ── Perspective description ──
-  const perspDesc = activeV?.description ? `<p style="color:#555;font-size:14px;margin-top:4px">${resc(activeV.description)}</p>` : '';
-
-  // ── Full HTML ──
-  const html = `<!DOCTYPE html>
-<html lang="no">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>${resc(title)} – ${resc(perspName)}</title>
-<style>
-  *{box-sizing:border-box;margin:0;padding:0}
-  body{font-family:system-ui,-apple-system,sans-serif;background:#f4f5f7;color:#1a1a2e;padding:0}
-  @media print{
-    body{background:#fff}
-    .no-print{display:none}
-    section{break-inside:avoid;page-break-inside:avoid}
-  }
-</style>
-</head>
-<body>
-  <!-- TOPBAR -->
-  <div style="background:#002169;color:#fff;padding:18px 40px;display:flex;align-items:center;justify-content:space-between;gap:16px" class="no-print">
-    <div>
-      <div style="font-size:11px;opacity:.6;letter-spacing:.08em;text-transform:uppercase;margin-bottom:2px">Rapport</div>
-      <div style="font-size:20px;font-weight:700">${resc(title)}</div>
-    </div>
-    <button onclick="window.print()" style="background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.3);color:#fff;padding:8px 18px;border-radius:6px;cursor:pointer;font-size:13px;font-family:inherit">Skriv ut / Lagre PDF</button>
-  </div>
-
-  <!-- HEADER -->
-  <div style="background:#002169;color:#fff;padding:28px 40px 32px">
-    <div style="font-size:13px;opacity:.65;margin-bottom:6px">Perspektiv</div>
-    <div style="font-size:26px;font-weight:700;margin-bottom:4px">${resc(perspName)}</div>
-    ${perspDesc}
-    <div style="margin-top:20px;display:flex;gap:28px;flex-wrap:wrap">
-      <div><div style="font-size:11px;opacity:.6;text-transform:uppercase;letter-spacing:.07em">Kategorier</div><div style="font-size:24px;font-weight:700">${allCats.length}</div></div>
-      <div><div style="font-size:11px;opacity:.6;text-transform:uppercase;letter-spacing:.07em">Objekter</div><div style="font-size:24px;font-weight:700">${totalNodes}</div></div>
-      <div><div style="font-size:11px;opacity:.6;text-transform:uppercase;letter-spacing:.07em">Koblinger</div><div style="font-size:24px;font-weight:700">${totalEdges}</div></div>
-      <div><div style="font-size:11px;opacity:.6;text-transform:uppercase;letter-spacing:.07em">Generert</div><div style="font-size:14px;font-weight:600;margin-top:4px">${dateStr}</div></div>
-    </div>
-  </div>
-
-  <!-- CONTENT -->
-  <div style="max-width:1200px;margin:0 auto;padding:36px 40px">
-    ${catSections || '<p style="color:#999;text-align:center;padding:40px">Ingen objekter å vise</p>'}
-  </div>
-
-  <!-- FOOTER -->
-  <div style="border-top:1px solid #e5e7eb;padding:16px 40px;font-size:11px;color:#aaa;text-align:center;background:#fff">
-    Generert fra Virksomhetskartlegger · ${dateStr}
-  </div>
-</body>
-</html>`;
-
-  const blob = new Blob([html], {type:'text/html;charset=utf-8'});
-  const a = document.createElement('a');
-  a.href = URL.createObjectURL(blob);
-  const safeName = (perspName).replace(/[^a-zA-Z0-9æøåÆØÅ\-_ ]/g,'').replace(/\s+/g,'-').toLowerCase();
-  a.download = `rapport-${safeName}-${new Date().toISOString().slice(0,10)}.html`;
-  a.click();
-  toast('HTML-rapport eksportert ✓');
-}
-
 // HTML-safe escape for report (avoids double-escaping)
 function resc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
 
@@ -4922,6 +4902,7 @@ function buildGraphSVGStr(){
   defs+='</defs>';
 
   // Edges
+  const useOrtho=S.settings?.edgeStyle==='ortho';
   const edgesHTML=S.edges.map(e=>{
     const src=S.nodes.find(n=>n.id===e.src);
     const tgt=S.nodes.find(n=>n.id===e.tgt);
@@ -4932,38 +4913,85 @@ function buildGraphSVGStr(){
     let x1,y1,x2,y2;
     if(tgt.y+tgt.h/2>src.y+src.h/2){x1=srcCX;y1=src.y+src.h;x2=tgtCX;y2=tgt.y;}
     else{x1=srcCX;y1=src.y;x2=tgtCX;y2=tgt.y+tgt.h;}
-    const dy=Math.abs(y2-y1),cp=Math.min(120,dy*0.5+40);
-    const pathD=`M${x1+ox},${y1+oy} C${x1+ox},${y1+oy+cp*(y2>y1?1:-1)} ${x2+ox},${y2+oy-cp*(y2>y1?1:-1)} ${x2+ox},${y2+oy}`;
+    const ax1=x1+ox,ay1=y1+oy,ax2=x2+ox,ay2=y2+oy;
+    let pathD;
+    if(useOrtho){
+      const midY=(ay1+ay2)/2;
+      pathD=`M${ax1},${ay1} L${ax1},${midY} L${ax2},${midY} L${ax2},${ay2}`;
+    } else {
+      const dy=Math.abs(ay2-ay1),cp=Math.min(120,dy*0.5+40);
+      pathD=`M${ax1},${ay1} C${ax1},${ay1+cp*(ay2>ay1?1:-1)} ${ax2},${ay2-cp*(ay2>ay1?1:-1)} ${ax2},${ay2}`;
+    }
     const dashAttr=et.dash?` stroke-dasharray="${et.dash}"`:'';
     return `<path d="${pathD}" stroke="${et.color}" stroke-width="${et.sw}" fill="none"${dashAttr} marker-end="url(#svgArr-${et.v})" opacity="0.65"/>`;
   }).join('');
 
   // Nodes
+  const svgNStyle=S.settings?.nodeStyle||'flat';
   const nodesHTML=visNodes.map(n=>{
     const cat=getCat(n.catId);
     const color=cat?.color||'#999';
     const nx=n.x+ox, ny=n.y+oy;
     const params=getCatParams(n.catId).filter(p=>(n.vis||[]).includes(p.id));
     const showCatLbl=S.settings?.showCatLabel!==false;
+    const HDRH=28; // header band height for flat/filled/duo/tinted styles
+    const usesHeader=['flat','filled','duo','tinted'].includes(svgNStyle);
     const titleLines=svgWrapText(n.title,n.w-24,13.5);
     const titleH=titleLines.length*18;
-    // Y layout: top-pad=9, catLabel=12px(with 3px gap)=15 if shown, title baseline, params
-    const catLblH=showCatLbl?15:0;
-    const titleY0=ny+9+catLblH+13; // baseline of first title line
-    let py=titleY0+titleH+8;       // param section start (baseline of first param)
+    const catLblH=(!usesHeader&&showCatLbl)?15:0;
+    const titleY0=usesHeader ? ny+HDRH+13 : ny+9+catLblH+13;
+    let py=titleY0+titleH+8;
     const paramRows=params.map(p=>{
       const pv=fmtValPlain(p,n.vals?.[p.id]);
       const nameX=nx+12, valX=nx+12+Math.min(p.name.length*5.8+4, n.w*0.42);
       const row=`<text x="${nameX}" y="${py}" font-family="Plus Jakarta Sans,sans-serif" font-size="10" fill="#999">${xmlEsc(p.name)}:</text><text x="${valX}" y="${py}" font-family="Plus Jakarta Sans,sans-serif" font-size="10" fill="#555">${xmlEsc(pv)}</text>`;
       py+=15;return row;
     }).join('');
-    const titleSVG=titleLines.map((ln,i)=>`<text x="${nx+12}" y="${titleY0+i*18}" font-family="Plus Jakarta Sans,sans-serif" font-size="13.5" font-weight="600" fill="#333">${xmlEsc(ln)}</text>`).join('');
+    const titleFill=(['filled'].includes(svgNStyle))?(PALETTE_TEXT[color]||'#fff'):'#333';
+    const titleSVG=titleLines.map((ln,i)=>`<text x="${nx+12}" y="${titleY0+i*18}" font-family="Plus Jakarta Sans,sans-serif" font-size="13.5" font-weight="600" fill="${titleFill}">${xmlEsc(ln)}</text>`).join('');
     const sepY=titleY0+titleH+2;
-    const catLabelSVG=showCatLbl?`<text x="${nx+12}" y="${ny+9+9.5}" font-family="Plus Jakarta Sans,sans-serif" font-size="9.5" font-weight="700" fill="${color}" letter-spacing="1">${xmlEsc((cat?.name||'').toUpperCase())}</text>`:'';
     const sepLine=params.length?`<line x1="${nx+1}" y1="${sepY}" x2="${nx+n.w-1}" y2="${sepY}" stroke="#e5e5e5" stroke-width="1"/>`:'';
+
+    // Style-specific background and decoration
+    let cardRect, decoration='', catLabelSVG='';
+    const r=S.settings?.nodeRadius??10;
+    if(svgNStyle==='flat'||svgNStyle==='duo'){
+      cardRect=`<rect x="${nx}" y="${ny}" width="${n.w}" height="${n.h}" rx="${r}" ry="${r}" fill="white" stroke="${hexToRgba(color,0.25)}" stroke-width="1.5"/>`;
+      decoration=`<rect x="${nx}" y="${ny}" width="${n.w}" height="${HDRH}" rx="${r}" ry="${r}" fill="${color}"/>
+        <rect x="${nx}" y="${ny+HDRH-r}" width="${n.w}" height="${r}" fill="${color}"/>`;
+      if(svgNStyle==='duo'){
+        cardRect=`<rect x="${nx}" y="${ny}" width="${n.w}" height="${n.h}" rx="${r}" ry="${r}" fill="white" stroke="${hexToRgba(color,0.28)}" stroke-width="1.5"/>`;
+        decoration=`<rect x="${nx}" y="${ny}" width="${n.w}" height="${HDRH}" rx="${r}" ry="${r}" fill="${hexToRgba(color,0.13)}"/>
+          <rect x="${nx}" y="${ny+HDRH-r}" width="${n.w}" height="${r}" fill="${hexToRgba(color,0.13)}"/>
+          <line x1="${nx}" y1="${ny+HDRH}" x2="${nx+n.w}" y2="${ny+HDRH}" stroke="${hexToRgba(color,0.25)}" stroke-width="1"/>
+          <rect x="${nx}" y="${ny}" width="4" height="${n.h}" rx="2" fill="${color}"/>`;
+      }
+      if(showCatLbl) catLabelSVG=`<text x="${nx+12}" y="${ny+HDRH/2+4}" font-family="Plus Jakarta Sans,sans-serif" font-size="9" font-weight="700" fill="white" letter-spacing="1" opacity="0.85">${xmlEsc((cat?.name||'').toUpperCase())}</text>`;
+    } else if(svgNStyle==='filled'){
+      cardRect=`<rect x="${nx}" y="${ny}" width="${n.w}" height="${n.h}" rx="${r}" ry="${r}" fill="${color}"/>`;
+      decoration='';
+      if(showCatLbl) catLabelSVG=`<text x="${nx+12}" y="${ny+HDRH/2+4}" font-family="Plus Jakarta Sans,sans-serif" font-size="9" font-weight="700" fill="${(PALETTE_TEXT[color]||'#fff')}" letter-spacing="1" opacity="0.75">${xmlEsc((cat?.name||'').toUpperCase())}</text>`;
+    } else if(svgNStyle==='tinted'){
+      cardRect=`<rect x="${nx}" y="${ny}" width="${n.w}" height="${n.h}" rx="${r}" ry="${r}" fill="${hexToRgba(color,0.18)}" stroke="${hexToRgba(color,0.42)}" stroke-width="1.5"/>`;
+      decoration=`<rect x="${nx}" y="${ny}" width="5" height="${n.h}" rx="2.5" fill="${color}"/>`;
+      if(showCatLbl) catLabelSVG=`<text x="${nx+14}" y="${ny+9+9.5}" font-family="Plus Jakarta Sans,sans-serif" font-size="9.5" font-weight="700" fill="${color}" letter-spacing="1">${xmlEsc((cat?.name||'').toUpperCase())}</text>`;
+    } else if(svgNStyle==='outlined'){
+      cardRect=`<rect x="${nx}" y="${ny}" width="${n.w}" height="${n.h}" rx="${r}" ry="${r}" fill="white" stroke="${color}" stroke-width="2.5"/>`;
+      decoration=`<rect x="${nx+1.5}" y="${ny}" width="${n.w-3}" height="${HDRH/2}" rx="${r}" ry="${r}" fill="${hexToRgba(color,0.07)}"/>`;
+      if(showCatLbl) catLabelSVG=`<text x="${nx+12}" y="${ny+9+9.5}" font-family="Plus Jakarta Sans,sans-serif" font-size="9.5" font-weight="700" fill="${color}" letter-spacing="1">${xmlEsc((cat?.name||'').toUpperCase())}</text>`;
+    } else {
+      // card, minimal, and fallback: left accent bar
+      const borderColor=svgNStyle==='minimal'?'#dde1ea':hexToRgba(color,0.15);
+      const bgColor2=svgNStyle==='minimal'?'white':hexToRgba(color,0.04);
+      const bottomBorder=svgNStyle==='minimal'?`<rect x="${nx}" y="${ny+n.h-3}" width="${n.w}" height="3" rx="1.5" fill="${color}"/>`:'';
+      cardRect=`<rect x="${nx}" y="${ny}" width="${n.w}" height="${n.h}" rx="${r}" ry="${r}" fill="${bgColor2}" stroke="${borderColor}" stroke-width="1.5"/>`;
+      decoration=`<rect x="${nx}" y="${ny}" width="5" height="${n.h}" rx="2.5" fill="${color}"/>${bottomBorder}`;
+      if(showCatLbl) catLabelSVG=`<text x="${nx+14}" y="${ny+9+9.5}" font-family="Plus Jakarta Sans,sans-serif" font-size="9.5" font-weight="700" fill="${color}" letter-spacing="1">${xmlEsc((cat?.name||'').toUpperCase())}</text>`;
+    }
+
     return `<g>
-      <rect x="${nx}" y="${ny}" width="${n.w}" height="${n.h}" rx="10" ry="10" fill="white" stroke="#dddcda" stroke-width="1.5"/>
-      <rect x="${nx}" y="${ny}" width="3" height="${n.h}" rx="1.5" fill="${color}"/>
+      ${cardRect}
+      ${decoration}
       ${catLabelSVG}
       ${titleSVG}
       ${sepLine}

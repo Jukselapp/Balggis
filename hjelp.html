@@ -617,6 +617,92 @@
     color: var(--primary);
     margin: 2px;
   }
+
+  /* ── REF TABLE ── */
+  .ref-table, .shortcut-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.88rem;
+    margin: 12px 0;
+    background: var(--card);
+    border-radius: 8px;
+    overflow: hidden;
+    border: 1px solid var(--border);
+    box-shadow: 0 1px 4px rgba(0,33,105,0.05);
+  }
+
+  .ref-table th, .shortcut-table th {
+    background: var(--primary);
+    color: #fff;
+    padding: 9px 14px;
+    text-align: left;
+    font-weight: 600;
+    font-size: 0.8rem;
+  }
+
+  .ref-table td, .shortcut-table td {
+    padding: 9px 14px;
+    border-bottom: 1px solid var(--border);
+    vertical-align: top;
+  }
+
+  .ref-table tr:last-child td, .shortcut-table tr:last-child td {
+    border-bottom: none;
+  }
+
+  /* ── TIPS GRID (Dashboard widget types) ── */
+  .tips-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 14px;
+    margin: 14px 0;
+  }
+
+  .tip-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 16px 18px;
+    box-shadow: 0 1px 4px rgba(0,33,105,0.05);
+  }
+
+  .tip-title {
+    font-weight: 700;
+    font-size: 0.92rem;
+    color: var(--primary);
+    margin-bottom: 6px;
+  }
+
+  .tip-desc {
+    font-size: 0.84rem;
+    color: var(--text-muted);
+    line-height: 1.55;
+  }
+
+  /* ── CALLOUT (generic) ── */
+  .callout {
+    border-radius: 8px;
+    padding: 14px 18px;
+    margin: 14px 0;
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+    font-size: 0.9rem;
+    line-height: 1.6;
+  }
+
+  .callout.note { background: var(--success-bg); border-left: 4px solid var(--success-border); }
+  .callout.callout-tip { background: var(--tip-bg); border-left: 4px solid var(--tip-border); }
+  .callout.callout-note { background: var(--success-bg); border-left: 4px solid var(--success-border); }
+
+  /* ── SECTION CONTENT (Dashboard section uses this) ── */
+  #dashboard { margin-bottom: 64px; scroll-margin-top: calc(var(--nav-h) + 24px); }
+  #dashboard h2 { font-size: 1.5rem; font-weight: 800; letter-spacing: -0.02em; color: var(--primary); margin-bottom: 12px; }
+  #dashboard h3 { font-size: 1.05rem; font-weight: 700; color: var(--primary); margin-bottom: 8px; }
+  #dashboard p, #dashboard li { font-size: 0.92rem; }
+  #dashboard ol { padding-left: 20px; margin: 8px 0; }
+  .section-content { margin-top: 0; }
+  .section-lead { font-size: 1rem; color: var(--text-muted); margin-bottom: 20px; line-height: 1.7; }
 </style>
 </head>
 <body>
@@ -708,18 +794,20 @@
     </div>
 
     <div class="card">
-      <h3>Hva er Virksomhetskartlegger?</h3>
-      <p>Virksomhetskartlegger er et strategisk kartleggingsverktøy som lar deg bygge opp og visualisere virksomhetens strukturer – fra strategiske mål til IT-systemer og alt imellom. Du kan tegne koblinger mellom objekter, definere egenskaper, filtrere for ulike målgrupper og eksportere til bilder eller regneark.</p>
+      <h3>Hva er Bálggis?</h3>
+      <p>Bálggis er et strategisk kartleggingsverktøy som lar deg bygge opp og visualisere virksomhetens strukturer – fra strategiske mål til IT-systemer og alt imellom. Du kan tegne koblinger mellom objekter, definere egenskaper, filtrere for ulike målgrupper og eksportere til bilder eller regneark.</p>
       <p>Appen kjører direkte i nettleseren. Data lagres i nettleserens lokale lagring (localStorage) – ingen innlogging, ingen server, ingen installasjon.</p>
     </div>
 
     <div class="two-col">
       <div class="card">
-        <h3>Tre visningsmoduser</h3>
+        <h3>Fem visningsmoduser</h3>
         <ul>
-          <li><strong>Grafisk</strong> – interaktivt kart med noder og koblinger</li>
-          <li><strong>Tabell</strong> – strukturert tabellvisning med inline-redigering</li>
+          <li><strong>Kart</strong> – interaktivt lerret med noder og koblinger, grupperingsbokser, zoom og panorering</li>
+          <li><strong>Tabell</strong> – strukturert tabellvisning med inline-redigering av alle parameterverdier</li>
           <li><strong>Matrise</strong> – koblingsmatrise mellom to kategorier</li>
+          <li><strong>Tidslinje</strong> – Gantt-stil for noder med dato-parametere</li>
+          <li><strong>Dashboard</strong> – tilpassbart kontrollpanel med widgets</li>
         </ul>
         <p style="margin-top:10px;">Bytt mellom visningene via knappene øverst i verktøylinjen.</p>
       </div>
@@ -734,6 +822,10 @@
         <div class="warn" style="margin-top:12px;">
           <span class="tip-icon">⚠️</span>
           <div>Sletting av nettleserdata vil slette kartet. Ta jevnlig backup via <strong>Eksporter JSON</strong>.</div>
+        </div>
+        <div class="warn" style="margin-top:8px;">
+          <span class="tip-icon">💾</span>
+          <div><strong>Lagringsgrense:</strong> Nettlesere tillater typisk ~5 MB i localStorage. Bálggis viser en advarsel når du nærmer deg 3,5 MB. Anbefalt kapasitet er under 300 noder og 500 relasjoner. For å nullstille til demodata, åpne nettleserens DevTools-konsoll og kjør: <code>localStorage.removeItem('nx2'); location.reload();</code></div>
         </div>
       </div>
     </div>
@@ -905,7 +997,7 @@
         <span class="param-badge">Flerverdi</span>
         <div>
           <strong>Fritekst-tagg-felt</strong>
-          <span>Flere fritekstverdier som "tags". Egnet for stikkord, ansvarlige, teknologier.</span>
+          <span>Flere fritekstverdier som chips. Skriv et ord og trykk <kbd>Enter</kbd> eller komma for å legge til. Klikk ✕ for å fjerne. Egnet for stikkord, ansvarlige, teknologier.</span>
         </div>
         <span class="tag">#</span>
       </div>
@@ -1043,7 +1135,7 @@
     <div class="card">
       <h3>Navigasjon på lerretet</h3>
       <div class="shortcut-grid">
-        <div class="shortcut-row"><span>Panorere (flytte kartet)</span><div class="kbd-group">Drag på tomt område</div></div>
+        <div class="shortcut-row"><span>Panorere (flytte kartet)</span><div class="kbd-group">Midtmuseklikk + drag, eller <kbd>Space</kbd> + drag</div></div>
         <div class="shortcut-row"><span>Zoom inn/ut</span><div class="kbd-group">Scrollhjul</div></div>
         <div class="shortcut-row"><span>Flytte en node</span><div class="kbd-group">Drag noden</div></div>
         <div class="shortcut-row"><span>Endre størrelse på node</span><div class="kbd-group">Drag i hjørne/kant</div></div>
@@ -1066,13 +1158,31 @@
       <div class="card">
         <h3>Verktøylinjefunksjoner</h3>
         <ul>
-          <li><strong>Auto-layout</strong> – Arrangerer noder automatisk (Sugiyama-algoritmen)</li>
-          <li><strong>Snap til rutenett</strong> – Låser noder til et rutenett ved moving</li>
-          <li><strong>Relasjonforklaring</strong> – Toggle legend for relasjonstyper</li>
+          <li><strong>Auto-layout</strong> – Arrangerer noder automatisk</li>
+          <li><strong>Snap til rutenett</strong> – Låser noder til et rutenett ved flytt</li>
+          <li><strong>Grupperingsboks</strong> – Legg til en visuell svømmebane</li>
           <li><strong>Søk</strong> – Finn noder etter navn eller verdier</li>
           <li><strong>Eksporter</strong> – SVG eller PNG av kartet</li>
           <li><strong>Angre/Gjør om</strong> – Ctrl+Z / Ctrl+Shift+Z</li>
         </ul>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>Nodestiler</h3>
+      <p>Hvert objekt vises som en node på kartet. Det finnes 7 visuelle stiler du kan velge mellom – per kategori (i kategoriens innstillinger) eller globalt (Innstillinger → Noder):</p>
+      <ul>
+        <li><strong>flat</strong> – Ren, flat kortvisning (standard)</li>
+        <li><strong>card</strong> – Kort med skygge</li>
+        <li><strong>minimal</strong> – Bare tittel, ingen bakgrunn</li>
+        <li><strong>filled</strong> – Fylt bakgrunn i kategoriens farge</li>
+        <li><strong>outlined</strong> – Hvit bakgrunn med farget kantlinje</li>
+        <li><strong>tinted</strong> – Lys fargetone fra kategoriens farge</li>
+        <li><strong>duo</strong> – Tofarget topplinje + hvit kropp</li>
+      </ul>
+      <div class="tip">
+        <span class="tip-icon">💡</span>
+        <div>Standard stil gjelder for alle noder globalt, men kan også settes per kategori i kategoriinnstillingene.</div>
       </div>
     </div>
 
@@ -1290,16 +1400,18 @@
       </div>
     </div>
 
+    <p>Alle import- og eksportvalg finnes i <strong>Fil ▾</strong>-menyen i topplisten.</p>
+
     <div class="card">
       <h3>Full backup – JSON</h3>
       <div class="two-col">
         <div>
-          <strong>Eksporter</strong>
-          <p style="margin-top:6px;">Klikk <strong>"Eksporter JSON"</strong> i verktøylinjen. Filen inneholder hele kartet inkludert kategorier, parametere, noder, koblinger og perspektiver.</p>
+          <strong>Eksporter JSON</strong>
+          <p style="margin-top:6px;">Tar full backup av hele kartet: kategorier, parametere, noder, koblinger, perspektiver og dashboard-oppsett.</p>
         </div>
         <div>
-          <strong>Importer</strong>
-          <p style="margin-top:6px;">Klikk <strong>"Importer JSON"</strong> og velg en tidligere eksportert JSON-fil for å gjenopprette eller dele et kart.</p>
+          <strong>Importer JSON</strong>
+          <p style="margin-top:6px;">Velg en tidligere eksportert JSON-fil for å gjenopprette eller dele et kart.</p>
         </div>
       </div>
       <div class="warn" style="margin-top:12px;">
@@ -1309,29 +1421,52 @@
     </div>
 
     <div class="card">
-      <h3>Eksport til bilde – SVG og PNG</h3>
-      <p>I grafisk visning klikker du <strong>eksportknappen</strong> i verktøylinjen og velger format:</p>
+      <h3>Eksport til bilde</h3>
       <ul>
-        <li><strong>SVG</strong> – Vektorformat, skalerbart uten kvalitetstap. Egnet for presentasjoner og trykk.</li>
-        <li><strong>PNG</strong> – Rasterbilde, enkel å lime inn i dokumenter og e-post.</li>
+        <li><strong>Kart som SVG</strong> – Vektorformat, skalerbart uten kvalitetstap. Egnet for presentasjoner og trykk.</li>
+        <li><strong>Kart som PNG</strong> – Rasterbilde, enkel å lime inn i dokumenter og e-post.</li>
       </ul>
     </div>
 
     <div class="card">
-      <h3>Per-kategori eksport og import</h3>
+      <h3>HTML-rapport</h3>
+      <p>Én samlet rapport som inkluderer alle deler av kartet – tilpasset valgt perspektiv (f.eks. styrevisning):</p>
+      <ul style="margin-top:8px">
+        <li>Tabeller for alle synlige kategorier med parameterverdier og koblinger</li>
+        <li>Matriseoversikt (hvis radkategori og kolonnekategori er valgt i matrisevisningen)</li>
+        <li>Tidslinjeoversikt (hvis kategori og datoparameter er valgt i tidslinjevisningen)</li>
+        <li>Dashboard-widgets som statisk snapshot</li>
+        <li>Betinget formatering vises i tabellene</li>
+        <li>Utskriftsknapp for PDF/papir</li>
+      </ul>
+      <div class="tip" style="margin-top:12px">
+        <span class="tip-icon">💡</span>
+        <div>Velg riktig perspektiv i topplisten <em>før</em> du eksporterer – rapporten viser bare de kategoriene som er synlige i det aktive perspektivet.</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>Andre eksportformater</h3>
+      <ul>
+        <li><strong>Eksporter for KI-analyse</strong> – Ren, strukturert JSON egnet for analyse i et KI-verktøy (ChatGPT, Copilot, osv.).</li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <h3>CSV-import og -eksport</h3>
       <div class="two-col">
         <div>
-          <p><strong>JSON-eksport</strong> per kategori gjøres fra tabellvisningens eksportmeny.</p>
-          <p style="margin-top:6px;"><strong>CSV-eksport</strong> lager en fil med UTF-8 BOM som åpnes korrekt i Excel. Alle parametere og koblingskolonner inkluderes.</p>
+          <strong>CSV-eksport</strong>
+          <p style="margin-top:6px;">Per kategori i tabellvisningen: lager en fil med UTF-8 BOM som åpnes korrekt i Excel. Alle parametere og koblingskolonner inkluderes.</p>
         </div>
         <div>
-          <p><strong>CSV-import</strong> via knappen i tabellvisningens verktøylinje. Du kan:</p>
-          <ul>
-            <li>Mappe CSV-kolonner til eksisterende parametere</li>
-            <li>Legge til i en eksisterende kategori</li>
-            <li>Opprette en ny kategori fra CSV-en</li>
-          </ul>
+          <strong>CSV-import</strong>
+          <p style="margin-top:6px;">Via <strong>Importer CSV</strong> i Fil-menyen. En dialog lar deg mappe CSV-kolonner til parametere, og du kan velge å legge til i eksisterende kategori eller opprette ny.</p>
         </div>
+      </div>
+      <div class="tip" style="margin-top:12px;">
+        <span class="tip-icon">💡</span>
+        <div>CSV-import er fleksibel: kolonnenavn i filen trenger ikke å matche eksakt – du mapper dem manuelt i importdialogen.</div>
       </div>
     </div>
 
@@ -1357,31 +1492,49 @@
     </div>
 
     <div class="card">
-      <p>Åpne innstillinger ved å klikke <strong>tannhjulikonet (⚙)</strong> i topplisten. Innstillingsdialogen har to faner:</p>
+      <p>Åpne innstillinger ved å klikke <strong>tannhjulikonet (⚙)</strong> i topplisten. Innstillingsdialogen har fire faner:</p>
     </div>
 
     <div class="two-col">
       <div class="card">
-        <h3>Relasjonstyper</h3>
+        <h3>Generelt</h3>
+        <ul>
+          <li><strong>Prosjekttittel</strong> – vises i kartet og i eksportfilnavnet</li>
+          <li><strong>Språk</strong> – bytt grensesnittet mellom norsk og engelsk</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>Relasjoner</h3>
         <p>Tilpass de fire relasjonene:</p>
         <ul>
           <li>Endre navn til noe meningsfylt i din kontekst</li>
-          <li>Velg farge for linjen</li>
-          <li>Velg stiplingsmønster (solid, stiplet, prikket)</li>
+          <li>Velg farge og stiplingsmønster for linjen</li>
           <li>Juster linjetykkelse</li>
+          <li>Velg linjestil: buet (bezier) eller vinkelrett (ortogonal)</li>
         </ul>
         <div class="tip" style="margin-top:12px;">
           <span class="tip-icon">💡</span>
           <div>Endringer i relasjonstyper påvirker <em>alle</em> eksisterende koblinger av den typen umiddelbart.</div>
         </div>
       </div>
+    </div>
+
+    <div class="two-col">
       <div class="card">
-        <h3>Design</h3>
-        <p>Juster kartets utseende:</p>
+        <h3>Noder</h3>
         <ul>
+          <li><strong>Nodestil</strong> – velg standard stil (7 alternativer: flat, card, minimal, filled, outlined, tinted, duo)</li>
+          <li><strong>Skygge</strong> – aktiver/deaktiver skygge på noder</li>
           <li><strong>Hjørneradius</strong> – avrunding på nodekortene</li>
           <li><strong>Minimumsbredde</strong> – minste bredde for noder i grafen</li>
-          <li><strong>Karttittel</strong> – tittel som vises i kartet og i eksportfilens navn</li>
+          <li><strong>Vis kategorietikett</strong> – vis/skjul kategorinavn på noder</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>Kartvisning</h3>
+        <ul>
+          <li><strong>Bakgrunnsmønster</strong> – rutenett, prikker eller ingen</li>
+          <li><strong>Bakgrunnsfarge</strong> – tilpass lerrettets bakgrunnsfarge</li>
         </ul>
       </div>
     </div>
@@ -1401,6 +1554,11 @@
       <div class="shortcut-grid">
 
         <div class="shortcut-row">
+          <span>Panorere kartet</span>
+          <div class="kbd-group"><kbd>Space</kbd><span class="kbd-sep">+</span>drag</div>
+        </div>
+
+        <div class="shortcut-row">
           <span>Søk</span>
           <div class="kbd-group">
             <kbd>/</kbd>
@@ -1410,7 +1568,7 @@
         </div>
 
         <div class="shortcut-row">
-          <span>Lukk søk</span>
+          <span>Lukk søk / fjern markering</span>
           <div class="kbd-group"><kbd>Esc</kbd></div>
         </div>
 
@@ -1426,7 +1584,7 @@
 
         <div class="shortcut-row">
           <span>Slett valgt node / kobling</span>
-          <div class="kbd-group"><kbd>Del</kbd></div>
+          <div class="kbd-group"><kbd>Del</kbd><span class="kbd-sep">eller</span><kbd>Backspace</kbd></div>
         </div>
 
         <div class="shortcut-row">
@@ -1532,37 +1690,41 @@
       </div>
     </div>
 
-    <p>Tidslinjevisningen viser noder som horisontale stolper på en kalenderbasert tidslinje — akkurat som et Gantt-diagram. Den er nyttig for initiativ, prosjekter, milepæler og andre noder som har dato-parametere.</p>
-
-    <h3 style="margin:20px 0 10px">Forutsetning</h3>
-    <p>Kategorien du vil vise må ha minst én parameter av typen <strong>Dato</strong>. Uten dato-parametere vil tidslinjen vise en advarsel.</p>
+    <div class="card">
+      <p>Tidslinjevisningen viser noder som horisontale stolper på en kalenderbasert tidslinje — akkurat som et Gantt-diagram. Den er nyttig for initiativ, prosjekter, milepæler og andre noder som har dato-parametere.</p>
+      <p><strong>Forutsetning:</strong> Kategorien du vil vise må ha minst én parameter av typen <strong>Dato</strong>. Uten dato-parametere vil tidslinjen vise en advarsel.</p>
+    </div>
 
     <div class="tip">
       <span class="tip-icon">💡</span>
       <div>Legg til parameterne <strong>«Startdato»</strong> og <strong>«Sluttdato»</strong> (begge type Dato) i kategorier som Initiativ eller Prosjekt for å få fulle Gantt-stolper med varighet.</div>
     </div>
 
-    <h3 style="margin:20px 0 10px">Slik bruker du tidslinjen</h3>
-    <ol style="padding-left:20px;line-height:2">
-      <li>Klikk <strong>«Tidslinje»</strong> i topbaren</li>
-      <li>Velg hvilken <strong>kategori</strong> som skal vises som rader</li>
-      <li>Velg <strong>startdato-parameter</strong> (f.eks. «Startdato»)</li>
-      <li>Velg <strong>sluttdato-parameter</strong> (f.eks. «Sluttdato») — valgfri, ellers vises punktmarkering</li>
-      <li>Klikk en rad eller stolpe for å åpne noden i sidepanelet</li>
-    </ol>
+    <div class="card">
+      <h3>Slik bruker du tidslinjen</h3>
+      <ol>
+        <li>Klikk <strong>«Tidslinje»</strong> i topbaren</li>
+        <li>Velg hvilken <strong>kategori</strong> som skal vises som rader</li>
+        <li>Velg <strong>startdato-parameter</strong> (f.eks. «Startdato»)</li>
+        <li>Velg <strong>sluttdato-parameter</strong> (f.eks. «Sluttdato») — valgfri, ellers vises punktmarkering</li>
+        <li>Klikk en rad eller stolpe for å åpne noden i sidepanelet</li>
+      </ol>
+    </div>
 
-    <h3 style="margin:20px 0 10px">Hva vises</h3>
-    <table class="ref-table" style="margin-top:0">
-      <thead><tr><th>Element</th><th>Beskrivelse</th></tr></thead>
-      <tbody>
-        <tr><td>Farget stolpe</td><td>Noden sin varighet fra startdato til sluttdato</td></tr>
-        <tr><td>Rød strek</td><td>«I dag»-markør for enkel statusvurdering</td></tr>
-        <tr><td>Månedshoder</td><td>Automatisk månedsinndeling langs x-aksen</td></tr>
-        <tr><td>Venstre kolonne</td><td>Nodenavn — klikk for å åpne i sidepanel</td></tr>
-      </tbody>
-    </table>
+    <div class="card">
+      <h3>Hva vises</h3>
+      <table class="ref-table" style="margin-top:0">
+        <thead><tr><th>Element</th><th>Beskrivelse</th></tr></thead>
+        <tbody>
+          <tr><td>Farget stolpe</td><td>Noden sin varighet fra startdato til sluttdato</td></tr>
+          <tr><td>Rød strek</td><td>«I dag»-markør for enkel statusvurdering</td></tr>
+          <tr><td>Månedshoder</td><td>Automatisk månedsinndeling langs x-aksen</td></tr>
+          <tr><td>Venstre kolonne</td><td>Nodenavn — klikk for å åpne i sidepanel</td></tr>
+        </tbody>
+      </table>
+    </div>
 
-    <div class="callout note">
+    <div class="note">
       <span class="tip-icon">📌</span>
       <div>Tidslinjen oppdateres automatisk når du endrer dato-verdier i tabell- eller grafvisningen. Tidslinjevalget (kategori og parametere) lagres i nettleseren.</div>
     </div>
@@ -1578,42 +1740,51 @@
       </div>
     </div>
 
-    <p>Grupperingsbokser er visuelle rektangler du tegner over kartet for å samle relaterte noder. De er rene overlay-elementer — de påvirker ikke data, beregninger eller koblinger, men gjør kartet langt lettere å lese for andre.</p>
+    <div class="card">
+      <p>Grupperingsbokser er visuelle rektangler du tegner over kartet for å samle relaterte noder. De er rene overlay-elementer — de påvirker ikke data, beregninger eller koblinger, men gjør kartet langt lettere å lese for andre.</p>
+    </div>
 
-    <h3 style="margin:20px 0 10px">Opprette en gruppe</h3>
-    <ol style="padding-left:20px;line-height:2">
-      <li>Gå til <strong>Grafisk visning</strong></li>
-      <li>Klikk <strong>«⬜ Gruppe»</strong> i verktøylinjen</li>
-      <li>En ny boks plasseres midt i det synlige kartutsnitttet</li>
-      <li>Dra boksen med etiketten og resize med hjørnehåndtaket</li>
-    </ol>
-
-    <h3 style="margin:20px 0 10px">Redigere en gruppe</h3>
-    <p>Klikk på boksen for å velge den — sidepanelet åpnes med:</p>
-    <ul style="padding-left:20px;line-height:2">
-      <li><strong>Navn</strong> — skriv direkte i feltet, oppdateres umiddelbart</li>
-      <li><strong>Farge</strong> — velg blant de 12 palettfargene</li>
-      <li><strong>Slett gruppe</strong> — fjerner boksen (kan angres med Ctrl+Z)</li>
-    </ul>
+    <div class="two-col">
+      <div class="card">
+        <h3>Opprette en gruppe</h3>
+        <ol>
+          <li>Gå til <strong>Grafisk visning (Kart)</strong></li>
+          <li>Klikk <strong>«⬜ Gruppe»</strong> i verktøylinjen</li>
+          <li>En ny boks plasseres midt i det synlige kartutsnittet</li>
+          <li>Dra boksen med etiketten og endre størrelse med hjørnehåndtaket</li>
+        </ol>
+      </div>
+      <div class="card">
+        <h3>Redigere en gruppe</h3>
+        <p>Klikk på boksen for å velge den — sidepanelet åpnes med:</p>
+        <ul>
+          <li><strong>Navn</strong> — skriv direkte i feltet, oppdateres umiddelbart</li>
+          <li><strong>Farge</strong> — velg blant de 12 palettfargene</li>
+          <li><strong>Slett gruppe</strong> — fjerner boksen (kan angres med Ctrl+Z)</li>
+        </ul>
+      </div>
+    </div>
 
     <div class="tip">
       <span class="tip-icon">💡</span>
       <div>Bruk grupperingsbokser som <strong>svømmebaner</strong>: én boks per forretningsdomene, én per fase, eller én per team. Dra noder inn i boksene for å organisere kartet visuelt.</div>
     </div>
 
-    <h3 style="margin:20px 0 10px">Tastatur og interaksjon</h3>
-    <table class="ref-table" style="margin-top:0">
-      <thead><tr><th>Handling</th><th>Slik gjør du</th></tr></thead>
-      <tbody>
-        <tr><td>Flytt gruppe</td><td>Dra i etiketten øverst til venstre</td></tr>
-        <tr><td>Endre størrelse</td><td>Dra hjørnehåndtaket (●) nede til høyre</td></tr>
-        <tr><td>Velg gruppe</td><td>Klikk på boksen</td></tr>
-        <tr><td>Slett gruppe</td><td>Velg den, trykk <kbd>Del</kbd></td></tr>
-        <tr><td>Angre</td><td><kbd>Ctrl</kbd>+<kbd>Z</kbd></td></tr>
-      </tbody>
-    </table>
+    <div class="card">
+      <h3>Tastatur og interaksjon</h3>
+      <table class="ref-table" style="margin-top:0">
+        <thead><tr><th>Handling</th><th>Slik gjør du</th></tr></thead>
+        <tbody>
+          <tr><td>Flytt gruppe</td><td>Dra i etiketten øverst til venstre</td></tr>
+          <tr><td>Endre størrelse</td><td>Dra hjørnehåndtaket (●) nede til høyre</td></tr>
+          <tr><td>Velg gruppe</td><td>Klikk på boksen</td></tr>
+          <tr><td>Slett gruppe</td><td>Velg den, trykk <kbd>Del</kbd></td></tr>
+          <tr><td>Angre</td><td><kbd>Ctrl</kbd>+<kbd>Z</kbd></td></tr>
+        </tbody>
+      </table>
+    </div>
 
-    <div class="callout note">
+    <div class="note">
       <span class="tip-icon">📌</span>
       <div>Grupper tegnes <em>bak</em> noder og koblinger, slik at de aldri skjuler innhold. Du kan ha ubegrenset antall grupper per kart.</div>
     </div>
@@ -1629,67 +1800,78 @@
       </div>
     </div>
 
-    <p>Betinget formatering lar deg sette opp regler som automatisk fargesetter rader i tabellen og noder i grafvisningen basert på parameterverdier. Regelen «Hvis status er rød → gul radfarge» gjør at kritiske elementer hopper i øynene umiddelbart.</p>
-
-    <h3 style="margin:20px 0 10px">Opprette regler</h3>
-    <ol style="padding-left:20px;line-height:2">
-      <li>Gå til <strong>Tabellvisning</strong></li>
-      <li>Klikk <strong>«Formatering»</strong>-knappen ved siden av «Kolonner» for ønsket kategori</li>
-      <li>Klikk <strong>«+ Legg til regel»</strong></li>
-      <li>Velg <strong>parameter</strong>, <strong>operator</strong> og <strong>verdi</strong></li>
-      <li>Velg <strong>radfarge</strong>, <strong>tekstfarge</strong> og eventuelt <strong>fet skrift</strong></li>
-      <li>Klikk <strong>«Lagre»</strong></li>
-    </ol>
-
-    <h3 style="margin:20px 0 10px">Tilgjengelige operatorer</h3>
-    <table class="ref-table" style="margin-top:0">
-      <thead><tr><th>Operator</th><th>Brukes til</th><th>Eksempel</th></tr></thead>
-      <tbody>
-        <tr><td><code>er lik</code></td><td>Eksakt match</td><td>Status er lik <code>red</code></td></tr>
-        <tr><td><code>er ikke lik</code></td><td>Alle andre verdier</td><td>Status er ikke lik <code>green</code></td></tr>
-        <tr><td><code>er større enn</code></td><td>Tall over grense</td><td>Kostnad &gt; <code>1000000</code></td></tr>
-        <tr><td><code>er mindre enn</code></td><td>Tall under grense</td><td>Score &lt; <code>50</code></td></tr>
-        <tr><td><code>&gt;=</code> / <code>&lt;=</code></td><td>Tall inkl. grense</td><td>Fremdrift &gt;= <code>100</code></td></tr>
-        <tr><td><code>inneholder</code></td><td>Delstreng-søk</td><td>Navn inneholder <code>risiko</code></td></tr>
-        <tr><td><code>er tom</code></td><td>Manglende verdi</td><td>Eier er tom</td></tr>
-        <tr><td><code>er ikke tom</code></td><td>Verdi finnes</td><td>Startdato er ikke tom</td></tr>
-      </tbody>
-    </table>
-
-    <div class="tip">
-      <span class="tip-icon">💡</span>
-      <div>For status-parametere brukes verdiene <code>red</code>, <code>yellow</code> og <code>green</code> i reglene (ikke «Rød»/«Gul»/«Grønn»).</div>
+    <div class="card">
+      <p>Betinget formatering lar deg sette opp regler som automatisk fargesetter rader i tabellen og noder i kartvisningen basert på parameterverdier. Regelen «Hvis status er rød → rød radfarge» gjør at kritiske elementer hopper i øynene umiddelbart.</p>
     </div>
 
-    <h3 style="margin:20px 0 10px">Hvor gjelder reglene?</h3>
-    <ul style="padding-left:20px;line-height:2">
-      <li><strong>Tabellvisning</strong> — hele raden farges med valgt radfarge og tekstfarge</li>
-      <li><strong>Grafisk visning</strong> — noder som matcher får en farget topplinje og justert tittelstil</li>
-    </ul>
+    <div class="card">
+      <h3>Opprette regler</h3>
+      <ol>
+        <li>Gå til <strong>Tabellvisning</strong></li>
+        <li>Klikk <strong>«Formatering»</strong>-knappen ved siden av «Kolonner» for ønsket kategori</li>
+        <li>Klikk <strong>«+ Legg til regel»</strong></li>
+        <li>Velg <strong>parameter</strong>, <strong>operator</strong> og <strong>verdi</strong></li>
+        <li>Velg <strong>radfarge</strong>, <strong>tekstfarge</strong> og eventuelt <strong>fet skrift</strong></li>
+        <li>Klikk <strong>«Lagre»</strong></li>
+      </ol>
+    </div>
 
-    <h3 style="margin:20px 0 10px">Eksempler på nyttige regler</h3>
-    <table class="ref-table" style="margin-top:0">
-      <thead><tr><th>Regel</th><th>Strekfarge</th><th>Effekt</th></tr></thead>
-      <tbody>
-        <tr><td>Status er lik <code>red</code></td><td style="background:#fee2e2">Rød</td><td>Kritiske elementer spretter ut</td></tr>
-        <tr><td>Status er lik <code>yellow</code></td><td style="background:#fef9c3">Gul</td><td>Elementer som trenger oppfølging</td></tr>
-        <tr><td>Fremdrift &lt; <code>30</code></td><td style="background:#fee2e2">Rød</td><td>Prosjekter som henger etter</td></tr>
-        <tr><td>Eier er tom</td><td style="background:#fff7ed">Oransje</td><td>Elementer uten ansvarlig</td></tr>
-        <tr><td>Prioritet er lik <code>Høy</code></td><td style="background:#eff6ff">Blå</td><td>Høyprioriterte saker fremheves</td></tr>
-      </tbody>
-    </table>
+    <div class="card">
+      <h3>Tilgjengelige operatorer</h3>
+      <table class="ref-table" style="margin-top:0">
+        <thead><tr><th>Operator</th><th>Brukes til</th><th>Eksempel</th></tr></thead>
+        <tbody>
+          <tr><td><code>er lik</code></td><td>Eksakt match</td><td>Status er lik <code>red</code></td></tr>
+          <tr><td><code>er ikke lik</code></td><td>Alle andre verdier</td><td>Status er ikke lik <code>green</code></td></tr>
+          <tr><td><code>er større enn</code></td><td>Tall over grense</td><td>Kostnad &gt; <code>1000000</code></td></tr>
+          <tr><td><code>er mindre enn</code></td><td>Tall under grense</td><td>Score &lt; <code>50</code></td></tr>
+          <tr><td><code>&gt;=</code> / <code>&lt;=</code></td><td>Tall inkl. grense</td><td>Fremdrift &gt;= <code>100</code></td></tr>
+          <tr><td><code>inneholder</code></td><td>Delstreng-søk</td><td>Navn inneholder <code>risiko</code></td></tr>
+          <tr><td><code>er tom</code></td><td>Manglende verdi</td><td>Eier er tom</td></tr>
+          <tr><td><code>er ikke tom</code></td><td>Verdi finnes</td><td>Startdato er ikke tom</td></tr>
+        </tbody>
+      </table>
+      <div class="tip" style="margin-top:12px;">
+        <span class="tip-icon">💡</span>
+        <div>For status-parametere brukes verdiene <code>red</code>, <code>yellow</code> og <code>green</code> i reglene (ikke «Rød»/«Gul»/«Grønn»).</div>
+      </div>
+    </div>
 
-    <div class="callout note">
-      <span class="tip-icon">📌</span>
-      <div>Regler evalueres i den rekkefølgen de er opprettet. Hvis flere regler matcher, slås stilene sammen — siste regel vinner ved konflikt.</div>
+    <div class="two-col">
+      <div class="card">
+        <h3>Hvor gjelder reglene?</h3>
+        <ul>
+          <li><strong>Tabellvisning</strong> — hele raden farges med valgt radfarge og tekstfarge</li>
+          <li><strong>Kartvisning</strong> — noder som matcher får en farget topplinje og justert tittelstil</li>
+        </ul>
+        <div class="note" style="margin-top:12px;">
+          <span class="tip-icon">📌</span>
+          <div>Regler evalueres i den rekkefølgen de er opprettet. Siste regel vinner ved konflikt.</div>
+        </div>
+      </div>
+      <div class="card">
+        <h3>Eksempler på nyttige regler</h3>
+        <ul>
+          <li>Status er lik <code>red</code> → rød radfarge</li>
+          <li>Status er lik <code>yellow</code> → gul radfarge</li>
+          <li>Fremdrift &lt; <code>30</code> → rød rad</li>
+          <li>Eier er tom → oransje rad</li>
+          <li>Prioritet er lik <code>Høy</code> → blå rad</li>
+        </ul>
+      </div>
     </div>
   </section>
 
   <!-- ── DASHBOARD ── -->
-  <section id="dashboard">
-    <div class="section-icon">◫</div>
-    <div class="section-content">
+  <section class="section" id="dashboard">
+    <div class="section-header">
+      <div class="section-icon">◫</div>
+      <div>
         <h2>Dashboard</h2>
+        <div class="section-sub">Tilpassbart kontrollpanel med widgets</div>
+      </div>
+    </div>
+    <div class="section-content">
         <p class="section-lead">Dashboard-visningen lar deg sette sammen et egendefinert kontrollpanel med widgets fra ulike kategorier og objekter — ideelt for ledermøter, statusgjennomganger og digitale skjermvisninger.</p>
 
       <h3>Kom i gang</h3>
@@ -1770,7 +1952,7 @@
 <!-- ── FOOTER ── -->
 <footer>
   <p style="margin-bottom:8px;">
-    <strong style="color:#fff;">Virksomhetskartlegger</strong> – Strategisk kartlegging i nettleseren
+    <strong style="color:#fff;">Bálggis</strong> – Strategisk kartlegging i nettleseren
   </p>
   <p>
     <a href="index.html">Åpne appen</a>
