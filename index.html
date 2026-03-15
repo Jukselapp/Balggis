@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
-<title>Mapper Edit</title>
+<title>Bálggis</title>
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet"/>
 <style>
@@ -169,19 +169,20 @@ html,body{height:100%;font-family:var(--font);background:var(--bg);color:var(--t
 .node.selected{z-index:20}
 
 .node-body{padding:9px 13px 8px 12px}
+.node-cat-row{display:flex;align-items:center;justify-content:space-between;gap:6px;margin-bottom:4px}
 .node-cat-label{
-  display:block;font-size:9.5px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;
-  margin-bottom:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+  font-size:10px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;flex:1;min-width:0;
 }
 .node-title{
-  font-family:var(--font);font-weight:600;font-size:13.5px;
-  letter-spacing:-.015em;color:var(--text);line-height:1.35;word-break:break-word;
+  font-family:var(--font);font-weight:700;font-size:14px;
+  letter-spacing:-.02em;color:var(--text);line-height:1.35;word-break:break-word;
 }
 .node-params{padding:5px 13px 7px 12px;border-top:1px solid rgba(0,0,0,.06)}
 .node-param-row{display:flex;align-items:baseline;gap:5px;margin-bottom:2px;font-size:10.5px}
 .node-param-name{color:var(--text3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:80px;flex-shrink:0;font-weight:500}
 .node-param-val{color:var(--text2);font-weight:500;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.node-status-dot{position:absolute;top:9px;right:9px;width:8px;height:8px;border-radius:50%}
+.node-status-dot{display:inline-block;flex-shrink:0;width:11px;height:11px;border-radius:50%;box-shadow:0 0 0 2px rgba(255,255,255,0.65),0 1px 3px rgba(0,0,0,0.2)}
 
 /* Resize handles — outside .node-card, z-index 8, overflow:visible on .node allows this */
 .rh{
@@ -537,11 +538,11 @@ input[type=color]{width:34px;height:28px;border:1px solid var(--border);border-r
 
 /* ══════════════════ GROUP BOXES ══════════════════ */
 .group-box{position:absolute;border-radius:10px;cursor:move;user-select:none;box-sizing:border-box}
-.group-box-inner{width:100%;height:100%;border-radius:10px;border:2px dashed currentColor;background:currentColor;opacity:0.08;position:absolute;top:0;left:0;pointer-events:none}
+.group-box-inner{width:100%;height:100%;border-radius:10px;border:2px dashed currentColor;background:currentColor;opacity:0.15;position:absolute;top:0;left:0;pointer-events:none}
 .group-label{position:absolute;top:8px;left:12px;font-size:12px;font-weight:700;letter-spacing:.04em;pointer-events:auto;cursor:move;padding:2px 8px;border-radius:4px}
 .group-rh{position:absolute;width:10px;height:10px;background:currentColor;border-radius:2px;opacity:.6;cursor:se-resize}
 .group-rh.br{bottom:4px;right:4px}
-.group-selected .group-box-inner{opacity:0.14;border-style:solid}
+.group-selected .group-box-inner{opacity:0.22;border-style:solid}
 
 /* ══════════════════ DASHBOARD VIEW ══════════════════ */
 #dashboard-view{flex:1;display:none;overflow:auto;padding:0;flex-direction:column}
@@ -596,7 +597,7 @@ input[type=color]{width:34px;height:28px;border:1px solid var(--border);border-r
 <!-- TOPBAR -->
 <div id="topbar">
   <div class="tb-brand">
-    <span class="tb-brand-name">Mapper Edit</span>
+    <span class="tb-brand-name">Bálggis</span>
     <span id="tb-mapping-title" style="font-size:12px;color:rgba(255,255,255,.5);font-weight:400;display:none"></span>
   </div>
   <div class="tb-views">
@@ -619,53 +620,53 @@ input[type=color]{width:34px;height:28px;border:1px solid var(--border);border-r
     <div style="width:1px;height:22px;background:rgba(255,255,255,.15)"></div>
     <!-- Fil-meny: all import/eksport samlet -->
     <div style="position:relative">
-      <button class="tb-btn" onclick="toggleTbMenu('tb-fil-menu')" title="Import og eksport">
+      <button class="tb-btn" id="tb-fil-btn" onclick="toggleTbMenu('tb-fil-menu')" title="Import og eksport">
         <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 2h5l3 3v5H2z"/><path d="M7 2v3h3"/></svg>
         Fil ▾
       </button>
       <div class="img-export-menu" id="tb-fil-menu" style="display:none;min-width:220px">
         <!-- DATA -->
-        <div style="padding:4px 10px 2px;font-size:10px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--text3)">Data</div>
-        <div class="col-menu-item" onclick="importJSON();toggleTbMenu('tb-fil-menu')">↓ Importer JSON</div>
-        <div class="col-menu-item" onclick="importCSV();toggleTbMenu('tb-fil-menu')">↓ Importer CSV</div>
-        <div class="col-menu-item" onclick="exportJSON();toggleTbMenu('tb-fil-menu')">↑ Eksporter JSON</div>
-        <div class="col-menu-item" onclick="exportAI();toggleTbMenu('tb-fil-menu')" style="color:var(--p5)">✦ Eksporter for KI-analyse</div>
+        <div id="fil-sec-data" style="padding:4px 10px 2px;font-size:10px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--text3)">Data</div>
+        <div class="col-menu-item" id="fil-import-json" onclick="importJSON();toggleTbMenu('tb-fil-menu')">↓ Importer JSON</div>
+        <div class="col-menu-item" id="fil-import-csv" onclick="importCSV();toggleTbMenu('tb-fil-menu')">↓ Importer CSV</div>
+        <div class="col-menu-item" id="fil-export-json" onclick="exportJSON();toggleTbMenu('tb-fil-menu')">↑ Eksporter JSON</div>
+        <div class="col-menu-item" id="fil-export-ai" onclick="exportAI();toggleTbMenu('tb-fil-menu')" style="color:var(--p5)">✦ Eksporter for KI-analyse</div>
         <div style="height:1px;background:var(--border);margin:4px 0"></div>
         <!-- KART -->
-        <div style="padding:4px 10px 2px;font-size:10px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--text3)">Kartvisning</div>
+        <div id="fil-sec-map" style="padding:4px 10px 2px;font-size:10px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--text3)">Kartvisning</div>
         <div class="col-menu-item" onclick="exportGraphSVG();toggleTbMenu('tb-fil-menu')">SVG</div>
         <div class="col-menu-item" onclick="exportGraphPNG();toggleTbMenu('tb-fil-menu')">PNG</div>
-        <div class="col-menu-item" onclick="exportReport();toggleTbMenu('tb-fil-menu')">HTML-rapport</div>
+        <div class="col-menu-item fil-html-label" onclick="exportReport();toggleTbMenu('tb-fil-menu')">HTML-rapport</div>
         <div style="height:1px;background:var(--border);margin:4px 0"></div>
         <!-- TABELL -->
-        <div style="padding:4px 10px 2px;font-size:10px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--text3)">Tabellvisning</div>
+        <div id="fil-sec-table" style="padding:4px 10px 2px;font-size:10px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--text3)">Tabellvisning</div>
         <div class="col-menu-item" onclick="exportViewPNG('table');toggleTbMenu('tb-fil-menu')">PNG</div>
-        <div class="col-menu-item" onclick="exportReport();toggleTbMenu('tb-fil-menu')">HTML-rapport</div>
+        <div class="col-menu-item fil-html-label" onclick="exportReport();toggleTbMenu('tb-fil-menu')">HTML-rapport</div>
         <div style="height:1px;background:var(--border);margin:4px 0"></div>
         <!-- MATRISE -->
-        <div style="padding:4px 10px 2px;font-size:10px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--text3)">Matrisevisning</div>
+        <div id="fil-sec-matrix" style="padding:4px 10px 2px;font-size:10px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--text3)">Matrisevisning</div>
         <div class="col-menu-item" onclick="exportViewPNG('matrix');toggleTbMenu('tb-fil-menu')">PNG</div>
-        <div class="col-menu-item" onclick="exportMatrixReport();toggleTbMenu('tb-fil-menu')">HTML-rapport</div>
+        <div class="col-menu-item fil-html-label" onclick="exportMatrixReport();toggleTbMenu('tb-fil-menu')">HTML-rapport</div>
         <div style="height:1px;background:var(--border);margin:4px 0"></div>
         <!-- TIDSLINJE -->
-        <div style="padding:4px 10px 2px;font-size:10px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--text3)">Tidslinje</div>
+        <div id="fil-sec-timeline" style="padding:4px 10px 2px;font-size:10px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--text3)">Tidslinje</div>
         <div class="col-menu-item" onclick="exportViewPNG('timeline');toggleTbMenu('tb-fil-menu')">PNG</div>
-        <div class="col-menu-item" onclick="exportTimelineReport();toggleTbMenu('tb-fil-menu')">HTML-rapport</div>
+        <div class="col-menu-item fil-html-label" onclick="exportTimelineReport();toggleTbMenu('tb-fil-menu')">HTML-rapport</div>
         <div style="height:1px;background:var(--border);margin:4px 0"></div>
         <!-- DASHBOARD -->
-        <div style="padding:4px 10px 2px;font-size:10px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--text3)">Dashboard</div>
+        <div id="fil-sec-dashboard" style="padding:4px 10px 2px;font-size:10px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--text3)">Dashboard</div>
         <div class="col-menu-item" onclick="exportDashPNG();toggleTbMenu('tb-fil-menu')">PNG</div>
-        <div class="col-menu-item" onclick="exportDashReport();toggleTbMenu('tb-fil-menu')">HTML-rapport</div>
+        <div class="col-menu-item fil-html-label" onclick="exportDashReport();toggleTbMenu('tb-fil-menu')">HTML-rapport</div>
       </div>
     </div>
     <div style="width:1px;height:22px;background:rgba(255,255,255,.15)"></div>
     <!-- Innstillinger -->
-    <button class="tb-btn" onclick="openAdminModal()" title="Innstillinger">
+    <button class="tb-btn" id="tb-settings-btn" onclick="openAdminModal()" title="Innstillinger">
       <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="6" cy="6" r="2"/><path d="M6 1v1M6 10v1M1 6h1M10 6h1M2.6 2.6l.7.7M8.7 8.7l.7.7M2.6 9.4l.7-.7M8.7 3.3l.7-.7"/></svg>
       Innstillinger
     </button>
     <!-- Hjelp -->
-    <a href="hjelp.html" target="_blank" class="tb-btn" title="Hjelp" style="text-decoration:none">
+    <a href="hjelp.html" target="_blank" id="tb-help-link" class="tb-btn" title="Hjelp" style="text-decoration:none">
       <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="6" cy="6" r="5"/><path d="M6 8v-1c0-1 2-1.5 2-3a2 2 0 1 0-4 0"/><circle cx="6" cy="9.5" r=".5" fill="currentColor" stroke="none"/></svg>
       Hjelp
     </a>
@@ -684,7 +685,7 @@ input[type=color]{width:34px;height:28px;border:1px solid var(--border);border-r
         <div id="nodes-layer"></div>
       </div>
       <div id="edge-legend">
-        <div class="el-title">Relasjonstyper</div>
+        <div class="el-title" id="rel-legend-title">Relasjonstyper</div>
       </div>
       <div class="empty" id="graph-empty">
         <div class="empty-icon">◈</div>
@@ -802,6 +803,80 @@ const EDGE_TYPES = [
 ];
 
 // ════════════════════════════════════════════════════════
+//  I18N — STRINGS + t()
+// ════════════════════════════════════════════════════════
+
+const STRINGS = {
+  no: {
+    'view.graph':'Kart','view.table':'Tabell','view.matrix':'Matrise',
+    'view.timeline':'Tidslinje','view.dashboard':'Dashboard',
+    'topbar.file':'Fil ▾','topbar.settings':'Innstillinger','topbar.help':'Hjelp',
+    'fil.data':'Data','fil.map':'Kartvisning','fil.table':'Tabellvisning',
+    'fil.matrix':'Matrisevisning','fil.timeline':'Tidslinje','fil.dashboard':'Dashboard',
+    'fil.import.json':'↓ Importer JSON','fil.import.csv':'↓ Importer CSV',
+    'fil.export.json':'↑ Eksporter JSON','fil.export.ai':'✦ Eksporter for KI-analyse',
+    'fil.html':'HTML-rapport',
+    'btn.save':'Lagre','btn.cancel':'Avbryt','btn.delete':'Slett','btn.close':'Lukk',
+    'btn.add':'Legg til','btn.edit':'Rediger','btn.add.cat':'Ny kategori','btn.add.obj':'Nytt objekt',
+    'st.title':'Innstillinger','st.save':'Lagre innstillinger',
+    'st.tab.general':'Generelt','st.tab.rel':'Relasjoner','st.tab.nodes':'Noder','st.tab.map':'Kartvisning',
+    'st.lang':'Språk','st.lang.no':'Norsk','st.lang.en':'English',
+    'st.proj.title':'Prosjekttittel',
+    'st.nodeStyle':'Nodestil','st.nodeShadow':'Skygge','st.nodeRadius':'Hjørneradius (px)',
+    'st.nodeMinW':'Minimumsbredde (px)','st.showCatLabel':'Vis kategorietikett på noder',
+    'st.edgeShape':'Linjeform','st.curved':'Buet (bezier)','st.ortho':'Rette vinkler (ortogonal)',
+    'st.canvasBg':'Bakgrunnsmønster','st.canvasBgColor':'Bakgrunnsfarge',
+    'rel.legend':'Relasjonstyper',
+    'graph.empty':'Opprett en kategori og legg til objekter for å starte kartet',
+    'panel.cats':'Kategorier','panel.nosel':'Velg et objekt for å se detaljer',
+    'auto.layout':'Auto-layout','search.ph':'Søk...',
+    'persp.all':'Alle',
+    'matrix.row':'Radkategori','matrix.col':'Kolonnekategori',
+    'tl.nodate':'Ingen datofelt funnet i denne kategorien.',
+    'dash.edit':'Rediger','dash.done':'Ferdig','dash.add':'+ Widget','dash.new':'+ Nytt dashboard',
+    'toast.settings':'Innstillinger lagret ✓','toast.deleted':'Slettet',
+    'toast.imported':'Importert ✓','toast.saved':'Lagret ✓',
+    'help.url':'hjelp.html',
+  },
+  en: {
+    'view.graph':'Map','view.table':'Table','view.matrix':'Matrix',
+    'view.timeline':'Timeline','view.dashboard':'Dashboard',
+    'topbar.file':'File ▾','topbar.settings':'Settings','topbar.help':'Help',
+    'fil.data':'Data','fil.map':'Map view','fil.table':'Table view',
+    'fil.matrix':'Matrix view','fil.timeline':'Timeline','fil.dashboard':'Dashboard',
+    'fil.import.json':'↓ Import JSON','fil.import.csv':'↓ Import CSV',
+    'fil.export.json':'↑ Export JSON','fil.export.ai':'✦ Export for AI analysis',
+    'fil.html':'HTML report',
+    'btn.save':'Save','btn.cancel':'Cancel','btn.delete':'Delete','btn.close':'Close',
+    'btn.add':'Add','btn.edit':'Edit','btn.add.cat':'New category','btn.add.obj':'New object',
+    'st.title':'Settings','st.save':'Save settings',
+    'st.tab.general':'General','st.tab.rel':'Relations','st.tab.nodes':'Nodes','st.tab.map':'Map view',
+    'st.lang':'Language','st.lang.no':'Norsk','st.lang.en':'English',
+    'st.proj.title':'Project title',
+    'st.nodeStyle':'Node style','st.nodeShadow':'Shadow','st.nodeRadius':'Corner radius (px)',
+    'st.nodeMinW':'Minimum width (px)','st.showCatLabel':'Show category label on nodes',
+    'st.edgeShape':'Line shape','st.curved':'Curved (bezier)','st.ortho':'Right angles (orthogonal)',
+    'st.canvasBg':'Background pattern','st.canvasBgColor':'Background color',
+    'rel.legend':'Relation types',
+    'graph.empty':'Create a category and add objects to start the map',
+    'panel.cats':'Categories','panel.nosel':'Select an object to see details',
+    'auto.layout':'Auto-layout','search.ph':'Search...',
+    'persp.all':'All',
+    'matrix.row':'Row category','matrix.col':'Column category',
+    'tl.nodate':'No date fields found for this category.',
+    'dash.edit':'Edit','dash.done':'Done','dash.add':'+ Widget','dash.new':'+ New dashboard',
+    'toast.settings':'Settings saved ✓','toast.deleted':'Deleted',
+    'toast.imported':'Imported ✓','toast.saved':'Saved ✓',
+    'help.url':'help.html',
+  }
+};
+
+function t(key) {
+  const lang = S?.settings?.lang || 'no';
+  return STRINGS[lang]?.[key] ?? STRINGS.no[key] ?? key;
+}
+
+// ════════════════════════════════════════════════════════
 //  STATE
 // ════════════════════════════════════════════════════════
 
@@ -821,8 +896,8 @@ function blankState() {
     dashboards: [{id:'default',name:'Dashboard',widgets:[]}],
     activeDashId: 'default',
     settings: { edgeTypes:[], nodeRadius:10, showCatLabel:true, nodeMinW:160,
-                nodeStyle:'card', nodeShadow:'subtle', canvasBg:'dots', canvasBgColor:'#f1f1f1',
-                showEdges:true, title:'' },
+                nodeStyle:'flat', nodeShadow:'subtle', canvasBg:'dots', canvasBgColor:'#f1f1f1',
+                showEdges:true, title:'', lang:'no' },
   };
 }
 
@@ -1003,12 +1078,44 @@ function getParam(id) { return S.params.find(p=>p.id===id) }
 // ════════════════════════════════════════════════════════
 
 function render() {
+  updateI18n();
   renderPerspective();
   if (S.view==='graph') { renderGraph(); renderSidePanel(); }
   else if (S.view==='matrix') { renderMatrix(); renderSidePanel(); }
   else if (S.view==='timeline') { renderTimeline(); renderSidePanel(); }
   else if (S.view==='dashboard') { renderDashboard(); }
   else { renderTable(); renderSidePanel(); }
+}
+
+function updateI18n() {
+  // View buttons
+  ['graph','table','matrix','timeline','dashboard'].forEach(v=>{
+    const el=document.getElementById('v-'+v);
+    if(el) el.textContent=t('view.'+v);
+  });
+  // Topbar buttons with IDs
+  const filBtn=document.getElementById('tb-fil-btn');
+  if(filBtn){ const ic=filBtn.querySelector('svg');filBtn.textContent=t('topbar.file');if(ic)filBtn.prepend(ic); }
+  const stBtn=document.getElementById('tb-settings-btn');
+  if(stBtn){ const ic=stBtn.querySelector('svg');stBtn.textContent=t('topbar.settings');if(ic)stBtn.prepend(ic); }
+  const helpLink=document.getElementById('tb-help-link');
+  if(helpLink){ const ic=helpLink.querySelector('svg');helpLink.textContent=t('topbar.help');if(ic)helpLink.prepend(ic);helpLink.href=t('help.url'); }
+  // File menu section headers
+  ['data','map','table','matrix','timeline','dashboard'].forEach(s=>{
+    const el=document.getElementById('fil-sec-'+s);
+    if(el) el.textContent=t('fil.'+s);
+  });
+  // File menu items with IDs
+  const filItems={'fil-import-json':'fil.import.json','fil-import-csv':'fil.import.csv','fil-export-json':'fil.export.json','fil-export-ai':'fil.export.ai'};
+  Object.entries(filItems).forEach(([id,key])=>{const el=document.getElementById(id);if(el)el.textContent=t(key);});
+  // HTML report items
+  document.querySelectorAll('.fil-html-label').forEach(el=>el.textContent=t('fil.html'));
+  // Graph empty state
+  const ge=document.getElementById('graph-empty');
+  if(ge){ const txt=ge.querySelector('.empty-text');if(txt)txt.textContent=t('graph.empty'); }
+  // Edge legend
+  const rlt=document.getElementById('rel-legend-title');
+  if(rlt) rlt.textContent=t('rel.legend');
 }
 
 function switchView(v) {
@@ -1331,64 +1438,73 @@ function renderNodes() {
     el.style.opacity=dimmedBySearch?'0.1':'1';
     el.style.pointerEvents=dimmedBySearch?'none':'';
 
-    // Node style settings
-    const nStyle=S.settings?.nodeStyle||'card';
+    // ── Node style ────────────────────────────────────────
+    const nStyle=S.settings?.nodeStyle||'flat';
     const nShadow=S.settings?.nodeShadow||'subtle';
     const contrastText=PALETTE_TEXT[color]||'#fff';
-    let cardStyle=`border-left-color:${color};background:${hexToRgba(color,0.04)};`;
-    let catLabelCss=`color:${color}`;
-    let titleStyle='';let paramNameCss='';let paramValCss='';let paramBorderCss='';
-    if(nStyle==='minimal'){
-      cardStyle=`border-left-color:${color};background:#fff;border-color:${hexToRgba(color,0.25)};`;
+    // Default = flat (header-div variant, see nodeBodyHTML below)
+    let cardStyle=`background:#fff;border:1.5px solid ${hexToRgba(color,0.25)};border-top:none;border-radius:0 0 var(--node-r,10px) var(--node-r,10px);`;
+    let catLabelCss=`color:${contrastText};opacity:0.9`;
+    let titleStyle=`font-weight:700;color:#1a1a2e`;
+    let paramNameCss='';let paramValCss='';let paramBorderCss='';
+    let statusRing=contrastText==='#fff'?'rgba(255,255,255,0.45)':'rgba(0,0,0,0.22)';
+
+    if(nStyle==='card'){
+      // Classic card: left accent, very light tint background
+      cardStyle=`border-left:5px solid ${color};background:${hexToRgba(color,0.04)};border-color:${hexToRgba(color,0.15)};`;
+      catLabelCss=`color:${color}`;
+      titleStyle=`font-weight:700;color:#1a1a2e`;
+      statusRing='rgba(255,255,255,0.65)';
+    } else if(nStyle==='minimal'){
+      // Truly minimal: neutral border, micro bottom color accent only
+      cardStyle=`background:#fff;border:1px solid #dde1ea;border-bottom:3px solid ${color};`;
+      catLabelCss=`color:${color}`;
+      titleStyle=`font-weight:500;color:#2a2a3a`;
+      statusRing='rgba(255,255,255,0.65)';
     } else if(nStyle==='filled'){
+      // Full category color fill; cat label as pill badge
       cardStyle=`border:none!important;background:${color};`;
-      catLabelCss=`color:${contrastText};opacity:0.7`;
-      titleStyle=`color:${contrastText}`;
+      catLabelCss=`background:rgba(${contrastText==='#fff'?'255,255,255':'0,0,0'},0.22);color:${contrastText};padding:1px 7px;border-radius:10px;font-size:9px;letter-spacing:.05em;flex-shrink:1;max-width:85%`;
+      titleStyle=`color:${contrastText};font-weight:700;font-size:14px`;
       paramNameCss=`color:${contrastText};opacity:0.62`;
-      paramValCss=`color:${contrastText};opacity:0.85`;
+      paramValCss=`color:${contrastText};opacity:0.9;font-weight:600`;
       paramBorderCss=`border-top-color:${contrastText==='#fff'?'rgba(255,255,255,0.2)':'rgba(0,0,0,0.1)'}`;
-    } else if(nStyle==='glass'){
-      cardStyle=`border-left-color:${color};background:rgba(255,255,255,0.82);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-color:rgba(255,255,255,0.6);`;
-    } else if(nStyle==='flat'){
-      // Flat: colored top border strip, no left accent, white bg, no shadow
-      cardStyle=`border-left:none;border-top:3px solid ${color};background:#fff;border-radius:0 0 var(--node-r,10px) var(--node-r,10px);`;
-      catLabelCss=`color:${color}`;
+      statusRing=contrastText==='#fff'?'rgba(255,255,255,0.45)':'rgba(0,0,0,0.22)';
     } else if(nStyle==='outlined'){
-      // Outlined: transparent bg, colored border all around, colored text
-      cardStyle=`background:transparent;border:2px solid ${color};border-left:2px solid ${color};`;
+      // Outlined: white bg, thick colored border + subtle inner glow
+      cardStyle=`background:#fff;border:2.5px solid ${color};box-shadow:inset 0 0 0 1px ${hexToRgba(color,0.1)},0 1px 4px rgba(0,0,0,.05);`;
       catLabelCss=`color:${color}`;
+      titleStyle=`font-weight:700;color:#1a1a2e`;
+      statusRing='rgba(255,255,255,0.65)';
     } else if(nStyle==='tinted'){
-      // Tinted: stronger color tint background
-      cardStyle=`border-left-color:${color};background:${hexToRgba(color,0.13)};border-color:${hexToRgba(color,0.35)};`;
+      // Tinted: bold color tint, strong left accent, visible border
+      cardStyle=`border-left:5px solid ${color};background:${hexToRgba(color,0.18)};border-color:${hexToRgba(color,0.42)};`;
       catLabelCss=`color:${color}`;
-    } else if(nStyle==='dark'){
-      // Dark: charcoal background, light text, colored left accent
-      cardStyle=`border-left-color:${color};background:#1e1e2e;border-color:#2a2a3e;`;
-      catLabelCss=`color:${hexToRgba(color,0.9)}`;
-      titleStyle=`color:#f0f0f8`;
-      paramNameCss=`color:#6e6e8e`;
-      paramValCss=`color:#c8c8e8`;
-      paramBorderCss=`border-top-color:rgba(255,255,255,0.08)`;
+      titleStyle=`font-weight:700;color:#1a1a2e`;
+      statusRing='rgba(255,255,255,0.65)';
     } else if(nStyle==='duo'){
-      // Duo-tone: colored header band at top, white body. Achieved via gradient.
-      cardStyle=`border-left-color:${color};background:linear-gradient(180deg,${hexToRgba(color,0.18)} 0%,${hexToRgba(color,0.18)} 38px,#fff 38px);border-color:${hexToRgba(color,0.3)};`;
+      // Duo: tinted header band via div, clean white body — see nodeBodyHTML below
+      cardStyle=`border-left:4px solid ${color};background:#fff;border-color:${hexToRgba(color,0.28)};`;
       catLabelCss=`color:${color}`;
+      titleStyle=`font-weight:700;color:#1a1a2e`;
+      statusRing='rgba(255,255,255,0.65)';
     }
     if(nShadow==='none') cardStyle+='box-shadow:none;';
     else if(nShadow==='strong') cardStyle+='box-shadow:0 6px 28px rgba(0,0,0,.18),0 2px 10px rgba(0,0,0,.1);';
 
-    // Status dot: first visible status param
+    // ── Status dot (computed after style so ring color is known) ──
     const allCatParams=getCatParams(node.catId);
     const statusParam=visParams.find(p=>p.type==='status');
     const statusVal=statusParam?computeVal(node,statusParam,allCatParams):null;
-    const statusDot=statusVal?`<span class="node-status-dot s-${statusVal}" title="${statusVal}"></span>`:'';
+    const statusDot=statusVal?`<span class="node-status-dot s-${statusVal}" style="box-shadow:0 0 0 2px ${statusRing},0 1px 3px rgba(0,0,0,0.18)" title="${statusVal}"></span>`:'';
 
-    // Conditional formatting
+    // ── Conditional formatting ────────────────────────────
     const _ncs=getCondStyle(node,node.catId);
     if(_ncs.rowBg) cardStyle+=`border-top:3px solid ${_ncs.rowBg};`;
     if(_ncs.textColor) titleStyle=`color:${_ncs.textColor}`;
-    if(_ncs.bold) titleStyle+=(_ncs.bold?';font-weight:700':'');
+    if(_ncs.bold) titleStyle+=';font-weight:700';
 
+    // ── Params ───────────────────────────────────────────
     const showCatLabel=S.settings?.showCatLabel!==false;
     const paramRows=visParams.map(p=>{
       const val=computeVal(node,p,allCatParams);
@@ -1399,15 +1515,51 @@ function renderNodes() {
     }).join('');
     const paramHTML=visParams.length?`<div class="node-params"${paramBorderCss?` style="${paramBorderCss}"`:''}>${paramRows}</div>`:'';
 
-    el.innerHTML=`
-      <div class="node-card" style="${cardStyle}">
-        ${statusDot}
-        <div class="node-body">
-          ${showCatLabel?`<span class="node-cat-label" style="${catLabelCss}">${esc(cat?.name||'')}</span>`:''}
+    // ── Cat-row for standard styles (status dot integrated) ──
+    let catRowContent='';
+    if(showCatLabel) catRowContent+=`<span class="node-cat-label" style="${catLabelCss}">${esc(cat?.name||'')}</span>`;
+    catRowContent+=statusDot;
+    const catRow=catRowContent?`<div class="node-cat-row">${catRowContent}</div>`:'';
+
+    // ── Body HTML: header-div variant for flat & duo ──────
+    let nodeBodyHTML;
+    if(nStyle==='flat'){
+      nodeBodyHTML=`
+        <div style="background:${color};padding:7px 13px 6px 12px">
+          <div class="node-cat-row">
+            ${showCatLabel?`<span class="node-cat-label" style="${catLabelCss}">${esc(cat?.name||'')}</span>`:'<span></span>'}
+            ${statusDot}
+          </div>
+        </div>
+        <div class="node-body" style="padding-top:9px">
           <div class="node-title"${titleStyle?` style="${titleStyle}"`:''}>${esc(node.title)}</div>
         </div>
-        ${paramHTML}
-      </div>
+        ${paramHTML}`;
+    } else if(nStyle==='duo'){
+      const duoBg=hexToRgba(color,0.13);
+      const duoBd=hexToRgba(color,0.22);
+      nodeBodyHTML=`
+        <div style="background:${duoBg};padding:6px 13px 6px 12px;border-bottom:1px solid ${duoBd}">
+          <div class="node-cat-row">
+            ${showCatLabel?`<span class="node-cat-label" style="${catLabelCss}">${esc(cat?.name||'')}</span>`:'<span></span>'}
+            ${statusDot}
+          </div>
+        </div>
+        <div class="node-body" style="padding-top:9px">
+          <div class="node-title"${titleStyle?` style="${titleStyle}"`:''}>${esc(node.title)}</div>
+        </div>
+        ${paramHTML}`;
+    } else {
+      nodeBodyHTML=`
+        <div class="node-body">
+          ${catRow}
+          <div class="node-title"${titleStyle?` style="${titleStyle}"`:''}>${esc(node.title)}</div>
+        </div>
+        ${paramHTML}`;
+    }
+
+    el.innerHTML=`
+      <div class="node-card" style="${cardStyle}">${nodeBodyHTML}</div>
       <div class="conn-zone" data-conn="${node.id}"><div class="conn-dot"></div></div>
       <div class="rh rh-nw" data-rh="nw" data-nid="${node.id}"><div class="rh-inner"></div></div>
       <div class="rh rh-ne" data-rh="ne" data-nid="${node.id}"><div class="rh-inner"></div></div>
@@ -1457,8 +1609,16 @@ function renderEdges() {
       x1=srcCX; y1=src.y; x2=tgtCX; y2=tgt.y+tgt.h;
     }
     const dy=Math.abs(y2-y1);
-    const cp=Math.min(120, dy*0.5+40);
-    const pathD=`M${x1},${y1} C${x1},${y1+cp*(y2>y1?1:-1)} ${x2},${y2-cp*(y2>y1?1:-1)} ${x2},${y2}`;
+    let pathD;
+    if((S.settings?.edgeStyle||'curved')==='orthogonal'){
+      // Right-angle path: vertical segment from src, horizontal mid, vertical to tgt
+      const midY=(y1+y2)/2;
+      pathD=`M${x1},${y1} L${x1},${midY} L${x2},${midY} L${x2},${y2}`;
+    } else {
+      // Cubic bezier (default)
+      const cp=Math.min(120, dy*0.5+40);
+      pathD=`M${x1},${y1} C${x1},${y1+cp*(y2>y1?1:-1)} ${x2},${y2-cp*(y2>y1?1:-1)} ${x2},${y2}`;
+    }
 
     const stroke=isDim?'#c8c7c3':et.color;
     const sw=isDim?1:(isRel?et.sw+0.5:et.sw);
@@ -2267,7 +2427,7 @@ function toggleLegend(){
   if(btn) btn.classList.toggle('active',show);
   if(show && el.children.length<=1){
     // Build legend content
-    el.innerHTML=`<div class="el-title">Relasjonstyper</div>`+
+    el.innerHTML=`<div class="el-title" id="rel-legend-title">${t('rel.legend')}</div>`+
       getEdgeTypes().map(et=>`
         <div class="el-row">
           <svg width="28" height="10" style="flex-shrink:0"><line x1="0" y1="5" x2="22" y2="5" stroke="${et.color}" stroke-width="${et.sw}" stroke-dasharray="${et.dash}"/><polygon points="22,2 28,5 22,8" fill="${et.color}"/></svg>
@@ -4542,95 +4702,111 @@ let _adminET=[];
 function openAdminModal() {
   closeModal('admin-modal');
   _adminET=getEdgeTypes().map(et=>({...et}));
-  const ns=S.settings?.nodeStyle||'card';
+  const ns=S.settings?.nodeStyle||'flat';
   const nsh=S.settings?.nodeShadow||'subtle';
+  const es=S.settings?.edgeStyle||'curved';
   const cbg=S.settings?.canvasBg||'dots';
   const cbgc=S.settings?.canvasBgColor||'#f1f1f1';
+  const lg=S.settings?.lang||'no';
   const div=document.createElement('div');
   div.className='modal-bg';div.id='admin-modal';
   div.innerHTML=`<div class="modal" style="width:660px;max-width:95vw">
     <div class="modal-head">
-      <h2>Innstillinger</h2>
+      <h2>${t('st.title')}</h2>
       <button class="sp-close" onclick="closeModal('admin-modal')">✕</button>
     </div>
     <div class="modal-body">
-      <div class="field" style="margin-bottom:14px;padding-bottom:14px;border-bottom:1px solid var(--border)">
-        <label class="field-label">Tittel på kartleggingen</label>
-        <input type="text" id="as-title" value="${esc(S.settings?.title||'')}" placeholder="Feks: Strategisk mapping" style="width:100%"/>
-        <div style="font-size:11px;color:var(--text3);margin-top:4px">Vises i topbar og i Mapper View når data lastes inn</div>
-      </div>
       <div class="admin-tabs">
-        <button class="admin-tab active" id="atab-rel" onclick="switchAdminTab('rel')">Relasjoner</button>
-        <button class="admin-tab" id="atab-noder" onclick="switchAdminTab('noder')">Noder</button>
-        <button class="admin-tab" id="atab-kart" onclick="switchAdminTab('kart')">Kartvisning</button>
+        <button class="admin-tab active" id="atab-generelt" onclick="switchAdminTab('generelt')">${t('st.tab.general')}</button>
+        <button class="admin-tab" id="atab-rel" onclick="switchAdminTab('rel')">${t('st.tab.rel')}</button>
+        <button class="admin-tab" id="atab-noder" onclick="switchAdminTab('noder')">${t('st.tab.nodes')}</button>
+        <button class="admin-tab" id="atab-kart" onclick="switchAdminTab('kart')">${t('st.tab.map')}</button>
       </div>
-      <div id="admin-rel">
-        <p style="color:var(--text3);font-size:12px;margin-bottom:12px">Farge, navn, stiplingsmønster og tykkelse per relasjonstype.</p>
+      <div id="admin-generelt">
+        <div class="field">
+          <label class="field-label">${t('st.proj.title')}</label>
+          <input type="text" id="as-title" value="${esc(S.settings?.title||'')}" placeholder="F.eks: Strategisk mapping" style="width:100%"/>
+        </div>
+        <div class="field">
+          <label class="field-label">${t('st.lang')}</label>
+          <select id="as-lang" style="width:200px">
+            <option value="no"${lg==='no'?' selected':''}>${t('st.lang.no')}</option>
+            <option value="en"${lg==='en'?' selected':''}>${t('st.lang.en')}</option>
+          </select>
+        </div>
+      </div>
+      <div id="admin-rel" style="display:none">
+        <p style="color:var(--text3);font-size:12px;margin-bottom:12px">${lg==='en'?'Color, name, dash pattern and weight per relation type.':'Farge, navn, stiplingsmønster og tykkelse per relasjonstype.'}</p>
         <div style="display:grid;grid-template-columns:38px 1fr 150px 60px 32px;gap:6px;padding:4px 0;border-bottom:1px solid var(--border);margin-bottom:4px">
-          <span style="font-size:10px;font-weight:700;letter-spacing:.06em;color:var(--text3);text-transform:uppercase">Farge</span>
-          <span style="font-size:10px;font-weight:700;letter-spacing:.06em;color:var(--text3);text-transform:uppercase">Navn</span>
-          <span style="font-size:10px;font-weight:700;letter-spacing:.06em;color:var(--text3);text-transform:uppercase">Strek</span>
-          <span style="font-size:10px;font-weight:700;letter-spacing:.06em;color:var(--text3);text-transform:uppercase">Tykkelse</span>
+          <span style="font-size:10px;font-weight:700;letter-spacing:.06em;color:var(--text3);text-transform:uppercase">${lg==='en'?'Color':'Farge'}</span>
+          <span style="font-size:10px;font-weight:700;letter-spacing:.06em;color:var(--text3);text-transform:uppercase">${lg==='en'?'Name':'Navn'}</span>
+          <span style="font-size:10px;font-weight:700;letter-spacing:.06em;color:var(--text3);text-transform:uppercase">${lg==='en'?'Dash':'Strek'}</span>
+          <span style="font-size:10px;font-weight:700;letter-spacing:.06em;color:var(--text3);text-transform:uppercase">${lg==='en'?'Weight':'Tykkelse'}</span>
           <span></span>
         </div>
         <div id="admin-et-list">${_adminET.map((et,i)=>adminETRow(et,i)).join('')}</div>
         <div style="margin-top:10px;display:flex;gap:8px">
-          <button class="btn btn-ghost btn-sm" onclick="adminAddET()">+ Legg til type</button>
-          <button class="btn btn-ghost btn-sm" onclick="adminResetET()">Tilbakestill standard</button>
+          <button class="btn btn-ghost btn-sm" onclick="adminAddET()">+ ${lg==='en'?'Add type':'Legg til type'}</button>
+          <button class="btn btn-ghost btn-sm" onclick="adminResetET()">${lg==='en'?'Reset defaults':'Tilbakestill standard'}</button>
+        </div>
+        <div class="field" style="margin-top:16px">
+          <label class="field-label">${t('st.edgeShape')}</label>
+          <select id="as-edgestyle" style="width:200px">
+            <option value="curved"${es==='curved'?' selected':''}>${t('st.curved')}</option>
+            <option value="orthogonal"${es==='orthogonal'?' selected':''}>${t('st.ortho')}</option>
+          </select>
         </div>
       </div>
       <div id="admin-noder" style="display:none">
         <div class="field">
-          <label class="field-label">Nodestil</label>
-          <select id="as-nodestyle" style="width:200px">
-            <option value="card"${ns==='card'?' selected':''}>Kort (standard)</option>
-            <option value="minimal"${ns==='minimal'?' selected':''}>Minimalt</option>
-            <option value="filled"${ns==='filled'?' selected':''}>Fylt (kategorifarger)</option>
-            <option value="glass"${ns==='glass'?' selected':''}>Glass (gjennomsiktig)</option>
-            <option value="flat"${ns==='flat'?' selected':''}>Flat (topplinje)</option>
-            <option value="outlined"${ns==='outlined'?' selected':''}>Kontur (transparrent)</option>
-            <option value="tinted"${ns==='tinted'?' selected':''}>Tonet (sterk fargebakgrunn)</option>
-            <option value="dark"${ns==='dark'?' selected':''}>Mørk (mørk bakgrunn)</option>
-            <option value="duo"${ns==='duo'?' selected':''}>Duo-tone (fargebånd øverst)</option>
+          <label class="field-label">${t('st.nodeStyle')}</label>
+          <select id="as-nodestyle" style="width:220px">
+            <option value="flat"${ns==='flat'?' selected':''}>${lg==='en'?'Flat header (default)':'Flat topplinje (standard)'}</option>
+            <option value="card"${ns==='card'?' selected':''}>${lg==='en'?'Card (left accent)':'Kort (venstreakant)'}</option>
+            <option value="minimal"${ns==='minimal'?' selected':''}>${lg==='en'?'Minimal':'Minimalt'}</option>
+            <option value="filled"${ns==='filled'?' selected':''}>${lg==='en'?'Filled (category color)':'Fylt (kategorifarger)'}</option>
+            <option value="outlined"${ns==='outlined'?' selected':''}>${lg==='en'?'Outlined':'Kontur'}</option>
+            <option value="tinted"${ns==='tinted'?' selected':''}>${lg==='en'?'Tinted (color background)':'Tonet (fargebakgrunn)'}</option>
+            <option value="duo"${ns==='duo'?' selected':''}>${lg==='en'?'Duo (tinted header band)':'Duo (fargebånd øverst)'}</option>
           </select>
         </div>
         <div class="field">
-          <label class="field-label">Skygge</label>
+          <label class="field-label">${t('st.nodeShadow')}</label>
           <select id="as-nodeshadow" style="width:200px">
-            <option value="none"${nsh==='none'?' selected':''}>Ingen</option>
-            <option value="subtle"${nsh==='subtle'?' selected':''}>Subtil (standard)</option>
-            <option value="strong"${nsh==='strong'?' selected':''}>Sterk</option>
+            <option value="none"${nsh==='none'?' selected':''}>${lg==='en'?'None':'Ingen'}</option>
+            <option value="subtle"${nsh==='subtle'?' selected':''}>${lg==='en'?'Subtle (default)':'Subtil (standard)'}</option>
+            <option value="strong"${nsh==='strong'?' selected':''}>${lg==='en'?'Strong':'Sterk'}</option>
           </select>
         </div>
         <div class="field">
-          <label class="field-label">Hjørneradius (px)</label>
+          <label class="field-label">${t('st.nodeRadius')}</label>
           <input type="number" id="as-radius" min="0" max="24" value="${S.settings?.nodeRadius??10}" style="width:100px"/>
         </div>
         <div class="field">
-          <label class="field-label">Minimumsbredde (px)</label>
+          <label class="field-label">${t('st.nodeMinW')}</label>
           <input type="number" id="as-minw" min="100" max="500" value="${S.settings?.nodeMinW??160}" style="width:100px"/>
         </div>
         <div class="field">
-          <label class="field-label">Vis kategorietikett på noder</label>
+          <label class="field-label">${t('st.showCatLabel')}</label>
           <label style="display:flex;align-items:center;gap:8px;cursor:pointer;font-size:13px;padding:4px 0">
             <input type="checkbox" id="as-catlabel" ${S.settings?.showCatLabel!==false?'checked':''} style="accent-color:var(--p5);width:16px;height:16px"/>
-            Aktiv
+            ${lg==='en'?'Active':'Aktiv'}
           </label>
         </div>
       </div>
       <div id="admin-kart" style="display:none">
         <div class="field">
-          <label class="field-label">Bakgrunnsmønster</label>
+          <label class="field-label">${t('st.canvasBg')}</label>
           <select id="as-canbg" style="width:200px">
-            <option value="dots"${cbg==='dots'?' selected':''}>Punkter (standard)</option>
-            <option value="grid"${cbg==='grid'?' selected':''}>Rutenett</option>
-            <option value="lines"${cbg==='lines'?' selected':''}>Horisontale linjer</option>
-            <option value="solid"${cbg==='solid'?' selected':''}>Ensfarget</option>
-            <option value="none"${cbg==='none'?' selected':''}>Ingen</option>
+            <option value="dots"${cbg==='dots'?' selected':''}>${lg==='en'?'Dots (default)':'Punkter (standard)'}</option>
+            <option value="grid"${cbg==='grid'?' selected':''}>${lg==='en'?'Grid':'Rutenett'}</option>
+            <option value="lines"${cbg==='lines'?' selected':''}>${lg==='en'?'Horizontal lines':'Horisontale linjer'}</option>
+            <option value="solid"${cbg==='solid'?' selected':''}>${lg==='en'?'Solid color':'Ensfarget'}</option>
+            <option value="none"${cbg==='none'?' selected':''}>${lg==='en'?'None':'Ingen'}</option>
           </select>
         </div>
         <div class="field">
-          <label class="field-label">Bakgrunnsfarge</label>
+          <label class="field-label">${t('st.canvasBgColor')}</label>
           <div style="display:flex;align-items:center;gap:10px">
             <input type="color" id="as-canbgcol" value="${cbgc}" style="width:48px;height:36px;cursor:pointer;border:1px solid var(--border);border-radius:6px;padding:2px"/>
             <div style="display:flex;gap:6px;flex-wrap:wrap">
@@ -4643,8 +4819,8 @@ function openAdminModal() {
       </div>
     </div>
     <div class="modal-foot">
-      <button class="btn btn-ghost" onclick="closeModal('admin-modal')">Avbryt</button>
-      <button class="btn btn-primary" onclick="saveAdminSettings()">Lagre innstillinger</button>
+      <button class="btn btn-ghost" onclick="closeModal('admin-modal')">${t('btn.cancel')}</button>
+      <button class="btn btn-primary" onclick="saveAdminSettings()">${t('st.save')}</button>
     </div>
   </div>`;
   document.body.appendChild(div);
@@ -4652,9 +4828,9 @@ function openAdminModal() {
 }
 
 function switchAdminTab(tab) {
-  ['rel','noder','kart'].forEach(t=>{
-    document.getElementById('admin-'+t).style.display=tab===t?'':'none';
-    document.getElementById('atab-'+t).classList.toggle('active',tab===t);
+  ['generelt','rel','noder','kart'].forEach(id=>{
+    document.getElementById('admin-'+id).style.display=tab===id?'':'none';
+    document.getElementById('atab-'+id).classList.toggle('active',tab===id);
   });
 }
 
@@ -4695,9 +4871,11 @@ function saveAdminSettings() {
   const defStr=JSON.stringify(EDGE_TYPES.map(({v,l,color,dash,sw})=>({v,l,color,dash,sw})));
   const cusStr=JSON.stringify(_adminET.map(({v,l,color,dash,sw})=>({v,l,color,dash,sw})));
   S.settings.edgeTypes=cusStr===defStr?[]:_adminET;
-  S.settings.nodeStyle=document.getElementById('as-nodestyle')?.value||'card';
+  S.settings.nodeStyle=document.getElementById('as-nodestyle')?.value||'flat';
   S.settings.nodeShadow=document.getElementById('as-nodeshadow')?.value||'subtle';
+  S.settings.edgeStyle=document.getElementById('as-edgestyle')?.value||'curved';
   S.settings.title=(document.getElementById('as-title')?.value||'').trim();
+  S.settings.lang=document.getElementById('as-lang')?.value||'no';
   S.settings.nodeRadius=parseInt(document.getElementById('as-radius')?.value)||10;
   S.settings.nodeMinW=parseInt(document.getElementById('as-minw')?.value)||160;
   S.settings.showCatLabel=document.getElementById('as-catlabel')?.checked!==false;

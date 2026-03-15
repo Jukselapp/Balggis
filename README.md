@@ -1,88 +1,95 @@
-# Virksomhetskartlegger
+# Bálggis
 
-Et selvdrevet verktøy for strategisk virksomhetskartlegging — kjører direkte i nettleseren uten installasjon, server eller pålogging.
+**Bálggis** means "path" or "trail" in Northern Sami — a name that reflects the tool's purpose: mapping the paths and connections within an organization.
 
-## Kom i gang
+A self-contained strategic mapping tool that runs directly in the browser with no installation, server, or login required.
 
-1. Last ned eller klon dette repositoriet
-2. Åpne `mapper_edit.html` i Chrome, Firefox eller Edge
-3. Ferdig — ingen installasjon nødvendig
+## Getting started
 
-Data lagres lokalt i nettleseren (`localStorage`). Ta jevnlig sikkerhetskopi via **Fil ▾ → JSON (backup)**.
+1. Download or clone this repository
+2. Open `index.html` in Chrome, Firefox, or Edge
+3. Done — no installation needed
+
+Data is stored locally in the browser (`localStorage`). Back up regularly via **File ▾ → Export JSON**.
 
 ---
 
-## Funksjoner
+## Features
 
-### Visninger
-| Visning | Beskrivelse |
+### Views
+| View | Description |
 |---|---|
-| **Kart** | Grafisk visning med noder og relasjonslinjer. Dra, koble og organiser fritt på et uendelig lerret. |
-| **Tabell** | Strukturert tabellvisning per kategori med inline-redigering av alle parameterverdier. |
-| **Matrise** | Krysstabell mellom to kategorier — vis og rediger relasjoner som prikker i et rutenett. |
-| **Tidslinje** | Gantt-lignende visning for noder med dato-parametere. |
-| **Dashboard** | Egendefinert kontrollpanel med valgfrie widgets fra ulike kategorier og objekter. |
+| **Map** | Graphical view with nodes and relation lines. Drag, connect, and arrange freely on an infinite canvas. |
+| **Table** | Structured table view per category with inline editing of all parameter values. |
+| **Matrix** | Cross-table between two categories — view and edit relations as dots in a grid. |
+| **Timeline** | Gantt-style view for nodes with date parameters. |
+| **Dashboard** | Customizable control panel with optional widgets from various categories and objects. |
 
-### Datamodell
-- **Kategorier** — grupperinger av objekter (f.eks. Strategisk mål, KPI, Kapabilitet, Initiativ, IT-system)
-- **Objekter** — noder innenfor en kategori, med egendefinerte parameterverdier
-- **Parametere** — feltdefinisjoner per kategori: tekst, tall, status (trafikklys), dato, valgliste, flervalg, ja/nei, beregnet (formel)
-- **Relasjoner** — koblinger mellom objekter med type: hierarkisk, måler, støtter, leverer til
-- **Perspektiver** — filtreringsvisninger som avgjør hvilke kategorier og grupperingsbokser som er synlige
+### Data model
+- **Categories** — groupings of objects (e.g. Strategic goal, KPI, Capability, Initiative, IT system)
+- **Objects** — nodes within a category, with custom parameter values
+- **Parameters** — field definitions per category: text, number, status (traffic light), date, select, multi-select, yes/no, calculated (formula)
+- **Relations** — links between objects with type: hierarchical, measures, supports, delivers to
+- **Perspectives** — filter views that determine which categories and group boxes are visible
 
-### Dashboard-widgets
-- KPI / enkeltverdi (med valgfri fremdriftslinje mot mål)
-- Antall objekter
-- Statusfordeling (trafikklys-fordeling)
-- Fremdriftsindikator (progress bar)
-- Objektliste (mini-tabell)
-- Tekst / overskrift
-- Avviksliste (objekter som utløser betingede regler)
+### Dashboard widgets
+- KPI / single value (with optional progress bar toward target)
+- Object count
+- Status distribution (traffic light breakdown)
+- Progress indicator
+- Object list (mini-table)
+- Text / heading
+- Deviation list (objects triggering conditional rules)
 
-### Andre funksjoner
-- **Grupperingsbokser** — visuelle svømmebaner på kartet
-- **Betinget formatering** — automatisk fargesetting av noder og tabellrader basert på parameterverdier
-- **Beregningsparametere** — formler med `{ParamNavn}`-referanser og matematiske funksjoner
-- **Perspektivfiltrering** — tilpassede visninger for ulike målgrupper (styre, CIO, driftsteam)
-- **Auto-layout** — automatisk plassering av noder i kartet
-- **Angre / Gjenta** — fullstendig undo/redo-støtte (Ctrl+Z / Ctrl+Shift+Z)
+### Other features
+- **Group boxes** — visual swim lanes on the map
+- **Conditional formatting** — automatic coloring of nodes and table rows based on parameter values
+- **Calculated parameters** — formulas using `{ParamName}` references and math functions
+- **Perspective filtering** — tailored views for different audiences (board, CIO, operations team)
+- **Auto-layout** — automatic node placement on the map
+- **Undo / Redo** — full undo/redo support (Ctrl+Z / Ctrl+Shift+Z)
+- **Line style** — choose between curved bezier lines and right-angle (orthogonal) relation lines
+- **Norwegian / English UI** — switch language in Settings → General
 
-### Import og eksport
-- **JSON** — full backup og gjenoppretting av all data
-- **CSV** — import av objekter til en kategori
-- **SVG / PNG** — eksport av kartvisningen som bilde
-- **HTML-rapport** — frittstående rapport med tabeller og betinget formatering
-- **Dashboard HTML / PNG** — eksport av dashboardvisningen
+### Import and export
+- **JSON** — full backup and restore of all data
+- **CSV** — import objects to a category
+- **SVG / PNG** — export the map view as an image
+- **HTML report** — standalone report with tables and conditional formatting
+- **Dashboard HTML / PNG** — export the dashboard view
+- **AI analysis JSON** — clean export structured for AI/LLM analysis
 
 ---
 
-## Filer
+## Files
 
-| Fil | Beskrivelse |
+| File | Description |
 |---|---|
-| `mapper_edit.html` | Hele applikasjonen — én selvdreven HTML-fil (~4700 linjer) |
-| `hjelp.html` | Fullstendig brukerveiledning på norsk |
+| `index.html` | The entire application — one self-contained HTML file (~5000 lines) |
+| `hjelp.html` | Full user guide in Norwegian |
+| `help.html` | Full user guide in English |
 
 ---
 
-## Teknisk
+## Technical
 
-- **Ren vanilla JS + CSS** — ingen avhengigheter, ingen byggsteg
-- **Single-file arkitektur** — alt i `mapper_edit.html`: CSS (linje ~1–545), HTML-skall (~545–720), JavaScript (~720–slutt)
-- **Global state** `S` — alle mutasjoner kaller `save()` (localStorage) og `render()`
-- **localStorage-nøkkel:** `nx2`
+- **Pure vanilla JS + CSS** — no dependencies, no build step
+- **Single-file architecture** — everything in `index.html`: CSS (lines ~1–545), HTML shell (~545–720), JavaScript (~720–end)
+- **Global state** `S` — all mutations call `save()` (localStorage) then `render()`
+- **localStorage key:** `nx2`
+- **i18n:** `STRINGS` object + `t(key)` function; language stored in `S.settings.lang`
 
-### Tilbakestille til demo-data
-Åpne DevTools → Console og kjør:
+### Reset to demo data
+Open DevTools → Console and run:
 ```js
 localStorage.removeItem('nx2'); location.reload();
 ```
 
-### Syntakssjekk etter endringer
+### Syntax check after edits
 ```bash
 node -e "
 const fs = require('fs');
-const html = fs.readFileSync('mapper_edit.html','utf8');
+const html = fs.readFileSync('index.html','utf8');
 const match = html.match(/<script>([\s\S]*?)<\/script>/);
 new Function(match[1]);
 console.log('JS syntax OK');
@@ -91,6 +98,12 @@ console.log('JS syntax OK');
 
 ---
 
-## Lisens
+## About the name
 
-Privat bruk. Ikke for videredistribusjon uten tillatelse.
+*Bálggis* is a Northern Sami word meaning "path" or "trail". The name reflects the tool's core purpose: charting the paths between goals, capabilities, systems, and initiatives in an organization.
+
+---
+
+## License
+
+Private use. Not for redistribution without permission.
